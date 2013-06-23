@@ -1,0 +1,66 @@
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\DSeX.exe.config
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\MapSearch.exe
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\MapSearch_Readme.txt
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\keys.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\DSeX.exe
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\DSeX.pdb
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\DSeX.xml
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\AutocompleteMenu.dll
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\FurcadiaLib.dll
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\No Flicker.dll
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\AutocompleteMenu.pdb
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\No Flicker.pdb
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\No Flicker.xml
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.vbprojResolveAssemblyReference.cache
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.frmSearch.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.Config.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.cRTFSyntax.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.MS_Edit.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.Resources.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.cRTFDebug.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.AboutBox1.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.vbproj.GenerateResource.Cache
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.exe
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.xml
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.pdb
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\help.txt
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\readme.txt
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\4 point Chair Face.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\example.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.SplashScreen1.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\DSeX.nsi
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\DotNetChecker.nsh
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\32x32 (2).ico
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\16x16.ico
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\antispam.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\automaticdoor.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\BaH-Item Dispenser.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\BaH-ItemClear.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\BaH-RoomItems.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\basic door.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\basicbanning.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\BasicLockableDoor.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\basicshare.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\bumpswitches.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\C Advanced Dreamstats.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\C Hopping.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\C pushing.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\cartride.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\chat sounds.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\cuff.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\DSummon name.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\Go to jail.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\guns.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\joinfurre.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\Localspecies Toggle.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\locationscan.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\objectnum.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\Owner Alert.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\raintoggle.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\sharecheck-nops.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\sharecheck-ps.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\Syphor's Weather.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\teleportingcuff.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\bin\Release\Scripts\touchfloor.ini
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.wMain.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\DSeX\obj\x86\Release\DSeX.wUI.resources
