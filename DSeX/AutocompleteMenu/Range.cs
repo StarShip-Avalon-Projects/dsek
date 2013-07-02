@@ -35,8 +35,8 @@ namespace AutocompleteMenuNS
 
             set
             {
-                TargetWrapper.SelectionStart = Start;
-                TargetWrapper.SelectionLength = End - Start;
+                TargetWrapper.SelectionStart = Start ;
+                TargetWrapper.SelectionLength = End - Start  ;
                if (TargetWrapper is RichTextBox2)
                    TargetWrapper.SelectedText2 = value;
                 else

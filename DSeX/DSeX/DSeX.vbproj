@@ -114,6 +114,12 @@
     <Compile Include="Controls\ListView_NoFlicker.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ProgressFrm.Designer.vb">
+      <DependentUpon>ProgressFrm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProgressFrm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="cRTBWrapper.vb" />
     <Compile Include="cRTFSyntax.vb">
       <SubType>Form</SubType>
@@ -177,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Config.resx">
       <DependentUpon>Config.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProgressFrm.resx">
+      <DependentUpon>ProgressFrm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="cRTFSyntax.resx">
       <DependentUpon>cRTFSyntax.vb</DependentUpon>
@@ -464,7 +473,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

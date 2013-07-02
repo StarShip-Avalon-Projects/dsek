@@ -87,10 +87,10 @@ Public Class MS_Edit
     Dim CMD_Args As System.Collections.ObjectModel.ReadOnlyCollection(Of String) = My.Application.CommandLineArgs
     Public Sub AutoMenu() Handles AutocompleteMenu1.Selected
 
-
-        Dim pos As Integer = MS_Editor.SelectionStart + MS_Editor.SelectionLength
-        RTBWrapper.colorDocument()
-        MS_Editor.SelectionStart = pos
+        'MS_Editor.SelectedText2 = Chr(10)
+        ' Dim pos As Integer = MS_Editor.SelectionStart + MS_Editor.SelectionLength
+        RTBWrapper.ColorLine(MS_Editor.GetLineFromCharIndex(MS_Editor.SelectionStart - 1))
+        ' MS_Editor.SelectionStart = pos
         lblStatus.Text = "Status: Auto Complete Insert"
     End Sub
 
@@ -123,6 +123,7 @@ Public Class MS_Edit
 
     Private Sub GetTemplates()
         Dim path As String = Application.StartupPath + "/Templates/"
+        Directory.CreateDirectory(path)
         TemplatePaths.Clear()
         Dim x As Integer = 0
         ListBox2.BeginUpdate()
@@ -132,6 +133,7 @@ Public Class MS_Edit
             TemplatePaths.Add(ListBox2.Items.Count - 1, path)
         Next
         path = Furcadia.IO.Paths.GetFurcadiaDocPath + "/Templates/"
+        Directory.CreateDirectory(path)
         For x = 0 To FileIO.FileSystem.GetFiles(path, FileIO.SearchOption.SearchTopLevelOnly, "*.ds").Count - 1
             Dim s = FileIO.FileSystem.GetName(FileIO.FileSystem.GetFiles(path).Item(x))
             ListBox2.Items.Add(s.Remove(s.Length - 3, 3))
@@ -199,26 +201,23 @@ Public Class MS_Edit
         Me.Dispose()
     End Sub
 
-    Private Sub MS_Edit_HelpButtonClicked(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Me.HelpButtonClicked
-
-    End Sub
 
     Private Sub MS_Edit_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyDown
         If (e.KeyCode = Keys.O AndAlso e.Modifiers = Keys.Control) Then
             OpenMS_File()
         ElseIf (e.KeyCode = Keys.W AndAlso e.Modifiers = Keys.Control) Then
             wMain.Show()
-            wMain.Activate()
         ElseIf (e.KeyCode = Keys.S AndAlso e.Modifiers = Keys.Control) Then
             SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
         ElseIf (e.KeyCode = Keys.F1) Then
-            Process.Start(Application.StartupPath & "/Silver Monkey.chm")
+
         ElseIf (e.KeyCode = Keys.F AndAlso e.Modifiers = Keys.Control) Then
             FindReplace()
         End If
 
     End Sub
     Private Sub OpenMS_File()
+        AddNewEditorTab("", "", "")
         If Not CanOpen(TabControl2.SelectedIndex) Then
             Dim reply As DialogResult = MessageBox.Show("Save changes? Yes or No", "Caption", _
               MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
@@ -259,8 +258,8 @@ Public Class MS_Edit
             'Variable
             EditSettings.LoadEditorSettings()
             .rtfSyntax.Clear()
-            .rtfSyntax.add("%([A-Za-z0-9]+)", True, True, EditSettings.VariableColor.ToArgb)
-            .rtfSyntax.add("~([A-Za-z0-9]+)", True, True, EditSettings.StringVariableColor.ToArgb)
+            .rtfSyntax.add("%([A-Za-z0-9_]+)", True, True, EditSettings.VariableColor.ToArgb)
+            .rtfSyntax.add("~([A-Za-z0-9_]+)", True, True, EditSettings.StringVariableColor.ToArgb)
             '.rtfSyntax.add("([0-9]*)\.?([0-9]*)", True, True, Color.Violet.ToArgb)
             'string
             .rtfSyntax.add("\\{(.*?)\\}", True, True, EditSettings.StringColor.ToArgb)
@@ -322,18 +321,20 @@ Public Class MS_Edit
         End Try
 
 
-        AddNewEditorTab("New.ds", mPath, 0)
+        AddNewEditorTab("", mPath, 0)
 
         CanOpen(0) = True
         NewFile()
 
-        WorkFileName(0) = "New DragonSpeak File"
         'MS_Editor.SaveFile(WorkPath & "/" & cBot.MS_File, RichTextBoxStreamType.PlainText)
         MS_Editor.Text = NewMSFile()
         RTBWrapper.colorDocument()
-        lblStatus.Text = "Status: Saved " & WorkFileName(0)
-        frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(0)
+
+        lblStatus.Text = "Status: Opened New DragonSpeak  File "
+        Dim title As String = "New Dragon"
+        frmTitle(TabControl2.SelectedIndex) = "DSeX - New File"
         Me.Text = frmTitle(0)
+        TabControl2.SelectedTab.Text = "(New File)"
         CanOpen(0) = True
         GetTemplates()
 
@@ -407,18 +408,14 @@ Public Class MS_Edit
     Private Sub TextInsert(ByRef LB As ListView, Optional ByVal Spaces As Integer = 0)
 
         Dim insertText = StrDup(Spaces, " ") & LB.SelectedItems(0).Text
-        If MS_Editor.SelectedText = "" Then
-            insertText = insertText & Environment.NewLine
-        Else
-            MS_Editor.SelectedText = ""
-        End If
 
         Dim insertPos As Integer = MS_Editor.SelectionStart
         'MS_Editor.
 
-        MS_Editor.SelectedText2 = insertText
-        RTBWrapper.colorDocument()
-        MS_Editor.SelectionStart = insertPos + insertText.Length - 1
+        MS_Editor.SelectedText2 = insertText + Chr(10)
+
+        RTBWrapper.ColorLine(MS_Editor.GetLineFromCharIndex(MS_Editor.SelectionStart - 1))
+        ' MS_Editor.SelectionStart = insertPos + insertText.Length
 
         sb.Panels.Item(0).Text = "Cursor Position: " & MS_Editor.SelectionStart.ToString
         sb.Panels.Item(1).Text = "Current Line: " & MS_Editor.GetLineFromCharIndex(MS_Editor.SelectionStart) + 1
@@ -510,7 +507,12 @@ Public Class MS_Edit
         sb.Panels.Item(2).Text = "Total Lines: " & MS_Editor.GetLineFromCharIndex(MS_Editor.Text.Length) + 1
         sb.Panels.Item(3).Text = "Total Characters: " & MS_Editor.Text.Length.ToString
         Me.Text = frmTitle(TabControl2.SelectedIndex) & "*"
-        TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex) + "*"
+        If WorkFileName(TabControl2.SelectedIndex) = "" Then
+            TabControl2.SelectedTab.Text = "(New File)*"
+        Else
+            TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex) + "*"
+        End If
+
         lblStatus.Text = "Status: A change has occured since you last saved the document."
     End Sub
 #Region "Gutter"
@@ -685,7 +687,7 @@ InputBox("What location within the document do you want to send the cursor to?",
 
     Private Sub FixIndentsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles FixIndentsToolStripMenuItem.Click
         Dim StrArray() As String
-
+        MS_Editor.BeginUpdate()
         StrArray = MS_Editor.Lines
         Dim str As String
         Dim pattern(CInt(KeysIni.GetKeyValue("Init-Types", "Count"))) As String
@@ -702,18 +704,20 @@ InputBox("What location within the document do you want to send the cursor to?",
         Dim insertPos As Integer = MS_Editor.SelectionStart
         For I As Integer = 0 To StrArray.Length - 1
             str = LTrim(StrArray(I) & vbCrLf)
-            StrArray(I) = str
-        Next
-        MS_Editor.Text = ""
-        For I As Integer = 0 To StrArray.Length - 1
+
             For N As Integer = 1 To pattern.Length - 1
-                If StrArray(I).StartsWith(pattern(N)) Then
+                If str.StartsWith(pattern(N)) Then
                     Dim count As Integer = pattern(N).Substring(1, 1)
-                    StrArray(I) = StrDup(pat(N), " ") & StrArray(I)
+                    StrArray(I) = StrDup(pat(N), " ") & str
+                    Exit For
                 End If
             Next
-            MS_Editor.Text += StrArray(I)
         Next
+
+        MS_Editor.Lines = StrArray
+
+        MS_Editor.EndUpdate()
+
         RTBWrapper.colorDocument()
         MS_Editor.SelectionStart = insertPos
     End Sub
@@ -868,7 +872,7 @@ InputBox("What location within the document do you want to send the cursor to?",
 
         Dim Gutter As PictureBox = New PictureBox
         Gutter.Parent = TabControl2.TabPages(intLastTabIndex)
-        Gutter.Location = New System.Drawing.Point(3, 3)
+        Gutter.Location = New System.Drawing.Point(0, 3)
 
 
         Gutter.Anchor = AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Bottom
@@ -883,7 +887,7 @@ InputBox("What location within the document do you want to send the cursor to?",
         lstView.Anchor = AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Bottom + AnchorStyles.Right
         lstView.Name = "edit" + n
         AutocompleteMenu1.SetAutocompleteMenu(lstView, Me.AutocompleteMenu1)
-        lstView.Location = New System.Drawing.Point(50, 3)
+        lstView.Location = New System.Drawing.Point(47, 3)
         'lstView.Size = New System.Drawing.Size(573, 187)
         lstView.Height = TabControl2.TabPages(intLastTabIndex).Height
         lstView.Width = TabControl2.TabPages(intLastTabIndex).Width - 41
@@ -895,8 +899,8 @@ InputBox("What location within the document do you want to send the cursor to?",
             'tDict(Pattern, isRegex, isCase, value)
             'Variable
             .rtfSyntax.Clear()
-            .rtfSyntax.add("%([A-Za-z0-9]+)", True, True, EditSettings.VariableColor.ToArgb)
-            .rtfSyntax.add("~([A-Za-z0-9]+)", True, True, EditSettings.StringVariableColor.ToArgb)
+            .rtfSyntax.add("%([A-Za-z0-9_]+)", True, True, EditSettings.VariableColor.ToArgb)
+            .rtfSyntax.add("~([A-Za-z0-9_]+)", True, True, EditSettings.StringVariableColor.ToArgb)
             '.rtfSyntax.add("([0-9]*)\.?([0-9]*)", True, True, Color.Violet.ToArgb)
             'string
             .rtfSyntax.add("\\{(.*?)\\}", True, True, EditSettings.StringColor.ToArgb)
@@ -911,7 +915,7 @@ InputBox("What location within the document do you want to send the cursor to?",
             '.rtfSyntax.add("<tr.*?>", True, True, Color.Brown.ToArgb)
             '.rtfSyntax.add("<td.*?>", True, True, Color.Brown.ToArgb)
             '.rtfSyntax.add("<img.*?>", True, True, Color.Red.ToArgb)
-            .colorDocument()
+            '.colorDocument()
         End With
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)
         TabControl2.SelectedTab.Text = FileName
@@ -954,7 +958,9 @@ InputBox("What location within the document do you want to send the cursor to?",
             Dim s As ToolStripItem = x.Items.Add("New Tab", Nothing, AddressOf FNewTab_Click)
             s.Tag = sender
             Dim t As ToolStripItem = x.Items.Add("Close Tab", Nothing, AddressOf FCloseTab_Click)
-            Dim u As ToolStripItem = x.Items.Add("Close All Tabs But this one", Nothing, AddressOf FCloseAllTab_Click)
+            t = x.Items.Add("Close All Tabs But this one", Nothing, AddressOf FCloseAllTab_Click)
+            x.Items.Add(New ToolStripSeparator)
+            t = x.Items.Add("Save File", Nothing, AddressOf FSave_Click)
 
             x.Show(sender, e.Location)
             Dim tabPageIndex As Integer = 0
@@ -966,7 +972,7 @@ InputBox("What location within the document do you want to send the cursor to?",
 
             Next
             t.Tag = tabPageIndex
-            u.Tag = tabPageIndex
+            'u.Tag = tabPageIndex
         End If
     End Sub
 
@@ -1023,5 +1029,10 @@ InputBox("What location within the document do you want to send the cursor to?",
 
     Private Sub ListBox1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox1.SelectedIndexChanged
         SectionIdx(TabControl2.SelectedIndex) = ListBox1.SelectedIndex
+    End Sub
+
+    Private Sub FSave_Click(sender As System.Object, e As System.EventArgs)
+
+        SaveMS_File(WorkPath(sender.tag), WorkFileName(sender.tag))
     End Sub
 End Class
