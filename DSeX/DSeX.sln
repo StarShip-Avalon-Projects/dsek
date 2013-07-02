@@ -18,18 +18,18 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs05
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = AutocompleteMenu\\AutocompleteMenu.csproj
-		SccProjectName1 = AutocompleteMenu
-		SccLocalPath1 = AutocompleteMenu
-		SccProjectUniqueName2 = DSeX\\DSeX.vbproj
-		SccProjectName2 = DSeX
-		SccLocalPath2 = DSeX
+		SccProjectUniqueName1 = DSeX\\DSeX.vbproj
+		SccProjectName1 = DSeX
+		SccLocalPath1 = DSeX
+		SccProjectUniqueName2 = ..\\FurcadiaFramework\\furcadia\\FurcadiaLib\\FurcadiaLib.csproj
+		SccProjectName2 = ../FurcadiaFramework/furcadia/FurcadiaLib
+		SccLocalPath2 = ..\\FurcadiaFramework\\furcadia\\FurcadiaLib
 		SccProjectUniqueName3 = No\u0020Flicker\\No\u0020Flicker.vbproj
 		SccProjectName3 = No\u0020Flicker
 		SccLocalPath3 = No\u0020Flicker
-		SccProjectUniqueName4 = ..\\FurcadiaFramework\\furcadia\\FurcadiaLib\\FurcadiaLib.csproj
-		SccProjectName4 = ../FurcadiaFramework/furcadia/FurcadiaLib
-		SccLocalPath4 = ..\\FurcadiaFramework\\furcadia\\FurcadiaLib
+		SccProjectUniqueName4 = AutocompleteMenu\\AutocompleteMenu.csproj
+		SccProjectName4 = AutocompleteMenu
+		SccLocalPath4 = AutocompleteMenu
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

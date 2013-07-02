@@ -69,6 +69,8 @@ Imports System.Runtime.InteropServices.Marshal
 Imports System.Runtime.InteropServices
 'Imports SilverMonkey.ConfigStructs
 Imports No_Flicker
+Imports System.Text
+Imports AutocompleteMenuNS
 
 Public Class cRTBWrapper
     ' Scrollbar direction
@@ -334,8 +336,8 @@ Public Class cRTBWrapper
     '     API: LockWindowUpdate
     ' Purpose: Locks or Unlocks a window
     '
-    Private Declare Function LockWindowUpdate Lib "user32.dll" (ByVal hWndLock As IntPtr) As Boolean
 
+    ' Private Declare Function LockWindowUpdate Lib "user32.dll" (ByVal hWndLock As IntPtr) As Boolean
     '--------------------------------------------------------------------------
     '     Sub: Update
     ' Purpose: Reports the curssor position (Customized for word wrap support)
@@ -425,7 +427,7 @@ Public Class cRTBWrapper
             CursorPosition.yScroll = GetScrollPos(hWnd, SBS_VERT)
             Exit Sub
         End If
-        LockWindowUpdate(hWnd)
+        'LockWindowUpdate(hWnd)
         oldEventMask = SendMessage(hWnd, EM_SETEVENTMASK, 0, 0)
 
         ' Prevent the control from redrawing itself.
@@ -451,7 +453,7 @@ Public Class cRTBWrapper
 
             Return
         End If
-        LockWindowUpdate(0&)
+        ' LockWindowUpdate(0&)
 
         ' Allow the control to redraw itself.
         SendMessage(hWnd, WM_SETREDRAW, 1, 0)
@@ -468,10 +470,13 @@ Public Class cRTBWrapper
 
         If e.KeyData = Keys.Space Or e.KeyData = Keys.OemPeriod Then
             update()
-            saveScroll(_bind.Handle)     ' Freeze the windows and get the scroll nfo
-
-            applyColor(_bind.GetLineFromCharIndex(_bind.SelectionStart))        ' Do any coloring
-            _bind.Rtf = Render()                          ' Update the RTF
+            ' Freeze the windows and get the scroll nfo
+            Dim line As Integer = _bind.GetLineFromCharIndex(_bind.SelectionStart - 1)
+            _bind.SelectionStart = _bind.SelectionStart - txtBody(line).Length
+            _bind.SelectionLength = txtBody(line).Length
+            saveScroll(_bind.Handle)
+            applyColor(line)        ' Do any coloring
+            _bind.SelectedRtf = RenderLine2(line)                          ' Update the RTF
             _bind.SelectionStart = CursorPosition.Cursor  ' Reset the cursor
             'debugprint(_bind.Rtf)                         ' Update the debug window
 
@@ -482,9 +487,14 @@ Public Class cRTBWrapper
             update()
             saveScroll(_bind.Handle)     ' Freeze the windows and get the scroll nfo
             ' CursorPosition.CurrentLine -= 1
-            applyColor(_bind.GetLineFromCharIndex(_bind.SelectionStart))        ' Do any coloring
-            applyColor(_bind.GetLineFromCharIndex(_bind.SelectionStart) - 1)        ' Do any coloring
-            _bind.Rtf = Render()                          ' Update the RTF
+            ' Do any coloring
+            Dim line As Integer = _bind.GetLineFromCharIndex(_bind.SelectionStart)
+            _bind.SelectionStart = _bind.SelectionStart - txtBody(line).Length
+            _bind.SelectionLength = txtBody(line).Length
+            applyColor(line)
+            _bind.SelectedRtf = RenderLine2(line)
+            ' Do any coloring
+            ' Update the RTF
             _bind.SelectionStart = CursorPosition.Cursor  ' Reset the cursor
             'debugprint(_bind.Rtf)                         ' Update the debug window
 
@@ -583,7 +593,12 @@ Public Class cRTBWrapper
         ''\uc1\fs" & FontSize.ToString & " \cf1
         Return reBuildHeader() & "\viewkind4 " & reBuildBody()
     End Function
-
+    Public Function RenderLine(ByRef line As Integer) As String
+        Return reBuildHeader() & "\viewkind4 " & RebuildLine(line)
+    End Function
+    Public Function RenderLine2(ByRef line As Integer) As String
+        Return reBuildHeader() & "\viewkind4 " & RebuildLine2(line)
+    End Function
     '--------------------------------------------------------------------------
     '     Sub: reBuildHeader()
     ' Purpose: Using the colortable supplied by readRTFColor() rebuilds the 
@@ -616,21 +631,22 @@ Public Class cRTBWrapper
     ' Purpose: Build the moded RTF Body
     '
     Private Function reBuildBody() As String
-        Dim DocBody As String = ""
-        'Dim rtfLine As String = ""
-        'Dim counter As Integer
 
+        Dim strb As New StringBuilder
         For counter As Integer = 0 To rtfBody.Length - 1
-            Dim tmp As String = rtfBody(counter)
-            'If tmp = "" Then tmp = " "
-
-            DocBody &= tmp & "\par" & Chr(10)
+            strb.AppendLine(rtfBody(counter) & "\par")
         Next
 
         If RTFDebug Then Console.WriteLine("RTF body lines rendered: " & rtfBody.Length)
-        Return DocBody
+        Return strb.ToString
     End Function
 
+    Private Function RebuildLine(ByRef line As Integer) As String
+        Return rtfBody(line) & "\par" & vbLf
+    End Function
+    Private Function RebuildLine2(ByRef line As Integer) As String
+        Return rtfBody(line)
+    End Function
     '--------------------------------------------------------------------------
     '     Sub: ChangeColor
     ' Purpose: Change the color of an element document wide.  Basicly this changes
@@ -654,6 +670,8 @@ Public Class cRTBWrapper
     Public Sub changeColor(ByRef index As Integer, ByRef toColor As Color)
         rtfColors.item(index) = toColor.ToArgb
     End Sub
+
+
 
     '--------------------------------------------------------------------------
     '     Sub: applyColor
@@ -716,15 +734,30 @@ Public Class cRTBWrapper
 
     End Sub
 
+    Public Sub ColorLine(ByRef line As Integer)
+
+        update()
+
+        _bind.SelectionStart = _bind.SelectionStart - txtBody(line).Length
+        _bind.SelectionLength = txtBody(line).Length
+        applyColor(line)
+        _bind.SelectedRtf = RenderLine(line)
+
+    End Sub
+
     Public Sub colorDocument()
         'Dim counter As Integer
+        Dim progress As New ProgressFrm()
+        progress.Show()
         update(Me, New System.EventArgs)
 
         For counter As Integer = 0 To txtBody.Length - 1
             applyColor(counter)
+            progress.UpdateProgress("Coloring File", (counter / txtBody.Length) * 100)
         Next
 
         _bind.Rtf = Render()
+        progress.Dispose()
     End Sub
 
 

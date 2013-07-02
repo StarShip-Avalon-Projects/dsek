@@ -693,7 +693,7 @@ namespace AutocompleteMenuNS
         {
             string newText = item.GetTextForReplace();
             //replace text of fragment
-            fragment.Text = newText;
+            fragment.Text = newText ;
             fragment.TargetWrapper.TargetControl.Focus();
         }
 
