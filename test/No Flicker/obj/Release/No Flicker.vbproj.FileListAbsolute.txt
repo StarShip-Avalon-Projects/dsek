@@ -1,0 +1,8 @@
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\bin\Release\No Flicker.dll
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\bin\Release\No Flicker.pdb
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\bin\Release\No Flicker.xml
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Release\No_Flicker.Resources.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Release\No Flicker.vbproj.GenerateResource.Cache
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Release\No Flicker.dll
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Release\No Flicker.xml
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Release\No Flicker.pdb
