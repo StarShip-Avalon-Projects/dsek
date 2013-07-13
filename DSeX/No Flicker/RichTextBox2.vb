@@ -1,9 +1,73 @@
 ﻿Imports System.Windows.Forms
+Imports System.Runtime.InteropServices
 
 Public Class RichTextBox2
     Inherits RichTextBox
 
 
+    <DllImport("user32.dll", CharSet:=CharSet.Auto)> _
+    Private Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal msg As Integer, ByVal wParam As IntPtr, ByVal lParam As IntPtr) As IntPtr
+    End Function
+
+    Private oldEventMask As IntPtr
+    Private updating As Integer
+    Private Const WM_USER As Integer = &H400
+    Private Const WM_SETREDRAW As Integer = &HB
+    Private Const EM_GETEVENTMASK As Integer = WM_USER + 59
+    Private Const EM_SETEVENTMASK As Integer = WM_USER + 69
+    ''' <summary>
+    ''' Maintains performance while updating.
+    ''' </summary>
+    ''' <remarks>
+    ''' <para>
+    ''' It is recommended to call this method before doing
+    ''' any major updates that you do not wish the user to
+    ''' see. Remember to call EndUpdate When you are finished
+    ''' with the update. Nested calls are supported.
+    ''' </para>
+    ''' <para>
+    ''' Calling this method will prevent redrawing. It will
+    ''' also setup the event mask of the underlying richedit
+    ''' control so that no events are sent.
+    ''' </para>
+    ''' </remarks>
+    Public Sub BeginUpdate()
+        ' Deal with nested calls.
+        updating += 1
+
+        If updating > 1 Then
+            Return
+        End If
+
+        ' Prevent the control from raising any events.
+        oldEventMask = SendMessage(CType(New HandleRef(Me, Handle), IntPtr), EM_SETEVENTMASK, CType(0, IntPtr), CType(0, IntPtr))
+
+        ' Prevent the control from redrawing itself.
+        SendMessage(CType(New HandleRef(Me, Handle), IntPtr), WM_SETREDRAW, CType(0, IntPtr), CType(0, IntPtr))
+    End Sub
+
+    ''' <summary>
+    ''' Resumes drawing and event handling.
+    ''' </summary>
+    ''' <remarks>
+    ''' This method should be called every time a call is made
+    ''' made to BeginUpdate. It resets the event mask to it's
+    ''' original value and enables redrawing of the control.
+    ''' </remarks>
+    Public Sub EndUpdate()
+        ' Deal with nested calls.
+        updating -= 1
+
+        If updating > 0 Then
+            Return
+        End If
+
+        ' Allow the control to redraw itself.
+        SendMessage(CType(New HandleRef(Me, Handle), IntPtr), WM_SETREDRAW, CType(1, IntPtr), CType(0, IntPtr))
+
+        ' Allow the control to raise event messages.
+        SendMessage(CType(New HandleRef(Me, Handle), IntPtr), EM_SETEVENTMASK, CType(0, IntPtr), oldEventMask)
+    End Sub
 
     Public Sub New()
         MyBase.New()
@@ -11,9 +75,9 @@ Public Class RichTextBox2
         UndoRedoHandler = New UndoRedoClass(Of RestorableItem)
     End Sub
 
-    Public Overloads Sub AppendText(ByRef str As String)
-        MyBase.AppendText(str)
-    End Sub
+    'Public Overloads Sub AppendText(ByRef str As String)
+    '    MyBase.AppendText(str)
+    'End Sub
 
     Public Sub AppendLine(ByRef str As String)
         MyBase.AppendText(str + vbLf)
@@ -124,7 +188,7 @@ Public Class RichTextBox2
 
 
 
-                    Case WindowMessages.WM_PASTE
+                    Case CType(WindowMessages.WM_PASTE, Keys)
                         If Me.SelectionLength > 0 Then      '' overtyping?
                             AddRestorableItem(EditType.Deleted, Me.SelectionStart, Me.SelectedText)
                         End If
@@ -159,11 +223,11 @@ Public Class RichTextBox2
         End With
     End Sub
 
-    Public  Property SelectedText2
+    Public Property SelectedText2 As String
         Get
             Return MyBase.SelectedText
         End Get
-        Set(value)
+        Set(value As String)
             If Not IsTyping Then
                 If Me.SelectionLength > 0 Then      '' overtyping?
                     AddRestorableItem(EditType.Deleted, Me.SelectionStart, Me.SelectedText)
@@ -175,11 +239,11 @@ Public Class RichTextBox2
             'IsTyping = False
         End Set
     End Property
-    Public Property SelectedRTF2
+    Public Property SelectedRTF2 As String
         Get
             Return MyBase.SelectedRtf
         End Get
-        Set(value)
+        Set(value As String)
             If Not IsTyping Then
                 If Me.SelectionLength > 0 Then      '' overtyping?
                     AddRestorableItem(EditType.Deleted, Me.SelectionStart, Me.SelectedText)
@@ -195,7 +259,11 @@ Public Class RichTextBox2
         If IsTyping Then
             With UndoRedoHandler.CurrentItem
                 If .EditType = EditType.Inserted Then
-                    .Text = Me.Text.Substring(.Position, Me.SelectionStart - .Position)
+                    Try
+                        .Text = Me.Text.Substring(.Position, Me.SelectionStart - .Position)
+                    Catch ex As Exception
+                        Dim x As New ErrorLogging(ex, Me)
+                    End Try
                 End If
                 IsTyping = False
             End With
@@ -213,7 +281,7 @@ Public Class RichTextBox2
                 Case EditType.BackSpace
                     Me.SelectedText = .Text
                 Case EditType.Deleted,
-                    Me.SelectedText = .Text
+                    CType(Me.SelectedText = .Text, Global.No_Flicker.RichTextBox2.EditType)
                 Case EditType.Cut
                     Me.SelectedText = .Text
                 Case EditType.Paste
