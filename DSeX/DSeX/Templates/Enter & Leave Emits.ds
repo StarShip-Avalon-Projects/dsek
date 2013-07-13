@@ -1,6 +1,0 @@
-*Enter and Leave Emits
-(0:9) When a furre arrives in the dream,
-    (5:201) emit message {...} to any furre present.
-
-(0:10) When a furre leaves the dream,
-    (5:201) emit message {...} to any furre present.
