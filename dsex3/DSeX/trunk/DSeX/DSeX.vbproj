@@ -137,7 +137,9 @@
     <Compile Include="MS_Edit.Designer.vb">
       <DependentUpon>MS_Edit.vb</DependentUpon>
     </Compile>
-    <Compile Include="MS_Edit.vb" />
+    <Compile Include="MS_Edit.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -172,7 +174,9 @@
     <Compile Include="Wizard\wMain.Designer.vb">
       <DependentUpon>wMain.vb</DependentUpon>
     </Compile>
-    <Compile Include="Wizard\wMain.vb" />
+    <Compile Include="Wizard\wMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Wizard\wUI.designer.vb">
       <DependentUpon>wUI.vb</DependentUpon>
     </Compile>
