@@ -113,6 +113,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConfigStructs.vb" />
+    <Compile Include="Controls\InputBoxFrm.Designer.vb">
+      <DependentUpon>InputBoxFrm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InputBoxFrm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Controls\ListView_NoFlicker.Designer.vb">
       <DependentUpon>ListView_NoFlicker.vb</DependentUpon>
     </Compile>
@@ -191,6 +197,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Config.resx">
       <DependentUpon>Config.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InputBoxFrm.resx">
+      <DependentUpon>InputBoxFrm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProgressFrm.resx">
       <DependentUpon>ProgressFrm.vb</DependentUpon>
@@ -374,6 +383,7 @@
     <Content Include="32x32 %282%29.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Credits.txt" />
     <Content Include="help.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -483,7 +493,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.None.Increment.MonthAndDayStamp" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

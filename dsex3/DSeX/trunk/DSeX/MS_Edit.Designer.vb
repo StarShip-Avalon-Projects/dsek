@@ -70,10 +70,16 @@ Partial Class MS_Edit
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.BtnSectionDelete = New System.Windows.Forms.Button()
-        Me.BtnSectionAdd = New System.Windows.Forms.Button()
         Me.BtnSectionDown = New System.Windows.Forms.Button()
         Me.BtnSectionUp = New System.Windows.Forms.Button()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.SectionMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.NewSection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteSection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CopySection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CutSection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PasteSection = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.BtnTemplateAdd = New System.Windows.Forms.Button()
         Me.BtnTemplateDelete = New System.Windows.Forms.Button()
@@ -108,14 +114,8 @@ Partial Class MS_Edit
         Me.panelTotalCharacters = New System.Windows.Forms.StatusBarPanel()
         Me.Causes = New System.Windows.Forms.TabControl()
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.SectionMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.NewSection = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteSection = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CopySection = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CutSection = New System.Windows.Forms.ToolStripMenuItem()
         Me.AutocompleteMenu1 = New AutocompleteMenuNS.AutocompleteMenu()
-        Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.PasteSection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BtnSectionAdd = New System.Windows.Forms.Button()
         Me.EditMenu.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -128,13 +128,13 @@ Partial Class MS_Edit
         Me.SplitContainer2.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
+        Me.SectionMenu.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.ToolBox.SuspendLayout()
         CType(Me.panelCurrentPosition, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.panelCurrentLine, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.panelTotalLines, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.panelTotalCharacters, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SectionMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'MSSaveDialog
@@ -470,9 +470,9 @@ Partial Class MS_Edit
         'TabPage1
         '
         Me.TabPage1.Controls.Add(Me.BtnSectionDelete)
-        Me.TabPage1.Controls.Add(Me.BtnSectionAdd)
         Me.TabPage1.Controls.Add(Me.BtnSectionDown)
         Me.TabPage1.Controls.Add(Me.BtnSectionUp)
+        Me.TabPage1.Controls.Add(Me.BtnSectionAdd)
         Me.TabPage1.Controls.Add(Me.ListBox1)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
@@ -492,17 +492,6 @@ Partial Class MS_Edit
         Me.BtnSectionDelete.TabIndex = 9
         Me.BtnSectionDelete.Text = "-"
         Me.BtnSectionDelete.UseVisualStyleBackColor = True
-        '
-        'BtnSectionAdd
-        '
-        Me.BtnSectionAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.BtnSectionAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnSectionAdd.Location = New System.Drawing.Point(50, 178)
-        Me.BtnSectionAdd.Name = "BtnSectionAdd"
-        Me.BtnSectionAdd.Size = New System.Drawing.Size(17, 23)
-        Me.BtnSectionAdd.TabIndex = 9
-        Me.BtnSectionAdd.Text = "+"
-        Me.BtnSectionAdd.UseVisualStyleBackColor = True
         '
         'BtnSectionDown
         '
@@ -538,6 +527,47 @@ Partial Class MS_Edit
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.Size = New System.Drawing.Size(107, 173)
         Me.ListBox1.TabIndex = 0
+        '
+        'SectionMenu
+        '
+        Me.SectionMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewSection, Me.DeleteSection, Me.ToolStripSeparator9, Me.CopySection, Me.CutSection, Me.PasteSection})
+        Me.SectionMenu.Name = "ContextMenuStrip1"
+        Me.SectionMenu.Size = New System.Drawing.Size(144, 120)
+        '
+        'NewSection
+        '
+        Me.NewSection.Name = "NewSection"
+        Me.NewSection.Size = New System.Drawing.Size(143, 22)
+        Me.NewSection.Text = "New Section"
+        '
+        'DeleteSection
+        '
+        Me.DeleteSection.Name = "DeleteSection"
+        Me.DeleteSection.Size = New System.Drawing.Size(143, 22)
+        Me.DeleteSection.Text = "Delete Section"
+        '
+        'ToolStripSeparator9
+        '
+        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(140, 6)
+        '
+        'CopySection
+        '
+        Me.CopySection.Name = "CopySection"
+        Me.CopySection.Size = New System.Drawing.Size(143, 22)
+        Me.CopySection.Text = "Copy Section"
+        '
+        'CutSection
+        '
+        Me.CutSection.Name = "CutSection"
+        Me.CutSection.Size = New System.Drawing.Size(143, 22)
+        Me.CutSection.Text = "Cut Section"
+        '
+        'PasteSection
+        '
+        Me.PasteSection.Name = "PasteSection"
+        Me.PasteSection.Size = New System.Drawing.Size(143, 22)
+        Me.PasteSection.Text = "Paste Section"
         '
         'TabPage2
         '
@@ -608,7 +638,7 @@ Partial Class MS_Edit
         Me.ToolBoxNew.Name = "ToolBoxNew"
         Me.ToolBoxNew.Size = New System.Drawing.Size(23, 22)
         Me.ToolBoxNew.Text = "ToolStripButton2"
-        Me.ToolBoxNew.ToolTipText = "New MS File"
+        Me.ToolBoxNew.ToolTipText = "New File"
         '
         'ToolBoxOpen
         '
@@ -618,7 +648,7 @@ Partial Class MS_Edit
         Me.ToolBoxOpen.Name = "ToolBoxOpen"
         Me.ToolBoxOpen.Size = New System.Drawing.Size(23, 22)
         Me.ToolBoxOpen.Text = "ToolStripButton3"
-        Me.ToolBoxOpen.ToolTipText = "Open MS file"
+        Me.ToolBoxOpen.ToolTipText = "Open File"
         '
         'ToolBoxSave
         '
@@ -829,36 +859,6 @@ Partial Class MS_Edit
         Me.ColumnHeader3.Text = ""
         Me.ColumnHeader3.Width = 640
         '
-        'SectionMenu
-        '
-        Me.SectionMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewSection, Me.DeleteSection, Me.ToolStripSeparator9, Me.CopySection, Me.CutSection, Me.PasteSection})
-        Me.SectionMenu.Name = "ContextMenuStrip1"
-        Me.SectionMenu.Size = New System.Drawing.Size(153, 142)
-        '
-        'NewSection
-        '
-        Me.NewSection.Name = "NewSection"
-        Me.NewSection.Size = New System.Drawing.Size(152, 22)
-        Me.NewSection.Text = "New Section"
-        '
-        'DeleteSection
-        '
-        Me.DeleteSection.Name = "DeleteSection"
-        Me.DeleteSection.Size = New System.Drawing.Size(152, 22)
-        Me.DeleteSection.Text = "Delete Section"
-        '
-        'CopySection
-        '
-        Me.CopySection.Name = "CopySection"
-        Me.CopySection.Size = New System.Drawing.Size(152, 22)
-        Me.CopySection.Text = "Copy Section"
-        '
-        'CutSection
-        '
-        Me.CutSection.Name = "CutSection"
-        Me.CutSection.Size = New System.Drawing.Size(152, 22)
-        Me.CutSection.Text = "Cut Section"
-        '
         'AutocompleteMenu1
         '
         Me.AutocompleteMenu1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
@@ -868,16 +868,16 @@ Partial Class MS_Edit
         Me.AutocompleteMenu1.SearchPattern = "[ \w\.:=!<>\{\}]"
         Me.AutocompleteMenu1.TargetControlWrapper = Nothing
         '
-        'ToolStripSeparator9
+        'BtnSectionAdd
         '
-        Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
-        Me.ToolStripSeparator9.Size = New System.Drawing.Size(149, 6)
-        '
-        'PasteSection
-        '
-        Me.PasteSection.Name = "PasteSection"
-        Me.PasteSection.Size = New System.Drawing.Size(152, 22)
-        Me.PasteSection.Text = "Paste Section"
+        Me.BtnSectionAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.BtnSectionAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BtnSectionAdd.Location = New System.Drawing.Point(50, 178)
+        Me.BtnSectionAdd.Name = "BtnSectionAdd"
+        Me.BtnSectionAdd.Size = New System.Drawing.Size(17, 23)
+        Me.BtnSectionAdd.TabIndex = 9
+        Me.BtnSectionAdd.Text = "+"
+        Me.BtnSectionAdd.UseVisualStyleBackColor = True
         '
         'MS_Edit
         '
@@ -905,6 +905,7 @@ Partial Class MS_Edit
         Me.SplitContainer2.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
+        Me.SectionMenu.ResumeLayout(False)
         Me.TabPage2.ResumeLayout(False)
         Me.ToolBox.ResumeLayout(False)
         Me.ToolBox.PerformLayout()
@@ -912,7 +913,6 @@ Partial Class MS_Edit
         CType(Me.panelCurrentLine, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.panelTotalLines, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.panelTotalCharacters, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SectionMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -991,7 +991,6 @@ Partial Class MS_Edit
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
     Friend WithEvents BtnSectionDelete As System.Windows.Forms.Button
-    Friend WithEvents BtnSectionAdd As System.Windows.Forms.Button
     Friend WithEvents BtnSectionDown As System.Windows.Forms.Button
     Friend WithEvents BtnSectionUp As System.Windows.Forms.Button
     Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
@@ -1009,4 +1008,5 @@ Partial Class MS_Edit
     Friend WithEvents CutSection As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator9 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents PasteSection As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BtnSectionAdd As System.Windows.Forms.Button
 End Class
