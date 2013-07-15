@@ -99,7 +99,9 @@ Public Class MS_Edit
         SecFixed
         SecDefault
     End Enum
-    Private Class TDSSegment
+
+    <Serializable()> _
+    Public Class TDSSegment
         Public Property Title As String
         Public Property lines As List(Of String) = New List(Of String)
         Public Property SecType As TSecType
@@ -109,6 +111,7 @@ Public Class MS_Edit
             SecType = TSecType.SecDefault
         End Sub
     End Class
+    Dim SectionChange As Boolean = False
     Dim TabSections As List(Of List(Of TDSSegment)) = New List(Of List(Of TDSSegment))
 
     Public TemplatePaths As List(Of String) = New List(Of String)
@@ -134,6 +137,7 @@ Public Class MS_Edit
     End Function
 
     Public Function MS_Editor() As RichTextBox2
+        If TabControl2.SelectedIndex = -1 Then Return Nothing
         Return FindControl(TabControl2.TabPages.Item(TabControl2.SelectedIndex), "edit")
         ' Return CType(TabControl2.TabPages.Item(TabControl2.SelectedIndex).Controls.Find("edit" + TabControl2.SelectedIndex.ToString, True)(0), RichTextBox2)
     End Function '+ TabControl2.SelectedIndex.ToString
@@ -425,12 +429,12 @@ Public Class MS_Edit
         'Gets the index number of the last tab
 
         Causes.TabPages(intLastTabIndex).Name = "tbpageBrowser" & Causes.TabPages.Count
-        Causes.SelectedTab = Causes.TabPages(intLastTabIndex)
+        'Causes.SelectedTab = Causes.TabPages(intLastTabIndex)
 
         'Creates the listview and displays it in the new tab
         Dim lstView As ListView_NoFlicker = New ListView_NoFlicker()
 
-        lstView.Parent = Causes.TabPages(intLastTabIndex)
+
         lstView.Dock = DockStyle.Fill
         lstView.Sorting = SortOrder.Ascending
         lstView.Columns.Add(n)
@@ -442,16 +446,16 @@ Public Class MS_Edit
             lstView.Items.Add(t)
         Next
         lstView.EndUpdate()
-
+        lstView.Parent = Causes.TabPages(intLastTabIndex)
         lstView.ListViewItemSorter = New MyCustomSorter
-        lstView.HeaderStyle = ColumnHeaderStyle.Nonclickable
+        lstView.HeaderStyle = ColumnHeaderStyle.None
         lstView.Name = VL_Name
         lstView.FullRowSelect = True
         lstView.View = View.Details
         lstView.Columns(0).Width() = lstView.Width
         AddHandler lstView.DoubleClick, AddressOf ListCauses_DoubleClick
         AddHandler lstView.Resize, AddressOf ListView_resize
-        lstView.Show()
+        'lstView.Show()
 
     End Sub
 
@@ -567,20 +571,20 @@ Public Class MS_Edit
 
 
     Private Sub MS_Editor_TextChanged(sender As Object, e As System.EventArgs)
-        CanOpen(TabControl2.SelectedIndex) = False
+        If SectionChange = False Then CanOpen(TabControl2.SelectedIndex) = False
         'RTBWrapper.colorDocument()
         sb.Panels.Item(0).Text = "Cursor Position: " & MS_Editor.SelectionStart.ToString
         sb.Panels.Item(1).Text = "Current Line: " & MS_Editor.GetLineFromCharIndex(MS_Editor.SelectionStart) + 1
         sb.Panels.Item(2).Text = "Total Lines: " & MS_Editor.GetLineFromCharIndex(MS_Editor.Text.Length) + 1
         sb.Panels.Item(3).Text = "Total Characters: " & MS_Editor.Text.Length.ToString
-        Me.Text = frmTitle(TabControl2.SelectedIndex) & "*"
-        If WorkFileName(TabControl2.SelectedIndex) = "" Then
+        If CanOpen(TabControl2.SelectedIndex) = False Then Me.Text = frmTitle(TabControl2.SelectedIndex) & "*"
+        If WorkFileName(TabControl2.SelectedIndex) = "" And CanOpen(TabControl2.SelectedIndex) = False Then
             TabControl2.SelectedTab.Text = "(New File)*"
-        Else
+        ElseIf CanOpen(TabControl2.SelectedIndex) = False Then
             TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex) + "*"
         End If
 
-        lblStatus.Text = "Status: A change has occured since you last saved the document."
+        If CanOpen(TabControl2.SelectedIndex) = False Then lblStatus.Text = "Status: A change has occured since you last saved the document."
     End Sub
 #Region "Gutter"
     Private Sub DrawRichTextBoxLineNumbers(ByRef g As Graphics, ByRef RTF As RichTextBox2)
@@ -1256,8 +1260,19 @@ InputBox("What location within the document do you want to send the cursor to?",
         End With
     End Sub
 
-    Private Sub ListBox1_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseDown
 
+
+    Private Sub ListBox1_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseDown
+        If ListBox1.Items.Count = 0 Then Exit Sub
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            ListBox1.SelectedIndex = ListBox1.IndexFromPoint(New Point(e.X, e.Y))
+        End If
+
+        SaveSections()
+
+    End Sub
+    Private Sub SaveSections()
+        If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
         If SectionIdx(TabControl2.SelectedIndex) = 0 Then
             FullFile(TabControl2.SelectedIndex).Clear()
             For i = 0 To MS_Editor.Lines.Count - 1
@@ -1276,7 +1291,9 @@ InputBox("What location within the document do you want to send the cursor to?",
     End Sub
 
     Private Sub ListBox1_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseUp
-
+        If ListBox1.Items.Count = 0 Then Exit Sub
+        If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
+        SectionChange = True
         MS_Editor.BeginUpdate()
         If ListBox1.SelectedIndex = 0 Then
             'Rebuild FullFile list first
@@ -1304,11 +1321,12 @@ InputBox("What location within the document do you want to send the cursor to?",
 
             Next
         End If
-        MS_Editor.EndUpdate()
+
         RTBWrapper.colorDocument()
+        MS_Editor.EndUpdate()
         Dim j As Integer = ListBox1.SelectedIndex
         SectionIdx(TabControl2.SelectedIndex) = ListBox1.SelectedIndex
-
+        SectionChange = False
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox1.SelectedIndexChanged
@@ -1338,27 +1356,50 @@ InputBox("What location within the document do you want to send the cursor to?",
         Next
     End Sub
 
-    Private Sub NewSection_Click(sender As System.Object, e As System.EventArgs) Handles NewSection.Click
+    Private Sub NewSection_Click(sender As System.Object, e As System.EventArgs) Handles NewSection.Click, BtnSectionAdd.Click
+        If ListBox1.Items.Count = 0 Then Exit Sub
+        SaveSections()
+        Dim section As TDSSegment = New TDSSegment
+        Dim s As String = Microsoft.VisualBasic.InputBox("Add Section")
+        If String.IsNullOrEmpty(s) Then Exit Sub
+        section.Title = s
+        section.lines.Add("")
+        Dim i As Integer = (TabSections(TabControl2.SelectedIndex).Count - 1)
+        TabSections(TabControl2.SelectedIndex).Insert(i, section)
+        'RebuildFullFile()
+        UpdateSegmentList()
+        UpdateSegments()
+        ListBox1.SelectedIndex = i + 1
+        'MS_Editor.Text = ""
 
     End Sub
 
     Private Sub DeleteSection_Click(sender As System.Object, e As System.EventArgs) Handles DeleteSection.Click
-
+        If ListBox1.SelectedIndex = -1 Then Exit Sub
     End Sub
 
     Private Sub CopySection_Click(sender As System.Object, e As System.EventArgs) Handles CopySection.Click
-
+        If ListBox1.SelectedIndex = -1 Then Exit Sub
+        CopyListBoxItem()
     End Sub
 
     Private Sub CutSection_Click(sender As System.Object, e As System.EventArgs) Handles CutSection.Click
+        If ListBox1.SelectedIndex = -1 Then Exit Sub
+    End Sub
+    Private Sub ListBox1_KeyUp(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox1.KeyUp
+        If e.Control AndAlso e.KeyCode = Keys.C Then
+            CopyListBoxItem()
+        ElseIf e.Control AndAlso e.KeyCode = Keys.X Then
 
+
+        ElseIf e.Control AndAlso e.KeyCode = Keys.V Then
+
+        End If
+    End Sub
+    Private Sub CopyListBoxItem()
+        Dim section As TDSSegment
+        section = TabSections(TabControl2.SelectedIndex)(ListBox1.SelectedIndex - 1)
+        Clipboard.SetDataObject(section)
     End Sub
 
-    Private Sub PasteSection_Click(sender As System.Object, e As System.EventArgs) Handles PasteSection.Click
-
-    End Sub
-
-    Private Sub ListBox1_SizeChanged(sender As Object, e As System.EventArgs) Handles ListBox1.SizeChanged
-
-    End Sub
 End Class
