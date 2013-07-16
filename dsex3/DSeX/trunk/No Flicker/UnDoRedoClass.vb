@@ -24,7 +24,7 @@
     End Sub
 
     Public Sub Undo()
-
+        If UndoStack.Count = 0 Then Exit Sub
         RedoStack.Push(CurrentItem)
         CurrentItem = UndoStack.Pop()
         RaiseEvent UndoHappened(Me, New UndoRedoEventArgs(CurrentItem))
@@ -33,7 +33,7 @@
     End Sub
 
     Public Sub Redo()
-
+        If RedoStack.Count = 0 Then Exit Sub
         UndoStack.Push(CurrentItem)
         CurrentItem = RedoStack.Pop
         RaiseEvent RedoHappened(Me, New UndoRedoEventArgs(CurrentItem))
