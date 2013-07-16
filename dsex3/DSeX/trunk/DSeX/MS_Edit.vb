@@ -83,6 +83,7 @@ Public Class MS_Edit
     'mPath()
     Dim frmTitle As List(Of String) = New List(Of String)
     Dim lastTab As Integer = 0
+    Dim Flag As Boolean = False
     Private Const RES_SEC_Marker As String = "**SECTION**  "
     Private Const RES_DS_begin As String = "DSPK V"
     Private Const RES_DS_end As String = "*Endtriggers* 8888 *Endtriggers*"
@@ -157,6 +158,7 @@ Public Class MS_Edit
         Dim path As String = Application.StartupPath + "/Templates/"
         Directory.CreateDirectory(path)
         TemplatePaths.Clear()
+        ListBox2.Items.Clear()
         Dim x As Integer = 0
         ListBox2.BeginUpdate()
         For x = 0 To FileIO.FileSystem.GetFiles(path, FileIO.SearchOption.SearchTopLevelOnly, "*.ds").Count - 1
@@ -248,19 +250,6 @@ Public Class MS_Edit
 
     End Sub
     Private Sub OpenMS_File()
-
-
-        'If Not CanOpen(TabControl2.SelectedIndex) Then
-        '    Dim reply As DialogResult = MessageBox.Show("Save changes? Yes or No", "Caption", _
-        '      MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
-
-        '    If reply = DialogResult.Yes Then
-        '        SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
-        '    Else
-        '        '    'Process No
-
-        '    End If
-        'End If
         With MS_BrosweDialog
             ' Select Character ini file
             .InitialDirectory = Environment.SpecialFolder.MyDocuments & "\Furcadia\"
@@ -408,7 +397,9 @@ Public Class MS_Edit
         'If Not IsNothing(splash) Then splash.Close()
     End Sub
 
-
+    Private Sub RefreshTemplatesToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RefreshTemplatesToolStripMenuItem.Click
+        GetTemplates()
+    End Sub
 
     Public Function SplitCSV(ByRef input As String) As ArrayList
         Dim csvSplit As New Regex("(?:^|,)(""(?:[^""]+|"""")*""|[^,]*)", RegexOptions.Compiled)
@@ -677,26 +668,32 @@ Public Class MS_Edit
     End Sub
 
     Private Sub ToolBoxCut_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxCut.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         MS_Editor.Cut()
     End Sub
 
     Private Sub ToolBoxyCopy_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxyCopy.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         MS_Editor.Copy()
     End Sub
 
     Private Sub ToolBoxPaste_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxPaste.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         MS_Editor.Paste()
     End Sub
 
     Private Sub ToolBoxUndo_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxUndo.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         MS_Editor.Undo()
     End Sub
 
     Private Sub ToolBoxRedo_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxRedo.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         MS_Editor.Redo()
     End Sub
 
     Private Sub GotoToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoToolStripMenuItem.Click, ToolStripButton1.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         Dim i As String = _
 InputBox("What location within the document do you want to send the cursor to?", _
 " Location to send the Cursor?", "0")
@@ -712,20 +709,20 @@ InputBox("What location within the document do you want to send the cursor to?",
     End Sub
 
     Private Sub UndoToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles UndoToolStripMenuItem.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         MS_Editor.Undo()
     End Sub
 
     Private Sub RedoToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RedoToolStripMenuItem.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         MS_Editor.Redo()
     End Sub
 
-    Private Sub SaveAsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SaveAsToolStripMenuItem.Click
+    Private Sub SaveAsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SaveAsToolStripMenuItem.Click, ToolBoxSaveAs.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         SaveAs()
     End Sub
 
-    Private Sub ToolBoxSaveAs_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxSaveAs.Click
-        SaveAs()
-    End Sub
 
     Private Sub NewFile()
         If Not CanOpen(TabControl2.SelectedIndex) Then
@@ -761,6 +758,7 @@ InputBox("What location within the document do you want to send the cursor to?",
     End Sub
 
     Private Sub FixIndentsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles FixIndentsToolStripMenuItem.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         Dim StrArray() As String
         MS_Editor.BeginUpdate()
         StrArray = MS_Editor.Lines
@@ -797,13 +795,37 @@ InputBox("What location within the document do you want to send the cursor to?",
         MS_Editor.SelectionStart = insertPos
     End Sub
 
-
-    Private Sub BtnComment_Click(sender As System.Object, e As System.EventArgs) Handles BtnComment.Click
+    Private Sub BtnComment_Click(sender As System.Object, e As System.EventArgs) Handles BtnComment.Click, ApplyCommentToolStripMenuItem.Click
         ApplyComment()
     End Sub
 
-    Private Sub ApplyComment()
+    Private Sub ApplyCommentToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles ApplyCommentToolStripMenuItem1.Click
+        If IsNothing(MS_Editor) Then Exit Sub
 
+        Dim str() As String = MS_Editor.Lines
+        If str.Length > 1 Then
+            For i As Integer = 0 To str.Length - 1
+                str(i) = "*" & str(i)
+            Next
+            MS_Editor.Lines = str
+            RTBWrapper.colorDocument()
+        End If
+    End Sub
+
+    Private Sub AutoCommentOffToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles AutoCommentOffToolStripMenuItem.Click
+        If IsNothing(MS_Editor) Then Exit Sub
+
+        Dim str() As String = MS_Editor.Lines
+        If str.Length > 1 Then
+            For i As Integer = 0 To str.Length - 1
+                If str(i).StartsWith("*") Then str(i) = str(i).Remove(0, 1)
+            Next
+            MS_Editor.Lines = str
+            RTBWrapper.colorDocument()
+        End If
+    End Sub
+    Private Sub ApplyComment()
+        If IsNothing(MS_Editor) Then Exit Sub
 
         Dim this As String = MS_Editor.SelectedText
         Dim str() As String = this.Split(Chr(10))
@@ -818,7 +840,7 @@ InputBox("What location within the document do you want to send the cursor to?",
     End Sub
 
     Private Sub RemoveComment()
-
+        If IsNothing(MS_Editor) Then Exit Sub
 
         Dim this As String = MS_Editor.SelectedText
         Dim str() As String = this.Split(Chr(10))
@@ -833,18 +855,10 @@ InputBox("What location within the document do you want to send the cursor to?",
         End If
     End Sub
 
-    Private Sub ApplyCommentToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ApplyCommentToolStripMenuItem.Click
-        ApplyComment()
-    End Sub
 
-    Private Sub RemoveCommentToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RemoveCommentToolStripMenuItem.Click
+    Private Sub RemoveCommentToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RemoveCommentToolStripMenuItem.Click, BtnUncomment.Click
         RemoveComment()
     End Sub
-
-    Private Sub BtnUncomment_Click(sender As System.Object, e As System.EventArgs) Handles BtnUncomment.Click
-        RemoveComment()
-    End Sub
-
 
     Private Sub ConfigToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ConfigToolStripMenuItem.Click
         Config.Show()
@@ -934,12 +948,6 @@ InputBox("What location within the document do you want to send the cursor to?",
         tp.Name = "tbpageBrowser" & intLastTabIndex.ToString
         'Adds a new tab to your tab control
         CanOpen.Add(True)
-        'Dim sections As List(Of String) = New List(Of String)
-        'sections.Add("Whole Script")
-        'sections.Add("Start")
-        'sections.Add("Default")
-        'sections.Add("end")
-        'TabSections.Add(sections)
         WorkFileName.Add(FileName)
         WorkPath.Add(FilePath)
         frmTitle.Add("DSeX - New DragonSpeak File")
@@ -1024,8 +1032,6 @@ InputBox("What location within the document do you want to send the cursor to?",
         End If
     End Sub
 
-
-
     Private Sub TabControl2_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles TabControl2.SelectedIndexChanged
         ListBox1.Items.Clear()
         If TabControl2.SelectedIndex = -1 Then Exit Sub
@@ -1040,8 +1046,6 @@ InputBox("What location within the document do you want to send the cursor to?",
         If SectionIdx(TabControl2.SelectedIndex) <> ListBox1.SelectedIndex Then ListBox1.SelectedIndex = SectionIdx(TabControl2.SelectedIndex)
         lastTab = TabControl2.SelectedIndex
     End Sub
-
-
 
     Private Sub TabControl2_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TabControl2.MouseUp
         If e.Button = Windows.Forms.MouseButtons.Right Then
@@ -1075,15 +1079,16 @@ InputBox("What location within the document do you want to send the cursor to?",
     End Sub
 
     Private Sub CloseAllButThis(ByRef i As Integer)
-
         For j = TabControl2.TabPages.Count - 1 To 0 Step -1
             If i <> j Then CloseTab(j)
         Next
     End Sub
+
     Private Sub FCloseAllTab_Click(sender As System.Object, e As System.EventArgs)
         Dim i As Integer = sender.Tag
         CloseAllButThis(i)
     End Sub
+
     Private Sub FCloseTab_Click(sender As System.Object, e As System.EventArgs)
         Dim i As Integer = sender.Tag
         CloseTab(i)
@@ -1124,7 +1129,7 @@ InputBox("What location within the document do you want to send the cursor to?",
         NewFile()
     End Sub
 
-    Private Sub ListBox2_DoubleClick(sender As Object, e As System.EventArgs) Handles ListBox2.DoubleClick
+    Private Sub ListBox2_DoubleClick(sender As Object, e As System.EventArgs) Handles ListBox2.DoubleClick, InsertToDSFileToolStripMenuItem.Click
         Dim p As String = TemplatePaths.Item(ListBox2.SelectedIndex) + ListBox2.SelectedItem + ".ds"
         Dim reader As New StreamReader(p)
         Dim str As String = ""
@@ -1143,8 +1148,20 @@ InputBox("What location within the document do you want to send the cursor to?",
         SaveMS_File(WorkPath(sender.tag), WorkFileName(sender.tag))
     End Sub
 
+    Private Sub RenameToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles RenameToolStripMenuItem1.Click
+        Dim s As String = Microsoft.VisualBasic.InputBox("New Name?")
+        If String.IsNullOrEmpty(s) Then Exit Sub
+        My.Computer.FileSystem.RenameFile(TemplatePaths.Item(ListBox2.SelectedIndex) + ListBox2.SelectedItem + ".ds", TemplatePaths(ListBox2.SelectedIndex) + s + ".ds")
+        GetTemplates()
+    End Sub
 
-    Private Sub BtnTemplateDelete_Click(sender As System.Object, e As System.EventArgs) Handles BtnTemplateDelete.Click
+    Private Sub EditToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles EditToolStripMenuItem1.Click
+        'emplatePaths(ListBox2.SelectedIndex) + 
+        AddNewEditorTab(ListBox2.SelectedItem + ".ds", TemplatePaths.Item(ListBox2.SelectedIndex), TabControl2.TabCount.ToString)
+        OpenMS_File(TemplatePaths.Item(ListBox2.SelectedIndex) + "/" + ListBox2.SelectedItem + ".ds")
+    End Sub
+
+    Private Sub BtnTemplateDelete_Click(sender As System.Object, e As System.EventArgs) Handles BtnTemplateDelete.Click, DeleteToolStripMenuItem.Click
         Dim reply As DialogResult = MessageBox.Show("Really delete this template?", "Caption", _
      MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
 
@@ -1156,7 +1173,7 @@ InputBox("What location within the document do you want to send the cursor to?",
 
     End Sub
 
-    Private Sub BtnTemplateAdd_Click(sender As System.Object, e As System.EventArgs) Handles BtnTemplateAdd.Click
+    Private Sub BtnTemplateAdd_Click(sender As System.Object, e As System.EventArgs) Handles BtnTemplateAdd.Click, AddToolStripMenuItem.Click
         Dim path As String = Furcadia.IO.Paths.GetFurcadiaDocPath + "/Templates/"
         Dim message, title As String
         Dim myValue As Object
@@ -1174,7 +1191,7 @@ InputBox("What location within the document do you want to send the cursor to?",
     End Sub
 
     Public Sub UpdateSegments(ByRef idx As Integer)
-
+        Debug.Print("UpdateSegments()")
         Dim tmpsec As TDSSegment = New TDSSegment
         Dim sec2 As TDSSegment = New TDSSegment
         Dim bypass As Boolean = False
@@ -1236,7 +1253,7 @@ InputBox("What location within the document do you want to send the cursor to?",
 
     Public Sub UpdateSegmentList(ByRef idx As Integer)
         Dim tseg As TDSSegment
-        Dim Sects_Indent As String = "    "
+        Dim Sects_Indent As String = Space(4)
         With ListBox1
             .Items.Clear()
             .Items.Add(RES_DSS_All)
@@ -1260,20 +1277,21 @@ InputBox("What location within the document do you want to send the cursor to?",
         End With
     End Sub
 
-
-
     Private Sub ListBox1_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseDown
         If ListBox1.Items.Count = 0 Then Exit Sub
         If e.Button = Windows.Forms.MouseButtons.Right Then
             ListBox1.SelectedIndex = ListBox1.IndexFromPoint(New Point(e.X, e.Y))
         End If
-
+        Debug.Print("ListBox1_MouseDown()")
         SaveSections()
 
     End Sub
+
     Private Sub SaveSections()
         If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
-        If SectionIdx(TabControl2.SelectedIndex) = 0 Then
+        Debug.Print("SaveSections()")
+        If SectionIdx(TabControl2.SelectedIndex) = 0 And MS_Editor.Text <> "" Then
+            Debug.Print("SectionIdx(" + TabControl2.SelectedIndex.ToString + ")")
             FullFile(TabControl2.SelectedIndex).Clear()
             For i = 0 To MS_Editor.Lines.Count - 1
                 FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines(i))
@@ -1292,6 +1310,7 @@ InputBox("What location within the document do you want to send the cursor to?",
 
     Private Sub ListBox1_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseUp
         If ListBox1.Items.Count = 0 Then Exit Sub
+        Debug.Print("ListBox1_MouseUp()")
         If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
         SectionChange = True
         MS_Editor.BeginUpdate()
@@ -1310,16 +1329,7 @@ InputBox("What location within the document do you want to send the cursor to?",
             Next
             UpdateSegments()
         Else
-            MS_Editor.Text = ""
-
-            For i = 0 To TabSections(TabControl2.SelectedIndex)(ListBox1.SelectedIndex - 1).lines.Count - 1
-                If i = TabSections(TabControl2.SelectedIndex)(ListBox1.SelectedIndex - 1).lines.Count - 1 Then
-                    MS_Editor.AppendText(TabSections(TabControl2.SelectedIndex)(ListBox1.SelectedIndex - 1).lines(i))
-                Else
-                    MS_Editor.AppendLine(TabSections(TabControl2.SelectedIndex)(ListBox1.SelectedIndex - 1).lines(i))
-                End If
-
-            Next
+            DisplaySection(ListBox1.SelectedIndex - 1)
         End If
 
         RTBWrapper.colorDocument()
@@ -1328,12 +1338,17 @@ InputBox("What location within the document do you want to send the cursor to?",
         SectionIdx(TabControl2.SelectedIndex) = ListBox1.SelectedIndex
         SectionChange = False
     End Sub
+    Private Sub DisplaySection(ByRef j As Integer)
+        MS_Editor.Text = ""
 
-    Private Sub ListBox1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox1.SelectedIndexChanged
-        'Save last section before changing tabs or sections
-        Dim i As Integer = ListBox1.SelectedIndex
-        Exit Sub
-        
+        For i = 0 To TabSections(TabControl2.SelectedIndex)(j).lines.Count - 1
+            If i = TabSections(TabControl2.SelectedIndex)(j).lines.Count - 1 Then
+                MS_Editor.AppendText(TabSections(TabControl2.SelectedIndex)(j).lines(i))
+            Else
+                MS_Editor.AppendLine(TabSections(TabControl2.SelectedIndex)(j).lines(i))
+            End If
+
+        Next
     End Sub
 
     Private Sub RebuildFullFile()
@@ -1341,6 +1356,7 @@ InputBox("What location within the document do you want to send the cursor to?",
     End Sub
 
     Private Sub RebuildFullFile(ByRef Tab As Integer)
+        Debug.Print("RebuildFullFile()")
         FullFile(Tab).Clear()
         For i = 0 To TabSections(Tab).Count - 1
             'RES_SEC_Marker
@@ -1351,55 +1367,94 @@ InputBox("What location within the document do you want to send the cursor to?",
                 FullFile(Tab).Add(RES_SEC_Marker + TabSections(Tab)(i).Title)
             End If
             FullFile(Tab).AddRange(TabSections(Tab)(i).lines)
-
-
         Next
     End Sub
 
     Private Sub NewSection_Click(sender As System.Object, e As System.EventArgs) Handles NewSection.Click, BtnSectionAdd.Click
+        NewSec((TabSections(TabControl2.SelectedIndex).Count - 1))
+    End Sub
+
+    Private Sub InsertSectionToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles InsertSectionToolStripMenuItem.Click
+        NewSec(ListBox1.SelectedIndex - 1)
+    End Sub
+
+    Private Sub NewSec(ByRef i As Integer)
         If ListBox1.Items.Count = 0 Then Exit Sub
+        Debug.Print("NewSection_Click()")
         SaveSections()
         Dim section As TDSSegment = New TDSSegment
         Dim s As String = Microsoft.VisualBasic.InputBox("Add Section")
         If String.IsNullOrEmpty(s) Then Exit Sub
         section.Title = s
         section.lines.Add("")
-        Dim i As Integer = (TabSections(TabControl2.SelectedIndex).Count - 1)
+
         TabSections(TabControl2.SelectedIndex).Insert(i, section)
+        RebuildFullFile()
+        UpdateSegmentList()
+        ListBox1.SelectedIndex = i + 1
+        DisplaySection(i)
+
+    End Sub
+
+    Private Sub RemoveSection(ByRef i As Integer)
+
+        If ListBox1.Items.Count = 0 Then Exit Sub
+        Dim reply As DialogResult = MessageBox.Show("Really delete this section?", "Caption", _
+MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+
+        If reply = DialogResult.Cancel Then Exit Sub
+
+        TabSections(TabControl2.SelectedIndex).RemoveAt(i)
         'RebuildFullFile()
         UpdateSegmentList()
-        UpdateSegments()
+        'UpdateSegments(i) 'm Goin bald trying to figure this
         ListBox1.SelectedIndex = i + 1
-        'MS_Editor.Text = ""
-
+        DisplaySection(i)
+        RTBWrapper.colorDocument()
     End Sub
 
     Private Sub DeleteSection_Click(sender As System.Object, e As System.EventArgs) Handles DeleteSection.Click
-        If ListBox1.SelectedIndex = -1 Then Exit Sub
+        RemoveSection(ListBox1.SelectedIndex - 1)
     End Sub
 
-    Private Sub CopySection_Click(sender As System.Object, e As System.EventArgs) Handles CopySection.Click
-        If ListBox1.SelectedIndex = -1 Then Exit Sub
-        CopyListBoxItem()
+    Private Sub RenameToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RenameToolStripMenuItem.Click
+        If ListBox1.Items.Count = 0 Then Exit Sub
+        Dim idx As Integer = ListBox1.SelectedIndex
+        Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(idx - 1)
+        Dim s As String = Microsoft.VisualBasic.InputBox("New Name?")
+        If String.IsNullOrEmpty(s) Then Exit Sub
+        section.Title = s
+        UpdateSegmentList()
+        ListBox1.SelectedIndex = idx
     End Sub
 
-    Private Sub CutSection_Click(sender As System.Object, e As System.EventArgs) Handles CutSection.Click
-        If ListBox1.SelectedIndex = -1 Then Exit Sub
+    Private Sub BtnSectionUp_Click(sender As System.Object, e As System.EventArgs) Handles BtnSectionUp.Click
+        If ListBox1.Items.Count = 0 Then Exit Sub
+        If ListBox1.SelectedIndex <= 2 Then Exit Sub
+        Dim idx As Integer = ListBox1.SelectedIndex - 1
+        Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(idx)
+        TabSections(TabControl2.SelectedIndex).RemoveAt(idx)
+        TabSections(TabControl2.SelectedIndex).Insert(idx - 1, section)
+        UpdateSegmentList()
+        ListBox1.SelectedIndex = idx
     End Sub
-    Private Sub ListBox1_KeyUp(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles ListBox1.KeyUp
-        If e.Control AndAlso e.KeyCode = Keys.C Then
-            CopyListBoxItem()
-        ElseIf e.Control AndAlso e.KeyCode = Keys.X Then
+
+    Private Sub BtnSectionDown_Click(sender As System.Object, e As System.EventArgs) Handles BtnSectionDown.Click
+        If ListBox1.Items.Count = 0 Then Exit Sub
+        If ListBox1.SelectedIndex < 2 Then Exit Sub
+        If ListBox1.SelectedIndex = ListBox1.Items.Count - 1 Then Exit Sub
+        Dim idx As Integer = ListBox1.SelectedIndex - 1
+        Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(idx)
+        TabSections(TabControl2.SelectedIndex).RemoveAt(idx)
+        TabSections(TabControl2.SelectedIndex).Insert(idx + 1, section)
+        UpdateSegmentList()
+        ListBox1.SelectedIndex = idx + 2
+    End Sub
 
 
-        ElseIf e.Control AndAlso e.KeyCode = Keys.V Then
-
+    Private Sub ListBox2_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox2.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            ListBox2.SelectedIndex = ListBox2.IndexFromPoint(New Point(e.X, e.Y))
         End If
     End Sub
-    Private Sub CopyListBoxItem()
-        Dim section As TDSSegment
-        section = TabSections(TabControl2.SelectedIndex)(ListBox1.SelectedIndex - 1)
-        Clipboard.SetDataObject(section)
-    End Sub
-
 End Class
