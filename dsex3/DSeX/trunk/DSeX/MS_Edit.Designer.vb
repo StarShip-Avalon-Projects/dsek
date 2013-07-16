@@ -33,7 +33,11 @@ Partial Class MS_Edit
         Me.MenuCopy = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuCut = New System.Windows.Forms.ToolStripMenuItem()
         Me.PasteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SelectAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AutocommentOnToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AutocommentOffToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.imgList = New System.Windows.Forms.ImageList(Me.components)
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewMonkeySpeakToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -72,18 +76,32 @@ Partial Class MS_Edit
         Me.BtnSectionDelete = New System.Windows.Forms.Button()
         Me.BtnSectionDown = New System.Windows.Forms.Button()
         Me.BtnSectionUp = New System.Windows.Forms.Button()
+        Me.BtnSectionAdd = New System.Windows.Forms.Button()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.SectionMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.RenameToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
         Me.NewSection = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DeleteSection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.InsertSectionToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.CopySection = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CutSection = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PasteSection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteSection = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ApplyCommentToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AutoCommentOffToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.BtnTemplateAdd = New System.Windows.Forms.Button()
         Me.BtnTemplateDelete = New System.Windows.Forms.Button()
         Me.ListBox2 = New System.Windows.Forms.ListBox()
+        Me.TemplateMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.RefreshTemplatesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
+        Me.InsertToDSFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
+        Me.AddToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeleteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
+        Me.RenameToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EditToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl2 = New DSeX.TabControlEx()
         Me.ToolBox = New System.Windows.Forms.ToolStrip()
         Me.ToolBoxNew = New System.Windows.Forms.ToolStripButton()
@@ -115,7 +133,6 @@ Partial Class MS_Edit
         Me.Causes = New System.Windows.Forms.TabControl()
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.AutocompleteMenu1 = New AutocompleteMenuNS.AutocompleteMenu()
-        Me.BtnSectionAdd = New System.Windows.Forms.Button()
         Me.EditMenu.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -130,6 +147,7 @@ Partial Class MS_Edit
         Me.TabPage1.SuspendLayout()
         Me.SectionMenu.SuspendLayout()
         Me.TabPage2.SuspendLayout()
+        Me.TemplateMenu.SuspendLayout()
         Me.ToolBox.SuspendLayout()
         CType(Me.panelCurrentPosition, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.panelCurrentLine, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -151,37 +169,60 @@ Partial Class MS_Edit
         '
         'EditMenu
         '
-        Me.EditMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuCopy, Me.MenuCut, Me.PasteToolStripMenuItem, Me.ToolStripSeparator3})
+        Me.EditMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuCopy, Me.MenuCut, Me.PasteToolStripMenuItem, Me.ToolStripSeparator12, Me.SelectAllToolStripMenuItem, Me.ToolStripSeparator3, Me.AutocommentOnToolStripMenuItem, Me.AutocommentOffToolStripMenuItem1})
         Me.EditMenu.Name = "EditMenu"
         Me.EditMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.EditMenu.ShowImageMargin = False
-        Me.EditMenu.Size = New System.Drawing.Size(115, 76)
+        Me.EditMenu.Size = New System.Drawing.Size(133, 148)
         '
         'MenuCopy
         '
         Me.MenuCopy.Name = "MenuCopy"
         Me.MenuCopy.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
-        Me.MenuCopy.Size = New System.Drawing.Size(114, 22)
+        Me.MenuCopy.Size = New System.Drawing.Size(132, 22)
         Me.MenuCopy.Text = "Copy"
         '
         'MenuCut
         '
         Me.MenuCut.Name = "MenuCut"
         Me.MenuCut.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.K), System.Windows.Forms.Keys)
-        Me.MenuCut.Size = New System.Drawing.Size(114, 22)
+        Me.MenuCut.Size = New System.Drawing.Size(132, 22)
         Me.MenuCut.Text = "Cut"
         '
         'PasteToolStripMenuItem
         '
         Me.PasteToolStripMenuItem.Name = "PasteToolStripMenuItem"
         Me.PasteToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
-        Me.PasteToolStripMenuItem.Size = New System.Drawing.Size(114, 22)
+        Me.PasteToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
         Me.PasteToolStripMenuItem.Text = "Paste"
+        '
+        'ToolStripSeparator12
+        '
+        Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(129, 6)
+        '
+        'SelectAllToolStripMenuItem
+        '
+        Me.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem"
+        Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
+        Me.SelectAllToolStripMenuItem.Text = "Select All"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(111, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(129, 6)
+        '
+        'AutocommentOnToolStripMenuItem
+        '
+        Me.AutocommentOnToolStripMenuItem.Name = "AutocommentOnToolStripMenuItem"
+        Me.AutocommentOnToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
+        Me.AutocommentOnToolStripMenuItem.Text = "Autocomment on"
+        '
+        'AutocommentOffToolStripMenuItem1
+        '
+        Me.AutocommentOffToolStripMenuItem1.Name = "AutocommentOffToolStripMenuItem1"
+        Me.AutocommentOffToolStripMenuItem1.Size = New System.Drawing.Size(132, 22)
+        Me.AutocommentOffToolStripMenuItem1.Text = "Autocomment off"
         '
         'imgList
         '
@@ -515,6 +556,17 @@ Partial Class MS_Edit
         Me.BtnSectionUp.Text = "á"
         Me.BtnSectionUp.UseVisualStyleBackColor = True
         '
+        'BtnSectionAdd
+        '
+        Me.BtnSectionAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.BtnSectionAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.BtnSectionAdd.Location = New System.Drawing.Point(50, 178)
+        Me.BtnSectionAdd.Name = "BtnSectionAdd"
+        Me.BtnSectionAdd.Size = New System.Drawing.Size(17, 23)
+        Me.BtnSectionAdd.TabIndex = 9
+        Me.BtnSectionAdd.Text = "+"
+        Me.BtnSectionAdd.UseVisualStyleBackColor = True
+        '
         'ListBox1
         '
         Me.ListBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -525,49 +577,65 @@ Partial Class MS_Edit
         Me.ListBox1.Items.AddRange(New Object() {"Entire Document", "DS-Start", "   Default Section", "DS-End"})
         Me.ListBox1.Location = New System.Drawing.Point(0, 0)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(107, 173)
+        Me.ListBox1.Size = New System.Drawing.Size(107, 160)
         Me.ListBox1.TabIndex = 0
         '
         'SectionMenu
         '
-        Me.SectionMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewSection, Me.DeleteSection, Me.ToolStripSeparator9, Me.CopySection, Me.CutSection, Me.PasteSection})
+        Me.SectionMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameToolStripMenuItem, Me.ToolStripSeparator11, Me.NewSection, Me.InsertSectionToolStripMenuItem, Me.ToolStripSeparator9, Me.DeleteSection, Me.ToolStripSeparator10, Me.ApplyCommentToolStripMenuItem1, Me.AutoCommentOffToolStripMenuItem})
         Me.SectionMenu.Name = "ContextMenuStrip1"
-        Me.SectionMenu.Size = New System.Drawing.Size(144, 120)
+        Me.SectionMenu.Size = New System.Drawing.Size(165, 154)
+        '
+        'RenameToolStripMenuItem
+        '
+        Me.RenameToolStripMenuItem.Name = "RenameToolStripMenuItem"
+        Me.RenameToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.RenameToolStripMenuItem.Text = "Rename"
+        '
+        'ToolStripSeparator11
+        '
+        Me.ToolStripSeparator11.Name = "ToolStripSeparator11"
+        Me.ToolStripSeparator11.Size = New System.Drawing.Size(161, 6)
         '
         'NewSection
         '
         Me.NewSection.Name = "NewSection"
-        Me.NewSection.Size = New System.Drawing.Size(143, 22)
+        Me.NewSection.Size = New System.Drawing.Size(164, 22)
         Me.NewSection.Text = "New Section"
         '
-        'DeleteSection
+        'InsertSectionToolStripMenuItem
         '
-        Me.DeleteSection.Name = "DeleteSection"
-        Me.DeleteSection.Size = New System.Drawing.Size(143, 22)
-        Me.DeleteSection.Text = "Delete Section"
+        Me.InsertSectionToolStripMenuItem.Name = "InsertSectionToolStripMenuItem"
+        Me.InsertSectionToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.InsertSectionToolStripMenuItem.Text = "Insert Section"
         '
         'ToolStripSeparator9
         '
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
-        Me.ToolStripSeparator9.Size = New System.Drawing.Size(140, 6)
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(161, 6)
         '
-        'CopySection
+        'DeleteSection
         '
-        Me.CopySection.Name = "CopySection"
-        Me.CopySection.Size = New System.Drawing.Size(143, 22)
-        Me.CopySection.Text = "Copy Section"
+        Me.DeleteSection.Name = "DeleteSection"
+        Me.DeleteSection.Size = New System.Drawing.Size(164, 22)
+        Me.DeleteSection.Text = "Delete Section"
         '
-        'CutSection
+        'ToolStripSeparator10
         '
-        Me.CutSection.Name = "CutSection"
-        Me.CutSection.Size = New System.Drawing.Size(143, 22)
-        Me.CutSection.Text = "Cut Section"
+        Me.ToolStripSeparator10.Name = "ToolStripSeparator10"
+        Me.ToolStripSeparator10.Size = New System.Drawing.Size(161, 6)
         '
-        'PasteSection
+        'ApplyCommentToolStripMenuItem1
         '
-        Me.PasteSection.Name = "PasteSection"
-        Me.PasteSection.Size = New System.Drawing.Size(143, 22)
-        Me.PasteSection.Text = "Paste Section"
+        Me.ApplyCommentToolStripMenuItem1.Name = "ApplyCommentToolStripMenuItem1"
+        Me.ApplyCommentToolStripMenuItem1.Size = New System.Drawing.Size(164, 22)
+        Me.ApplyCommentToolStripMenuItem1.Text = "Autocomment on"
+        '
+        'AutoCommentOffToolStripMenuItem
+        '
+        Me.AutoCommentOffToolStripMenuItem.Name = "AutoCommentOffToolStripMenuItem"
+        Me.AutoCommentOffToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.AutoCommentOffToolStripMenuItem.Text = "Auto Comment Off"
         '
         'TabPage2
         '
@@ -607,11 +675,69 @@ Partial Class MS_Edit
         Me.ListBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListBox2.ContextMenuStrip = Me.TemplateMenu
         Me.ListBox2.FormattingEnabled = True
         Me.ListBox2.Location = New System.Drawing.Point(3, 3)
         Me.ListBox2.Name = "ListBox2"
         Me.ListBox2.Size = New System.Drawing.Size(107, 173)
         Me.ListBox2.TabIndex = 0
+        '
+        'TemplateMenu
+        '
+        Me.TemplateMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RefreshTemplatesToolStripMenuItem, Me.ToolStripSeparator13, Me.InsertToDSFileToolStripMenuItem, Me.ToolStripSeparator14, Me.AddToolStripMenuItem, Me.DeleteToolStripMenuItem, Me.ToolStripSeparator15, Me.RenameToolStripMenuItem1, Me.EditToolStripMenuItem1})
+        Me.TemplateMenu.Name = "TemplateMenu"
+        Me.TemplateMenu.Size = New System.Drawing.Size(165, 154)
+        '
+        'RefreshTemplatesToolStripMenuItem
+        '
+        Me.RefreshTemplatesToolStripMenuItem.Name = "RefreshTemplatesToolStripMenuItem"
+        Me.RefreshTemplatesToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.RefreshTemplatesToolStripMenuItem.Text = "Refresh Templates"
+        '
+        'ToolStripSeparator13
+        '
+        Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(161, 6)
+        '
+        'InsertToDSFileToolStripMenuItem
+        '
+        Me.InsertToDSFileToolStripMenuItem.Name = "InsertToDSFileToolStripMenuItem"
+        Me.InsertToDSFileToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.InsertToDSFileToolStripMenuItem.Text = "Insert to DS File"
+        '
+        'ToolStripSeparator14
+        '
+        Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
+        Me.ToolStripSeparator14.Size = New System.Drawing.Size(161, 6)
+        '
+        'AddToolStripMenuItem
+        '
+        Me.AddToolStripMenuItem.Name = "AddToolStripMenuItem"
+        Me.AddToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.AddToolStripMenuItem.Text = "Add"
+        '
+        'DeleteToolStripMenuItem
+        '
+        Me.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem"
+        Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(164, 22)
+        Me.DeleteToolStripMenuItem.Text = "Delete"
+        '
+        'ToolStripSeparator15
+        '
+        Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
+        Me.ToolStripSeparator15.Size = New System.Drawing.Size(161, 6)
+        '
+        'RenameToolStripMenuItem1
+        '
+        Me.RenameToolStripMenuItem1.Name = "RenameToolStripMenuItem1"
+        Me.RenameToolStripMenuItem1.Size = New System.Drawing.Size(164, 22)
+        Me.RenameToolStripMenuItem1.Text = "Rename"
+        '
+        'EditToolStripMenuItem1
+        '
+        Me.EditToolStripMenuItem1.Name = "EditToolStripMenuItem1"
+        Me.EditToolStripMenuItem1.Size = New System.Drawing.Size(164, 22)
+        Me.EditToolStripMenuItem1.Text = "Edit"
         '
         'TabControl2
         '
@@ -868,17 +994,6 @@ Partial Class MS_Edit
         Me.AutocompleteMenu1.SearchPattern = "[ \w\.:=!<>\{\}]"
         Me.AutocompleteMenu1.TargetControlWrapper = Nothing
         '
-        'BtnSectionAdd
-        '
-        Me.BtnSectionAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.BtnSectionAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BtnSectionAdd.Location = New System.Drawing.Point(50, 178)
-        Me.BtnSectionAdd.Name = "BtnSectionAdd"
-        Me.BtnSectionAdd.Size = New System.Drawing.Size(17, 23)
-        Me.BtnSectionAdd.TabIndex = 9
-        Me.BtnSectionAdd.Text = "+"
-        Me.BtnSectionAdd.UseVisualStyleBackColor = True
-        '
         'MS_Edit
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -907,6 +1022,7 @@ Partial Class MS_Edit
         Me.TabPage1.ResumeLayout(False)
         Me.SectionMenu.ResumeLayout(False)
         Me.TabPage2.ResumeLayout(False)
+        Me.TemplateMenu.ResumeLayout(False)
         Me.ToolBox.ResumeLayout(False)
         Me.ToolBox.PerformLayout()
         CType(Me.panelCurrentPosition, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1004,9 +1120,26 @@ Partial Class MS_Edit
     Friend WithEvents TabControl2 As DSeX.TabControlEx
     Friend WithEvents NewSection As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DeleteSection As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CopySection As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents CutSection As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator9 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents PasteSection As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BtnSectionAdd As System.Windows.Forms.Button
+    Friend WithEvents ToolStripSeparator12 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents SelectAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AutocommentOnToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AutocommentOffToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RenameToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator11 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents InsertSectionToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator10 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ApplyCommentToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AutoCommentOffToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents TemplateMenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents RefreshTemplatesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator13 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents InsertToDSFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator14 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents AddToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DeleteToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator15 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents RenameToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EditToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
 End Class
