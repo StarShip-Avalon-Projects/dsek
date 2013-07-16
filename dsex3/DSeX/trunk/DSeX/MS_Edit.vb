@@ -654,6 +654,7 @@ Public Class MS_Edit
     End Sub
 
     Private Sub FindReplace()
+        If IsNothing(MS_Editor) Then Exit Sub
         Try
 
             Dim frm As Form = New frmSearch
@@ -695,12 +696,12 @@ Public Class MS_Edit
     Private Sub GotoToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoToolStripMenuItem.Click, ToolStripButton1.Click
         If IsNothing(MS_Editor) Then Exit Sub
         Dim i As String = _
-InputBox("What location within the document do you want to send the cursor to?", _
-" Location to send the Cursor?", "0")
+InputBox("What line within the document do you want to send the cursor to?", _
+" Location to send the Cursor?", "1")
 
-        If Char.IsNumber(i) Then
-
-            MS_Editor.SelectionStart = i
+        If IsInteger(i) And i > 0 Then
+            If i > MS_Editor.Lines.Count Then i = MS_Editor.Lines.Count
+            MS_Editor.SelectionStart = MS_Editor.GetFirstCharIndexFromLine(i - 1)
 
             sb.Panels.Item(0).Text = "Cursor Position: " & MS_Editor.SelectionStart.ToString
             sb.Panels.Item(1).Text = "Current Line: " & MS_Editor.GetLineFromCharIndex(MS_Editor.SelectionStart) + 1
