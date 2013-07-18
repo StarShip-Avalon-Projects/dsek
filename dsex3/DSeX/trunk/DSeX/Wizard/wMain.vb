@@ -74,7 +74,18 @@ Public Class wMain
         wUI.Show()
     End Sub
 
+    Private Sub selecter_DragOver(sender As Object, e As System.Windows.Forms.DragEventArgs) Handles selecter.DragOver
+
+    End Sub
+
+    Private Sub selecter_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles selecter.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            sender.SelectedIndex = sender.IndexFromPoint(New Point(e.X, e.Y))
+        End If
+    End Sub
+
     Private Sub selecter_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles selecter.SelectedIndexChanged
+
         If IO.File.Exists(ScriptPaths(selecter.SelectedIndex) & selecter.GetItemText(selecter.SelectedItem) & ".ini") Then
             Dim sIni = selecter.GetItemText(selecter.SelectedItem)
             GetInfo(ScriptPaths(selecter.SelectedIndex) & sIni & ".ini")
@@ -130,7 +141,7 @@ Public Class wMain
                 i += 1
             Loop
             s = ScriptIni.GetKeyValue("main", "DefaultRepeat")
-            If s <> "" Then wUI.NumericUpDown1.Value = s Else wUI.NumericUpDown1.Value = 1
+            If IsInteger(s) Then wUI.NumericUpDown1.Value = s.ToInteger Else wUI.NumericUpDown1.Value = 0
 
         Catch ex As Exception
             MsgBox(ex.Message & vbCrLf & ex.StackTrace, MsgBoxStyle.Exclamation, "Error!")
@@ -139,6 +150,7 @@ Public Class wMain
     End Sub
 
     Private Sub GetScriptIni()
+        selecter.Items.Clear()
         Dim path As String = Application.StartupPath + "/Scripts/"
         Directory.CreateDirectory(path)
         ScriptPaths.Clear()
@@ -146,14 +158,14 @@ Public Class wMain
         For x = 0 To FileIO.FileSystem.GetFiles(path, FileIO.SearchOption.SearchTopLevelOnly, "*.ini").Count - 1
             Dim s = FileIO.FileSystem.GetName(FileIO.FileSystem.GetFiles(path).Item(x))
             selecter.Items.Add(s.Remove(s.Length - 4, 4))
-            ScriptPaths.Add(selecter.Items.Count - 1, path)
+            ScriptPaths.Add(path)
         Next
         path = Furcadia.IO.Paths.GetFurcadiaDocPath + "\Scripts\"
         Directory.CreateDirectory(path)
         For x = 0 To FileIO.FileSystem.GetFiles(path, FileIO.SearchOption.SearchTopLevelOnly, "*.ini").Count - 1
             Dim s = FileIO.FileSystem.GetName(FileIO.FileSystem.GetFiles(path).Item(x))
             selecter.Items.Add(s.Remove(s.Length - 4, 4))
-            ScriptPaths.Add(selecter.Items.Count - 1, path)
+            ScriptPaths.Add(path)
         Next
     End Sub
 
@@ -198,5 +210,38 @@ Public Class wMain
             OnToolStripMenuItem.CheckState = CheckState.Checked
         End If
 
+    End Sub
+
+
+    Private Sub WizardRefresh_Click(sender As System.Object, e As System.EventArgs) Handles WizardRefresh.Click
+        GetScriptIni()
+    End Sub
+
+    Private Sub NewScriptToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles NewScriptToolStripMenuItem.Click
+        MS_Edit.AddNewEditorTab("", "", 0)
+        MS_Edit.NewScript()
+    End Sub
+
+    Private Sub WizardEdit_Click(sender As System.Object, e As System.EventArgs) Handles WizardEdit.Click
+        MS_Edit.AddNewEditorTab("", "", 0)
+        MS_Edit.OpenMS_File(ScriptPaths.Item(selecter.SelectedIndex) + "/" + selecter.SelectedItem + ".ini")
+    End Sub
+
+    Private Sub RenameToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RenameToolStripMenuItem.Click
+        Dim s As String = Microsoft.VisualBasic.InputBox("New Name?")
+        If String.IsNullOrEmpty(s) Then Exit Sub
+        My.Computer.FileSystem.RenameFile(ScriptPaths.Item(selecter.SelectedIndex) + "/" + selecter.SelectedItem + ".ini", ScriptPaths(selecter.SelectedIndex) + s + ".ini")
+
+    End Sub
+
+    Private Sub RemoveToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RemoveToolStripMenuItem.Click
+        Dim reply As DialogResult = MessageBox.Show("Really delete this script?", "Caption", _
+MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+
+        If reply = DialogResult.OK Then
+            File.Delete(ScriptPaths.Item(selecter.SelectedIndex) + selecter.SelectedItem + ".ini")
+            ScriptPaths.RemoveAt(selecter.SelectedIndex)
+            selecter.Items.RemoveAt(selecter.SelectedIndex)
+        End If
     End Sub
 End Class

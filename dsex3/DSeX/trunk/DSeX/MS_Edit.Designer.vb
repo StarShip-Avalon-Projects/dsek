@@ -133,6 +133,7 @@ Partial Class MS_Edit
         Me.Causes = New System.Windows.Forms.TabControl()
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.AutocompleteMenu1 = New AutocompleteMenuNS.AutocompleteMenu()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.EditMenu.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1142,4 +1143,5 @@ Partial Class MS_Edit
     Friend WithEvents ToolStripSeparator15 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents RenameToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EditToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
 End Class

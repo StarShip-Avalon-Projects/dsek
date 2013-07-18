@@ -33,12 +33,20 @@ Partial Class wMain
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.dsdesc = New System.Windows.Forms.RichTextBox()
         Me.selecter = New System.Windows.Forms.ListBox()
+        Me.WizMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.WizardRefresh = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.WizardEdit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NewScriptToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RemoveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RenameToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Timer = New System.Windows.Forms.Timer(Me.components)
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.ErrorProvider1 = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.MenuStrip.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
+        Me.WizMenu.SuspendLayout()
         CType(Me.ErrorProvider1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -63,7 +71,7 @@ Partial Class wMain
         'ToolStripMenuItem7
         '
         Me.ToolStripMenuItem7.Name = "ToolStripMenuItem7"
-        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(152, 22)
+        Me.ToolStripMenuItem7.Size = New System.Drawing.Size(92, 22)
         Me.ToolStripMenuItem7.Text = "Exit"
         '
         'ToolStripMenuItem2
@@ -79,14 +87,14 @@ Partial Class wMain
         '
         Me.FadeToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OnToolStripMenuItem})
         Me.FadeToolStripMenuItem.Name = "FadeToolStripMenuItem"
-        Me.FadeToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.FadeToolStripMenuItem.Size = New System.Drawing.Size(126, 22)
         Me.FadeToolStripMenuItem.Text = "Fade"
         '
         'OnToolStripMenuItem
         '
         Me.OnToolStripMenuItem.CheckOnClick = True
         Me.OnToolStripMenuItem.Name = "OnToolStripMenuItem"
-        Me.OnToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.OnToolStripMenuItem.Size = New System.Drawing.Size(88, 22)
         Me.OnToolStripMenuItem.Text = "On"
         Me.OnToolStripMenuItem.ToolTipText = "Fade in effect? Yes/No"
         '
@@ -94,7 +102,7 @@ Partial Class wMain
         '
         Me.INIFormatToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OnToolStripMenuItem1})
         Me.INIFormatToolStripMenuItem.Name = "INIFormatToolStripMenuItem"
-        Me.INIFormatToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.INIFormatToolStripMenuItem.Size = New System.Drawing.Size(126, 22)
         Me.INIFormatToolStripMenuItem.Text = "INI Format"
         '
         'OnToolStripMenuItem1
@@ -116,7 +124,7 @@ Partial Class wMain
         'ToolStripMenuItem8
         '
         Me.ToolStripMenuItem8.Name = "ToolStripMenuItem8"
-        Me.ToolStripMenuItem8.Size = New System.Drawing.Size(152, 22)
+        Me.ToolStripMenuItem8.Size = New System.Drawing.Size(103, 22)
         Me.ToolStripMenuItem8.Text = "About"
         '
         'TableLayoutPanel2
@@ -149,6 +157,7 @@ Partial Class wMain
         '
         Me.selecter.BackColor = System.Drawing.SystemColors.Window
         Me.selecter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.selecter.ContextMenuStrip = Me.WizMenu
         Me.selecter.Dock = System.Windows.Forms.DockStyle.Fill
         Me.selecter.ForeColor = System.Drawing.SystemColors.WindowText
         Me.selecter.FormattingEnabled = True
@@ -156,6 +165,48 @@ Partial Class wMain
         Me.selecter.Name = "selecter"
         Me.selecter.Size = New System.Drawing.Size(270, 197)
         Me.selecter.TabIndex = 2
+        '
+        'WizMenu
+        '
+        Me.WizMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.WizardRefresh, Me.ToolStripSeparator1, Me.WizardEdit, Me.NewScriptToolStripMenuItem, Me.RemoveToolStripMenuItem, Me.RenameToolStripMenuItem})
+        Me.WizMenu.Name = "WizMenu"
+        Me.WizMenu.Size = New System.Drawing.Size(153, 142)
+        Me.WizMenu.Text = "Refresh"
+        '
+        'WizardRefresh
+        '
+        Me.WizardRefresh.Name = "WizardRefresh"
+        Me.WizardRefresh.Size = New System.Drawing.Size(152, 22)
+        Me.WizardRefresh.Text = "Refresh"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(149, 6)
+        '
+        'WizardEdit
+        '
+        Me.WizardEdit.Name = "WizardEdit"
+        Me.WizardEdit.Size = New System.Drawing.Size(152, 22)
+        Me.WizardEdit.Text = "Edit"
+        '
+        'NewScriptToolStripMenuItem
+        '
+        Me.NewScriptToolStripMenuItem.Name = "NewScriptToolStripMenuItem"
+        Me.NewScriptToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.NewScriptToolStripMenuItem.Text = "New Script"
+        '
+        'RemoveToolStripMenuItem
+        '
+        Me.RemoveToolStripMenuItem.Name = "RemoveToolStripMenuItem"
+        Me.RemoveToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RemoveToolStripMenuItem.Text = "Delete"
+        '
+        'RenameToolStripMenuItem
+        '
+        Me.RenameToolStripMenuItem.Name = "RenameToolStripMenuItem"
+        Me.RenameToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RenameToolStripMenuItem.Text = "Rename"
         '
         'Timer
         '
@@ -187,6 +238,7 @@ Partial Class wMain
         Me.MenuStrip.ResumeLayout(False)
         Me.MenuStrip.PerformLayout()
         Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.WizMenu.ResumeLayout(False)
         CType(Me.ErrorProvider1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -223,5 +275,12 @@ Partial Class wMain
     Friend WithEvents INIFormatToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents OnToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents dsdesc As System.Windows.Forms.RichTextBox
+    Friend WithEvents WizMenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents WizardRefresh As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator1 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents WizardEdit As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents NewScriptToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RemoveToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RenameToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
