@@ -285,7 +285,7 @@ Public Class MS_Edit
 
     End Sub
 
-    Private Sub OpenMS_File(ByRef filename As String)
+    Public Sub OpenMS_File(ByRef filename As String)
 
         Dim slashPosition As Integer = filename.LastIndexOf("\")
         WorkFileName(TabControl2.SelectedIndex) = filename.Substring(slashPosition + 1)
@@ -467,6 +467,23 @@ Public Class MS_Edit
         Return str.ToString
     End Function
 
+    Private Function NewDMScript() As String
+        Dim str As New StringBuilder
+        str.AppendLine(KeysIni.GetKeyValue("DM-Script", "Header"))
+        Dim t As String = " "
+        Dim n As Integer = 0
+        While t <> ""
+            t = KeysIni.GetKeyValue("DM-Script", "H" + n.ToString)
+            If t <> "" Then str.AppendLine(t)
+            n += 1
+        End While
+        For i = 0 To CInt(KeysIni.GetKeyValue("DM-Script", "InitLineSpaces"))
+            str.AppendLine("")
+        Next
+        str.AppendLine(KeysIni.GetKeyValue("DM-Script", "Footer"))
+        Return str.ToString
+    End Function
+
     Private Sub TextInsert(ByRef LB As ListView, Optional ByVal Spaces As Integer = 0)
 
         Dim insertText = StrDup(Spaces, " ") & LB.SelectedItems(0).Text
@@ -571,8 +588,10 @@ Public Class MS_Edit
         If CanOpen(TabControl2.SelectedIndex) = False Then Me.Text = frmTitle(TabControl2.SelectedIndex) & "*"
         If WorkFileName(TabControl2.SelectedIndex) = "" And CanOpen(TabControl2.SelectedIndex) = False Then
             TabControl2.SelectedTab.Text = "(New File)*"
+            TabControl2.RePositionCloseButtons()
         ElseIf CanOpen(TabControl2.SelectedIndex) = False Then
             TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex) + "*"
+            TabControl2.RePositionCloseButtons()
         End If
 
         If CanOpen(TabControl2.SelectedIndex) = False Then lblStatus.Text = "Status: A change has occured since you last saved the document."
@@ -724,7 +743,6 @@ InputBox("What line within the document do you want to send the cursor to?", _
         SaveAs()
     End Sub
 
-
     Private Sub NewFile()
         If Not CanOpen(TabControl2.SelectedIndex) Then
             Dim reply As DialogResult = MessageBox.Show("Save changes? Yes or No", "Caption", _
@@ -740,6 +758,33 @@ InputBox("What line within the document do you want to send the cursor to?", _
         WorkFileName(TabControl2.SelectedIndex) = ""
 
         lblStatus.Text = "Status: Opened New DragonSpeak  File "
+        frmTitle(TabControl2.SelectedIndex) = "DSeX - New File"
+        FullFile(TabControl2.SelectedIndex).Clear()
+        Me.Text = frmTitle(TabControl2.SelectedIndex)
+        For i = 0 To MS_Editor.Lines.Count - 1
+            FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines(i))
+        Next
+        TabControl2.SelectedTab.Text = "(New File)"
+        CanOpen(TabControl2.SelectedIndex) = True
+        TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
+        UpdateSegments()
+        UpdateSegmentList()
+    End Sub
+    Public Sub NewScript()
+        If Not CanOpen(TabControl2.SelectedIndex) Then
+            Dim reply As DialogResult = MessageBox.Show("Save changes? Yes or No", "Caption", _
+      MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
+
+            If reply = DialogResult.Yes Then
+                SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
+            End If
+        End If
+        TabSections(TabControl2.SelectedIndex).Clear()
+        MS_Editor.Text = NewDMScript()
+        RTBWrapper.colorDocument()
+        WorkFileName(TabControl2.SelectedIndex) = ""
+
+        lblStatus.Text = "Status: Opened New Draconian Magic Script "
         frmTitle(TabControl2.SelectedIndex) = "DSeX - New File"
         FullFile(TabControl2.SelectedIndex).Clear()
         Me.Text = frmTitle(TabControl2.SelectedIndex)
@@ -939,7 +984,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         AboutBox1.Activate()
     End Sub
 
-    Private Sub AddNewEditorTab(ByRef FileName As String, FilePath As String, ByRef n As String)
+    Public Sub AddNewEditorTab(ByRef FileName As String, FilePath As String, ByRef n As String)
 
         Dim tp As New TabPage
 
@@ -1258,7 +1303,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         With ListBox1
             .Items.Clear()
             .Items.Add(RES_DSS_All)
-            For i = 0 To TabSections(Idx).Count - 1
+            For i = 0 To TabSections(idx).Count - 1
 
                 tseg = TabSections(idx)(i)
                 If (tseg.Title <> RES_DSS_begin) And (tseg.Title <> RES_DSS_End) Then
@@ -1319,7 +1364,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             'Rebuild FullFile list first
             RebuildFullFile()
             MS_Editor.Text = ""
-
+            MS_Editor.ClearUndo()
             For i = 0 To FullFile(TabControl2.SelectedIndex).Count - 1
                 If i = FullFile(TabControl2.SelectedIndex).Count - 1 Then
                     MS_Editor.AppendText(FullFile(TabControl2.SelectedIndex)(i))
@@ -1458,4 +1503,10 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             ListBox2.SelectedIndex = ListBox2.IndexFromPoint(New Point(e.X, e.Y))
         End If
     End Sub
+
+    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As System.EventArgs) Handles ListBox1.SelectedIndexChanged, ListBox2.SelectedIndexChanged
+        ToolTip1.SetToolTip(sender, sender.SelectedItem.ToString)
+    End Sub
+
+
 End Class

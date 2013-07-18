@@ -34,6 +34,9 @@ Public Class wUI
     Dim WorkFileName As String = MS_Edit.WorkFileName(0)
     Dim WorkPath As String = MS_Edit.WorkPath(0)
     Public PathIndex As Integer = 0
+
+
+
     Public Structure StructMapSearch
         Public DreamPath As String
         Public Item As String
@@ -88,18 +91,22 @@ Public Class wUI
     End Structure
     
     Public wVariables As Dictionary(Of Integer, Object) = New Dictionary(Of Integer, Object)
+
 #End Region
 
 #Region "Position Functions"
 
     'Regexes for calculation parsing
-    Dim RGEX_Movement As String = "(\d+)(nw|ne|sw|se)(\d+)(.*)"""
-    Dim RGEX_MathCalc As String = "(\d+)(\+|-|\*|/)(\d+)(.*)"""
-    Dim RGEX_MathStep As String = "(\+|-|\*|/)(\d+)"
-    Dim RGEX_Coordinate As String = "(\d+)\s*,\s*(\d+)"
-    Dim RGEX_Number As String = "^(\d+)"
-    Dim RGEX_Mov_Steps As String = "(nw|ne|sw|se)(\d+)"
-    Dim RGEX_Range As String = "^(\d+)(-\s*)(\d+)?"
+    Private Const RGEX_Movement As String = "(\d+)(nw|ne|sw|se)(\d+)(.*)"""
+    Private Const RGEX_MathCalc As String = "(\d+)(\+|-|\*|/)(\d+)(.*)"""
+    Private Const RGEX_MathStep As String = "(\+|-|\*|/)(\d+)"
+    Private Const RGEX_Coordinate As String = "(\d+)\s*,\s*(\d+)"
+    Private Const RGEX_Number As String = "^(\d+)"
+    Private Const RGEX_Mov_Steps As String = "(nw|ne|sw|se)(\d+)"
+    Private Const RGEX_Range As String = "^(\d+)(-\s*)(\d+)?"
+    Private Const RPOS_Range_Start As Integer = 1
+    Private Const RPOS_Range_Marker As Integer = 2
+    Private Const RPOS_Range_End As Integer = 3
 
     'Regular Expression match indexes
     'RPOS_Movement_Var = 1;
@@ -117,9 +124,6 @@ Public Class wUI
     'RPOS_Number_Num = 1;
     'RPOS_Coord_X = 1;
     'RPOS_Coord_Y = 2;
-    'RPOS_Range_Start = 1;
-    'RPOS_Range_Marker = 2;
-    'RPOS_Range_End = 3;
 
     Private Function MoveCoord(ByRef variable As String, ByRef directions As String) As String
         'Match Cords
@@ -384,30 +388,61 @@ Public Class wUI
     End Sub
 
     Private Sub ProcessVariableList()
-        Dim VarList As List(Of String) = New List(Of String)
+
         Dim VariableList As List(Of List(Of String)) = New List(Of List(Of String))
-        Dim start As Integer = 0
-        Dim stopp As Integer = 0
-        Dim counter As Integer
+        Dim Counters As Dictionary(Of Integer, Integer) = New Dictionary(Of Integer, Integer)
+        Dim it1, mini, maxi As New Integer
+        Dim tname As String = ""
+        'parser : TRegexpr;
+        Dim bounded As Boolean = False
+        mini = 0
+        maxi = 0
         For I = 0 To NumericUpDown1.Value - 1
+            Dim VarList As List(Of String) = New List(Of String)
             For t = 1 To wVariables.Count
+
                 Dim Str As String = ""
                 Dim type = wVariables(t).GetType()
                 If type Is GetType(System.String) Then
-                    Dim s As String = wVariables.Item(t)
-                    Dim z As Match = Regex.Match(s, RGEX_Range)
-                    start = z.Groups(0).Value
 
-                    If z.Groups.Count = 2 Then
-                        stopp = z.Groups(1).Value
-                    End If
-                    If I = 0 Then counter = start
-                    If stopp <> 0 And counter = stopp Then
-                        counter = start
-                    End If
-                    Str = counter.ToString
-                    counter += 1
 
+                    Dim regex As Regex = New Regex(RGEX_Range)
+                    Dim match As Match = regex.Match(wVariables.Item(t))
+                    If match.Success Then
+                        If Counters.ContainsKey(t) Then
+                            it1 = Counters.Item(t)
+                            bounded = False
+
+                            If match.Groups(RPOS_Range_End).Value <> "" Then
+                                mini = match.Groups(RPOS_Range_Start).Value
+                                maxi = match.Groups(RPOS_Range_End).Value
+                                bounded = True
+                            End If
+
+                            If bounded Then
+                                If mini > maxi Then
+                                    it1 -= 1
+                                    If it1 < maxi Then
+                                        it1 = mini
+                                    End If
+                                Else
+                                    it1 += 1
+                                    If it1 > maxi Then
+                                        it1 = mini
+                                    End If
+                                End If
+                            Else
+                                it1 += 1 'Unbounded, assume +
+                            End If
+                            Counters.Item(t) = it1
+                        Else
+                            it1 = match.Groups(RPOS_Range_Start).Value
+                            Counters.Add(t, it1)
+                        End If
+                        Str = it1.ToString
+                    Else
+                        Str = wVariables.Item(t)
+                    End If
                 ElseIf type Is GetType(StructMapSearch) Then
                     Dim mlist As List(Of String) = New List(Of String)
                     Do While wVariables.Item(t).Getlist.count <= NumericUpDown1.Value - 1
@@ -465,8 +500,8 @@ Public Class wUI
         solution.Text = ""
         For i As Integer = 0 To NumericUpDown1.Value - 1
             Dim template As String = Code
-            For t = 0 To Values(i).Count - 1
-                Dim str As String = Values.Item(i)(t)
+            For t = 1 To Values(i).Count
+                Dim str As String = Values(i)(t - 1)
                 template = Regex.Replace(template, "\^" & t.ToString & "\^", str)
                 Dim m As MatchCollection = Regex.Matches(template, "\^" + RGEX_Movement + "\^", RegexOptions.IgnoreCase)
                 For Each s In m
