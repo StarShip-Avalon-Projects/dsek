@@ -1,8 +1,0 @@
-C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\bin\Debug\No Flicker.dll
-C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\bin\Debug\No Flicker.pdb
-C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\bin\Debug\No Flicker.xml
-C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Debug\No_Flicker.Resources.resources
-C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Debug\No Flicker.vbproj.GenerateResource.Cache
-C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Debug\No Flicker.dll
-C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Debug\No Flicker.xml
-C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX\No Flicker\obj\Debug\No Flicker.pdb
