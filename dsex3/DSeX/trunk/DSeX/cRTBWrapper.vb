@@ -474,7 +474,8 @@ Public Class cRTBWrapper
             update()
             ' Freeze the windows and get the scroll nfo
             Dim line As Integer = _bind.GetLineFromCharIndex(_bind.SelectionStart - 1)
-            _bind.SelectionStart = _bind.SelectionStart - txtBody(line).Length
+            Dim lineStart = _bind.GetFirstCharIndexFromLine(line)
+            _bind.SelectionStart = lineStart
             _bind.SelectionLength = txtBody(line).Length
             saveScroll(_bind.Handle)
             applyColor(line)        ' Do any coloring

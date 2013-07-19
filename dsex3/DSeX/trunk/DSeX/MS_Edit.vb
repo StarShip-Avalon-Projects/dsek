@@ -75,9 +75,10 @@ Public Class MS_Edit
     End Class
 #Region "Properties"
     Public WithEvents RTBWrapper As New cRTBWrapper()
-    Public EditSettings As EditSettings = New EditSettings
+
     Dim KeysIni As IniFile
     Public CanOpen As List(Of Boolean) = New List(Of Boolean)
+    Public SettingsChanged As List(Of Boolean) = New List(Of Boolean)
     Public WorkFileName As List(Of String) = New List(Of String)
     Public WorkPath As List(Of String) = New List(Of String)
     'mPath()
@@ -312,31 +313,35 @@ Public Class MS_Edit
 
     End Sub
 
-
-
     Public Sub Reset()
+        If IsNothing(MS_Editor) Then Exit Sub
+        For i = 0 To SettingsChanged.Count - 1
+            If i <> TabControl2.SelectedIndex Then
+                SettingsChanged(i) = True
+            End If
+        Next
+        Reset(MS_Editor)
+        RTBWrapper.colorDocument()
+    End Sub
+
+    Public Sub Reset(ByRef rtf As RichTextBox2)
         With RTBWrapper
-            '.bind(MS_Editor)
+            .unbind()
+            .bind(rtf)
             'tDict(Pattern, isRegex, isCase, value)
             'Variable
-            EditSettings.LoadEditorSettings()
             .rtfSyntax.Clear()
             .rtfSyntax.add("%([A-Za-z0-9_]+)", True, True, EditSettings.VariableColor.ToArgb)
             .rtfSyntax.add("~([A-Za-z0-9_]+)", True, True, EditSettings.StringVariableColor.ToArgb)
-            '.rtfSyntax.add("([0-9]*)\.?([0-9]*)", True, True, Color.Violet.ToArgb)
             'string
             .rtfSyntax.add("\\{(.*?)\\}", True, True, EditSettings.StringColor.ToArgb)
             'Line ID
             .rtfSyntax.add("\(([0-9]*)\:([0-9]*)\)", True, True, EditSettings.IDColor.ToArgb)
             'Comment
             .rtfSyntax.add("^\*(.*?)$", True, True, EditSettings.CommentColor.ToArgb)
-            '.rtfSyntax.add("([0-9]+)\.([0-9]*)", True, True, Color.Violet.ToArgb)
             'Number
-            .rtfSyntax.add(" ([0-9]+)", True, True, EditSettings.NumberColor.ToArgb)
-            .rtfSyntax.add("\.([0-9]+)", True, True, EditSettings.NumberColor.ToArgb)
-            '.rtfSyntax.add("<tr.*?>", True, True, Color.Brown.ToArgb)
-            '.rtfSyntax.add("<td.*?>", True, True, Color.Brown.ToArgb)
-            '.rtfSyntax.add("<img.*?>", True, True, Color.Red.ToArgb)
+            .rtfSyntax.add(" ([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
+            .rtfSyntax.add("\.([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
         End With
     End Sub
 
@@ -348,7 +353,6 @@ Public Class MS_Edit
         KeysIni = New IniFile()
         KeysIni.Load(My.Application.Info.DirectoryPath + "\Keys.ini")
 
-        EditSettings.LoadEditorSettings()
         Me.Location = My.Settings.EditFormLocation
         Me.Visible = True
 
@@ -994,6 +998,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         tp.Name = "tbpageBrowser" & intLastTabIndex.ToString
         'Adds a new tab to your tab control
         CanOpen.Add(True)
+        SettingsChanged.Add(False)
         WorkFileName.Add(FileName)
         WorkPath.Add(FilePath)
         frmTitle.Add("DSeX - New DragonSpeak File")
@@ -1025,30 +1030,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         lstView.Width = TabControl2.TabPages(intLastTabIndex).Width - 32
         lstView.Show()
         lstView.ContextMenuStrip = SectionMenu
-        With RTBWrapper
-            .unbind()
-            .bind(lstView)
-            'tDict(Pattern, isRegex, isCase, value)
-            'Variable
-            .rtfSyntax.Clear()
-            .rtfSyntax.add("%([A-Za-z0-9_]+)", True, True, EditSettings.VariableColor.ToArgb)
-            .rtfSyntax.add("~([A-Za-z0-9_]+)", True, True, EditSettings.StringVariableColor.ToArgb)
-            '.rtfSyntax.add("([0-9]*)\.?([0-9]*)", True, True, Color.Violet.ToArgb)
-            'string
-            .rtfSyntax.add("\\{(.*?)\\}", True, True, EditSettings.StringColor.ToArgb)
-            'Line ID
-            .rtfSyntax.add("\(([0-9]*)\:([0-9]*)\)", True, True, EditSettings.IDColor.ToArgb)
-            'Comment
-            .rtfSyntax.add("^\*(.*?)$", True, True, EditSettings.CommentColor.ToArgb)
-            '.rtfSyntax.add("([0-9]+)\.([0-9]*)", True, True, Color.Violet.ToArgb)
-            'Number
-            .rtfSyntax.add(" ([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
-            .rtfSyntax.add("\.([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
-            '.rtfSyntax.add("<tr.*?>", True, True, Color.Brown.ToArgb)
-            '.rtfSyntax.add("<td.*?>", True, True, Color.Brown.ToArgb)
-            '.rtfSyntax.add("<img.*?>", True, True, Color.Red.ToArgb)
-            '.colorDocument()
-        End With
+        Reset(lstView)
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)
 
         lstView.WordWrap = False
@@ -1091,6 +1073,10 @@ InputBox("What line within the document do you want to send the cursor to?", _
         UpdateSegmentList()
         If SectionIdx(TabControl2.SelectedIndex) <> ListBox1.SelectedIndex Then ListBox1.SelectedIndex = SectionIdx(TabControl2.SelectedIndex)
         lastTab = TabControl2.SelectedIndex
+        If SettingsChanged(TabControl2.SelectedIndex) Then
+            RTBWrapper.colorDocument()
+            SettingsChanged(TabControl2.SelectedIndex) = False
+        End If
     End Sub
 
     Private Sub TabControl2_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TabControl2.MouseUp
@@ -1272,7 +1258,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
                 TabSections(idx).Add(tmpsec)
                 bypass = False
             End If
-            If (FullFile(idx)(i) <> "") And (tmpsec.Title = RES_Def_section) And (blank) And i > 0 Then
+            If (FullFile(idx)(i) <> "") And (tmpsec.Title = RES_Def_section) And (blank) And i = 1 Then
                 blank = False
                 bypass = False
             End If
@@ -1408,8 +1394,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             'RES_SEC_Marker
             If TabSections(Tab)(i).Title <> RES_DSS_begin And _
                 TabSections(Tab)(i).Title <> RES_DSS_End And _
-                TabSections(Tab)(i).Title <> RES_Def_section Then
-
+                (TabSections(Tab)(i).Title <> RES_Def_section Or TabSections(Tab)(i).Title = RES_Def_section And i > 1) Then
                 FullFile(Tab).Add(RES_SEC_Marker + TabSections(Tab)(i).Title)
             End If
             FullFile(Tab).AddRange(TabSections(Tab)(i).lines)
@@ -1417,7 +1402,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Private Sub NewSection_Click(sender As System.Object, e As System.EventArgs) Handles NewSection.Click, BtnSectionAdd.Click
-        NewSec((TabSections(TabControl2.SelectedIndex).Count - 1))
+        If TabControl2.TabCount > 0 Then NewSec((TabSections(TabControl2.SelectedIndex).Count - 1))
     End Sub
 
     Private Sub InsertSectionToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles InsertSectionToolStripMenuItem.Click
@@ -1426,6 +1411,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Private Sub NewSec(ByRef i As Integer)
         If ListBox1.Items.Count = 0 Then Exit Sub
+        If i > 1 Then i = 1
         Debug.Print("NewSection_Click()")
         SaveSections()
         Dim section As TDSSegment = New TDSSegment

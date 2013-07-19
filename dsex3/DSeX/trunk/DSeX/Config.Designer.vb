@@ -42,6 +42,10 @@
         Me.Label4 = New System.Windows.Forms.Label()
         Me.StringPictureBox = New System.Windows.Forms.PictureBox()
         Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.NumericUpDown5 = New System.Windows.Forms.NumericUpDown()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.NumericUpDown4 = New System.Windows.Forms.NumericUpDown()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.NumericUpDown3 = New System.Windows.Forms.NumericUpDown()
         Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
@@ -49,10 +53,6 @@
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.ConfigTabs = New System.Windows.Forms.TabControl()
-        Me.NumericUpDown4 = New System.Windows.Forms.NumericUpDown()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.NumericUpDown5 = New System.Windows.Forms.NumericUpDown()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.TabPage5.SuspendLayout()
         Me.GroupBox8.SuspendLayout()
         CType(Me.StringVariableClrBx, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -62,12 +62,12 @@
         CType(Me.CommentPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.StringPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox7.SuspendLayout()
+        CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown4, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ConfigTabs.SuspendLayout()
-        CType(Me.NumericUpDown4, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'BTN_Ok
@@ -272,25 +272,57 @@
         Me.GroupBox7.TabStop = False
         Me.GroupBox7.Text = "GroupBox7"
         '
+        'NumericUpDown5
+        '
+        Me.NumericUpDown5.Location = New System.Drawing.Point(118, 127)
+        Me.NumericUpDown5.Name = "NumericUpDown5"
+        Me.NumericUpDown5.Size = New System.Drawing.Size(46, 20)
+        Me.NumericUpDown5.TabIndex = 26
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(28, 129)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(73, 13)
+        Me.Label5.TabIndex = 25
+        Me.Label5.Text = "Effects Indent"
+        '
+        'NumericUpDown4
+        '
+        Me.NumericUpDown4.Location = New System.Drawing.Point(118, 102)
+        Me.NumericUpDown4.Name = "NumericUpDown4"
+        Me.NumericUpDown4.Size = New System.Drawing.Size(46, 20)
+        Me.NumericUpDown4.TabIndex = 24
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(28, 104)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(67, 13)
+        Me.Label2.TabIndex = 23
+        Me.Label2.Text = "Areas Indent"
+        '
         'NumericUpDown3
         '
         Me.NumericUpDown3.Location = New System.Drawing.Point(118, 24)
         Me.NumericUpDown3.Name = "NumericUpDown3"
-        Me.NumericUpDown3.Size = New System.Drawing.Size(33, 20)
+        Me.NumericUpDown3.Size = New System.Drawing.Size(46, 20)
         Me.NumericUpDown3.TabIndex = 22
         '
         'NumericUpDown2
         '
         Me.NumericUpDown2.Location = New System.Drawing.Point(118, 76)
         Me.NumericUpDown2.Name = "NumericUpDown2"
-        Me.NumericUpDown2.Size = New System.Drawing.Size(33, 20)
+        Me.NumericUpDown2.Size = New System.Drawing.Size(46, 20)
         Me.NumericUpDown2.TabIndex = 21
         '
         'NumericUpDown1
         '
         Me.NumericUpDown1.Location = New System.Drawing.Point(118, 50)
         Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(33, 20)
+        Me.NumericUpDown1.Size = New System.Drawing.Size(46, 20)
         Me.NumericUpDown1.TabIndex = 20
         '
         'Label18
@@ -307,9 +339,9 @@
         Me.Label17.AutoSize = True
         Me.Label17.Location = New System.Drawing.Point(28, 78)
         Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(73, 13)
+        Me.Label17.Size = New System.Drawing.Size(67, 13)
         Me.Label17.TabIndex = 18
-        Me.Label17.Text = "Effects Indent"
+        Me.Label17.Text = "Filters Indent"
         '
         'Label16
         '
@@ -328,38 +360,6 @@
         Me.ConfigTabs.SelectedIndex = 0
         Me.ConfigTabs.Size = New System.Drawing.Size(379, 256)
         Me.ConfigTabs.TabIndex = 11
-        '
-        'NumericUpDown4
-        '
-        Me.NumericUpDown4.Location = New System.Drawing.Point(118, 102)
-        Me.NumericUpDown4.Name = "NumericUpDown4"
-        Me.NumericUpDown4.Size = New System.Drawing.Size(33, 20)
-        Me.NumericUpDown4.TabIndex = 24
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(28, 104)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(73, 13)
-        Me.Label2.TabIndex = 23
-        Me.Label2.Text = "Effects Indent"
-        '
-        'NumericUpDown5
-        '
-        Me.NumericUpDown5.Location = New System.Drawing.Point(118, 127)
-        Me.NumericUpDown5.Name = "NumericUpDown5"
-        Me.NumericUpDown5.Size = New System.Drawing.Size(33, 20)
-        Me.NumericUpDown5.TabIndex = 26
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(28, 129)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(73, 13)
-        Me.Label5.TabIndex = 25
-        Me.Label5.Text = "Effects Indent"
         '
         'Config
         '
@@ -386,12 +386,12 @@
         CType(Me.StringPictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox7.ResumeLayout(False)
         Me.GroupBox7.PerformLayout()
+        CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown4, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ConfigTabs.ResumeLayout(False)
-        CType(Me.NumericUpDown4, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -419,11 +419,11 @@
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents StringPictureBox As System.Windows.Forms.PictureBox
     Friend WithEvents ChkBxAutoComplete As System.Windows.Forms.CheckBox
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents StringVariableClrBx As System.Windows.Forms.PictureBox
     Friend WithEvents NumericUpDown4 As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents NumericUpDown5 As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents StringVariableClrBx As System.Windows.Forms.PictureBox
 End Class
 
