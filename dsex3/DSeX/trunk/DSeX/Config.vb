@@ -9,10 +9,6 @@ Public Class Config
 
     Dim MyConfig As New ConfigStructs
 
-
-
-    Public EditSettings As EditSettings
-
     Private Sub BTN_Cancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BTN_Cancel.Click
         'Close with out Saving
         Me.Close()
@@ -26,19 +22,24 @@ Public Class Config
 
         EditSettings.CauseIndent = NumericUpDown3.Value
         EditSettings.ConditionIndent = NumericUpDown1.Value
-        EditSettings.EffectsIndent = NumericUpDown2.Value
+        EditSettings.FiltersIndent = NumericUpDown2.Value
+        EditSettings.AreasIndent = NumericUpDown4.Value
+        EditSettings.EffectsIndent = NumericUpDown5.Value
 
         EditSettings.CommentColor = CommentPictureBox.BackColor
         EditSettings.StringColor = StringPictureBox.BackColor
         EditSettings.NumberColor = NumberPictureBox.BackColor
         EditSettings.VariableColor = VariablePictureBox.BackColor
         EditSettings.IDColor = IDPictureBox.BackColor
+        EditSettings.StringVariableColor = StringVariableClrBx.BackColor
+
+        'Save the settings to the ini file
+        EditSettings.SaveEditorSettings()
+
         If MS_Edit.Visible Then
             MS_Edit.Reset()
         End If
-        'Save the settings to the ini file
 
-        EditSettings.SaveEditorSettings()
 
 
         Me.Dispose()
@@ -57,7 +58,7 @@ Public Class Config
 
     Public Sub Loadconfig()
 
-        EditSettings.LoadEditorSettings()
+        EditSettings = New EditSettings
         'Editor
 
         ChkBxAutoComplete.Checked = EditSettings.AutoCompleteEnable
@@ -67,9 +68,13 @@ Public Class Config
         NumberPictureBox.BackColor = EditSettings.NumberColor
         VariablePictureBox.BackColor = EditSettings.VariableColor
         IDPictureBox.BackColor = EditSettings.IDColor
+        StringVariableClrBx.BackColor = EditSettings.StringVariableColor
+
         NumericUpDown3.Value = EditSettings.CauseIndent
         NumericUpDown1.Value = EditSettings.ConditionIndent
-        NumericUpDown2.Value = EditSettings.EffectsIndent
+        NumericUpDown5.Value = EditSettings.EffectsIndent
+        NumericUpDown2.Value = EditSettings.FiltersIndent
+        NumericUpDown4.Value = EditSettings.AreasIndent
 
         Me.Location = My.Settings.ConfigFormLocation
     End Sub
@@ -116,5 +121,4 @@ Public Class Config
         GetColor(StringVariableClrBx)
     End Sub
 
-  
 End Class

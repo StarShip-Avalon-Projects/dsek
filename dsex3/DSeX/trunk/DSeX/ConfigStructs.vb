@@ -17,22 +17,22 @@ Public Class ConfigStructs
         Return mPath
     End Function
     Public Shared ini As IniFile = New IniFile
-    Public Structure EditSettings
+    Public Class EditSettings
 
 
-        Private Shared _ConditionIndent As Integer
-        Private Shared _EffectsIndent As Integer
-        Private Shared _CauseIndent As Integer
-        Private Shared _AreasIndent As Integer
-        Private Shared _FiltersIndent As Integer
+        Private _ConditionIndent As Integer
+        Private _EffectsIndent As Integer
+        Private _CauseIndent As Integer
+        Private _AreasIndent As Integer
+        Private _FiltersIndent As Integer
 
-        Private Shared _IDcolor As Color = Color.Blue
-        Private Shared _CommentColor As Color = Color.Green
-        Private Shared _StringColor As Color = Color.DarkCyan
-        Private Shared _NumberColor As Color = Color.Violet
-        Private Shared _VariableColor As Color = Color.Tan
-        Private Shared _StringVariableColor As Color = Color.Tan
-        Private Shared _AutoCompleteEnable As Boolean = True
+        Private _IDcolor As Color
+        Private _CommentColor As Color
+        Private _StringColor As Color
+        Private _NumberColor As Color
+        Private _VariableColor As Color
+        Private _StringVariableColor As Color
+        Private _AutoCompleteEnable As Boolean
         Public Property AutoCompleteEnable
             Get
                 Return _AutoCompleteEnable
@@ -133,7 +133,7 @@ Public Class ConfigStructs
             End Set
         End Property
 
-        Public Sub LoadEditorSettings()
+        Public Sub New()
             ini.AddSection("Editor").AddKey("IDColor").Value = Color.Blue.ToArgb
             ini.AddSection("Editor").AddKey("CommentColor").Value = Color.Green.ToArgb
             ini.AddSection("Editor").AddKey("StringColor").Value = Color.Red.ToArgb
@@ -166,6 +166,7 @@ Public Class ConfigStructs
             _VariableColor = ColorTranslator.FromHtml(ini.GetKeyValue("Editor", "VariableColor"))
             _StringVariableColor = ColorTranslator.FromHtml(ini.GetKeyValue("Editor", "StringVariableColor"))
             _NumberColor = ColorTranslator.FromHtml(ini.GetKeyValue("Editor", "NumberColor"))
+
             _AutoCompleteEnable = Convert.ToBoolean(ini.GetKeyValue("Editor", "AutoComplete"))
 
         End Sub
@@ -183,11 +184,13 @@ Public Class ConfigStructs
             ini.SetKeyValue("Editor", "VariableColor", ColorTranslator.ToHtml(_VariableColor).ToString)
             ini.SetKeyValue("Editor", "StringVariableColor", ColorTranslator.ToHtml(_StringVariableColor).ToString)
             ini.SetKeyValue("Editor", "CommentColor", ColorTranslator.ToHtml(_CommentColor).ToString)
+
             ini.SetKeyValue("Editor", "AutoComplete", _AutoCompleteEnable.ToString)
+
             ini.Save(SetFile)
         End Sub
 
-    End Structure
+    End Class
 
 
 End Class

@@ -141,10 +141,14 @@ Public Class wMain
                 i += 1
             Loop
             s = ScriptIni.GetKeyValue("main", "DefaultRepeat")
-            If IsInteger(s) Then wUI.NumericUpDown1.Value = s.ToInteger Else wUI.NumericUpDown1.Value = 0
+            If IsInteger(s) Then
+                wUI.NumericUpDown1.Value = s.ToInteger
+            Else
+                wUI.NumericUpDown1.Value = 0
+                end if
 
         Catch ex As Exception
-            MsgBox(ex.Message & vbCrLf & ex.StackTrace, MsgBoxStyle.Exclamation, "Error!")
+            Dim x As New ErrorLogging(ex, Me)
         End Try
 
     End Sub

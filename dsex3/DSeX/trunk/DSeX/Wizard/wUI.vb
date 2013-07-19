@@ -31,8 +31,8 @@ Public Class wUI
     Public EditSettings As EditSettings
     Private WithEvents RTBWrapper As New cRTBWrapper()
     Public Code As String
-    Dim WorkFileName As String = MS_Edit.WorkFileName(0)
-    Dim WorkPath As String = MS_Edit.WorkPath(0)
+    Dim WorkFileName As String = ""
+    Dim WorkPath As String = ""
     Public PathIndex As Integer = 0
 
 
@@ -607,6 +607,7 @@ Public Class wUI
     End Sub
 
     Private Sub BtnImport_Click(sender As System.Object, e As System.EventArgs) Handles BtnImport.Click
+        If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
         MS_Edit.MS_Editor.SelectedRTF2 = solution.Rtf
     End Sub
 
