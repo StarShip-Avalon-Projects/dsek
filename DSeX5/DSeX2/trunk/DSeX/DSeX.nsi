@@ -62,7 +62,6 @@ InstallDir "$PROGRAMFILES\DSeX"
 !include "MUI.nsh"
 ;!define MUI_ICON "16x16.ico"
 
-
 !define MUI_ABORTWARNING
 !define MUI_UNABORTWARNING
 
@@ -89,7 +88,10 @@ InstallDir "$PROGRAMFILES\DSeX"
 
 !insertmacro MUI_UNPAGE_CONFIRM
 
+
+
 !insertmacro MUI_UNPAGE_INSTFILES
+
 
 !insertmacro MUI_UNPAGE_FINISH
 
@@ -105,7 +107,7 @@ SetOverwrite on
 SetOutPath "$INSTDIR"
 !insertmacro CheckNetFramework "40Full"
 ExecWait '"$INSTDIR\uninstall.exe" /S _?=$INSTDIR'
-${registerExtension} "$INSTDIR\DSeX.exe" ".ds" "DragonSpeak File"
+
 File "${Bin_Directory}\*.dll"
 File "${Bin_Directory}\*.ini"
 ;File "${Bin_Directory}\*.pdb"
@@ -120,14 +122,14 @@ SectionEnd
 Section -Additional
 SetOutPath "$INSTDIR\Scripts"
 File "${Bin_Directory}\Scripts\*.ini"
-File "${Bin_Directory}\Scripts\*.txt"
+;File "${Bin_Directory}\Scripts\*.txt"
 SectionEnd
 
 
 Section -Additional2
 SetOutPath "$INSTDIR\Templates"
 File "${Bin_Directory}\Templates\*.ds"
-File "${Bin_Directory}\Scripts\*.txt"
+;File "${Bin_Directory}\Scripts\*.txt"
 SectionEnd
 
 ######################################################################

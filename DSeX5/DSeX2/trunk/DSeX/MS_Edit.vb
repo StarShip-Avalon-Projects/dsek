@@ -545,16 +545,27 @@ Public Class MS_Edit
             Dim Restart As Boolean = False
             If Not CanOpen(TabControl2.SelectedIndex) Then
 
-                If fName = Nothing Or fName = "" Then
+                If String.IsNullOrEmpty(fName) Then
                     SaveAs()
                     Exit Sub
                 End If
-                MS_Editor.SaveFile(path & "/" & fName, RichTextBoxStreamType.PlainText)
+                UpdateSegments()
+                RebuildFullFile()
+                Try
+                    Dim Writer As New StreamWriter(path & "/" & fName)
+                    For j = 0 To FullFile(TabControl2.SelectedIndex).Count - 1
+                        Writer.WriteLine(FullFile(TabControl2.SelectedIndex)(j))
+                    Next
+                    Writer.Close()
+                    lblStatus.Text = "Status: File Saved."
 
-                lblStatus.Text = "Status: File Saved."
+                    CanOpen(TabControl2.SelectedIndex) = True
+                    Me.Text = frmTitle(TabControl2.SelectedIndex)
+                Catch ex As Exception
+                    MessageBox.Show("There was an error writing to " + fName)
+                End Try
 
-                CanOpen(TabControl2.SelectedIndex) = True
-                Me.Text = frmTitle(TabControl2.SelectedIndex)
+
             End If
         End If
     End Sub
@@ -1019,7 +1030,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         'Creates the listview and displays it in the new tab
         Dim lstView As RichTextBox2 = New RichTextBox2
         lstView.ContextMenuStrip = Me.EditMenu
-
+        lstView.AcceptsTab = True
         lstView.Parent = tp
         lstView.Anchor = AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Bottom + AnchorStyles.Right
         lstView.Name = "edit" + n
@@ -1133,6 +1144,8 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Private Sub CloseTab(ByVal i As Integer)
+        If i < 0 Or i > TabControl2.TabCount - 1 Then Exit Sub
+
         If Not CanOpen(i) Then
             Dim reply As DialogResult = MessageBox.Show("Save changes? Yes or No", "Caption", _
       MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
@@ -1238,7 +1251,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
         TabSections(idx).Add(tmpsec)
         bypass = False
-        blank = True
+
         For i = 0 To FullFile(idx).Count - 1
 
             If FullFile(idx)(i).StartsWith(RES_DS_begin) Then
@@ -1258,7 +1271,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
                 TabSections(idx).Add(tmpsec)
                 bypass = False
             End If
-            If (FullFile(idx)(i) <> "") And (tmpsec.Title = RES_Def_section) And (blank) And i = 1 Then
+            If (FullFile(idx)(i) <> "") And (tmpsec.Title = RES_Def_section) And i = 1 Then
                 blank = False
                 bypass = False
             End If
@@ -1266,11 +1279,11 @@ InputBox("What line within the document do you want to send the cursor to?", _
             If FullFile(idx)(i).StartsWith(RES_SEC_Marker) Then
 
                 t1 = FullFile(idx)(i).Substring(RES_SEC_Marker.Length)
-                If Not blank Then
-                    tmpsec = New TDSSegment
-                    tmpsec.Title = t1
-                    TabSections(idx).Add(tmpsec)
-                End If
+
+                tmpsec = New TDSSegment
+                tmpsec.Title = t1
+                TabSections(idx).Add(tmpsec)
+
                 bypass = False
             ElseIf Not bypass Then
                 tmpsec.lines.Add(FullFile(idx)(i))
