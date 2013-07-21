@@ -763,8 +763,8 @@ Public Class cRTBWrapper
     Public Sub ColorLine(ByRef line As Integer)
 
         update()
-
-        _bind.SelectionStart = _bind.SelectionStart - txtBody(line).Length
+        Dim lineStart = _bind.GetFirstCharIndexFromLine(line)
+        _bind.SelectionStart = lineStart
         _bind.SelectionLength = txtBody(line).Length
         applyColor(line)
         _bind.SelectedRtf = RenderLine(line)
