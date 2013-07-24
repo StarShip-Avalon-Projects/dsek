@@ -14,6 +14,7 @@ Imports DSeX.IniFile
 
 'Begin the main Form!
 Public Class wMain
+    Private Const My_Docs As String = "/Furcadia"
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
@@ -72,10 +73,6 @@ Public Class wMain
         wUI.NumericUpDown1.Value = 1
         wUI.wVariables.Clear()
         wUI.Show()
-    End Sub
-
-    Private Sub selecter_DragOver(sender As Object, e As System.Windows.Forms.DragEventArgs) Handles selecter.DragOver
-
     End Sub
 
     Private Sub selecter_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles selecter.MouseDown
@@ -165,6 +162,7 @@ Public Class wMain
             ScriptPaths.Add(path)
         Next
         path = Furcadia.IO.Paths.GetFurcadiaDocPath + "\Scripts\"
+        'path = Enviroment.GetFolderPath(Enviroment.SpecialFolderMyDocuments) + My_Docs + "/Scripts"
         Directory.CreateDirectory(path)
         For x = 0 To FileIO.FileSystem.GetFiles(path, FileIO.SearchOption.SearchTopLevelOnly, "*.ini").Count - 1
             Dim s = FileIO.FileSystem.GetName(FileIO.FileSystem.GetFiles(path).Item(x))

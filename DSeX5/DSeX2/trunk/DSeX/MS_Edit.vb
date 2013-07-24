@@ -76,14 +76,14 @@ Public Class MS_Edit
 #Region "Properties"
     Public WithEvents RTBWrapper As New cRTBWrapper()
 
-    Dim KeysIni As IniFile
+
     Public CanOpen As List(Of Boolean) = New List(Of Boolean)
     Public SettingsChanged As List(Of Boolean) = New List(Of Boolean)
     Public WorkFileName As List(Of String) = New List(Of String)
     Public WorkPath As List(Of String) = New List(Of String)
     'mPath()
     Dim frmTitle As List(Of String) = New List(Of String)
-    Dim lastTab As Integer = 0
+    'Dim lastTab As Integer = 0
     Dim Flag As Boolean = False
     Private Const RES_SEC_Marker As String = "**SECTION**  "
     Private Const RES_DS_begin As String = "DSPK V"
@@ -92,6 +92,7 @@ Public Class MS_Edit
     Private Const RES_DSS_End As String = "DS-END"
     Private Const RES_Def_section As String = "Default Section"
     Private Const RES_DSS_All As String = "Entire Document"
+    Private Const My_Docs As String = "/Furcadia"
     Dim FullFile As List(Of List(Of String)) = New List(Of List(Of String))
     Dim SectionIdx As List(Of Integer) = New List(Of Integer)
 
@@ -168,6 +169,7 @@ Public Class MS_Edit
             TemplatePaths.Add(path)
         Next
         path = Furcadia.IO.Paths.GetFurcadiaDocPath + "/Templates/"
+        'path = Enviroment.GetFolderPath(Enviroment.SpecialFolderMyDocuments) + My_Docs + "/templates"
         Directory.CreateDirectory(path)
         For x = 0 To FileIO.FileSystem.GetFiles(path, FileIO.SearchOption.SearchTopLevelOnly, "*.ds").Count - 1
             Dim s = FileIO.FileSystem.GetName(FileIO.FileSystem.GetFiles(path).Item(x))
@@ -346,13 +348,14 @@ Public Class MS_Edit
     End Sub
 
 
+
     Private Sub MS_Edit_Load(sender As Object, e As System.EventArgs) Handles Me.Load
         Me.DoubleBuffered = True
 
         Dim splash As SplashScreen1 = CType(My.Application.SplashScreen, SplashScreen1)
         KeysIni = New IniFile()
         KeysIni.Load(My.Application.Info.DirectoryPath + "\Keys.ini")
-
+        EditSettings = New EditSettings
         Me.Location = My.Settings.EditFormLocation
         Me.Visible = True
 
@@ -489,8 +492,9 @@ Public Class MS_Edit
     End Function
 
     Private Sub TextInsert(ByRef LB As ListView, Optional ByVal Spaces As Integer = 0)
-
-        Dim insertText = StrDup(Spaces, " ") & LB.SelectedItems(0).Text
+        Dim chr As String = " "
+        If ini.GetKeyValue("Init-Types", "Character") = "Tab" Then chr = vbTab
+        Dim insertText = StrDup(Spaces, chr) & LB.SelectedItems(0).Text
 
         Dim insertPos As Integer = MS_Editor.SelectionStart
         'MS_Editor.
@@ -507,10 +511,10 @@ Public Class MS_Edit
 
 
     Private Sub ListCauses_DoubleClick(sender As Object, e As System.EventArgs)
-        Dim test2 As Object = KeysIni.GetKeyValue("Init-Types", sender.name)
+        Dim test2 As Object = ini.GetKeyValue("Init-Types", sender.name)
 
-        Dim test As Object = KeysIni.GetKeyValue("C-Indents", test2)
-        TextInsert(sender, Convert.ToInt32(test))
+        Dim test As Integer = ini.GetKeyValue("C-Indents", test2).ToInteger
+        TextInsert(sender, test)
 
     End Sub
 
@@ -824,25 +828,27 @@ InputBox("What line within the document do you want to send the cursor to?", _
         MS_Editor.BeginUpdate()
         StrArray = MS_Editor.Lines
         Dim str As String
-        Dim pattern(CInt(KeysIni.GetKeyValue("Init-Types", "Count"))) As String
-        Dim pat(CInt(KeysIni.GetKeyValue("Init-Types", "Count"))) As Integer
+        Dim pattern(ini.GetKeyValue("Init-Types", "Count").ToInteger) As String
+        Dim pat(ini.GetKeyValue("Init-Types", "Count").ToInteger) As Integer
+        Dim chr As String = " "
+        If ini.GetKeyValue("Init-Types", "Character") = "Tab" Then Chr = vbTab
         Dim T As String = " "
 
         For I As Integer = 1 To pattern.Length - 1
             T = KeysIni.GetKeyValue("Init-Types", I.ToString)
-            Dim s As String = KeysIni.GetKeyValue("Indent-Lookup", T)
-            Dim u As String = KeysIni.GetKeyValue("C-Indents", T)
+            Dim s As String = ini.GetKeyValue("Indent-Lookup", T)
+            Dim u As String = ini.GetKeyValue("C-Indents", T)
             pattern(I) = "(" + s
-            pat(I) = CInt(u)
+            pat(I) = u.ToInteger
         Next
         Dim insertPos As Integer = MS_Editor.SelectionStart
         For I As Integer = 0 To StrArray.Length - 1
-            str = LTrim(StrArray(I))
+            str = StrArray(I).Trim
 
             For N As Integer = 1 To pattern.Length - 1
                 If str.StartsWith(pattern(N)) Then
                     Dim count As Integer = pattern(N).Substring(1, 1)
-                    StrArray(I) = StrDup(pat(N), " ") & str
+                    StrArray(I) = StrDup(pat(N), chr) & str
                     Exit For
                 End If
             Next
@@ -1083,7 +1089,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         End If
         UpdateSegmentList()
         If SectionIdx(TabControl2.SelectedIndex) <> ListBox1.SelectedIndex Then ListBox1.SelectedIndex = SectionIdx(TabControl2.SelectedIndex)
-        lastTab = TabControl2.SelectedIndex
+        'lastTab = TabControl2.SelectedIndex
         If SettingsChanged(TabControl2.SelectedIndex) Then
             RTBWrapper.colorDocument()
             SettingsChanged(TabControl2.SelectedIndex) = False
@@ -1201,7 +1207,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Private Sub EditToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles EditToolStripMenuItem1.Click
-        'emplatePaths(ListBox2.SelectedIndex) + 
+        'TemplatePaths(ListBox2.SelectedIndex) + 
         AddNewEditorTab(ListBox2.SelectedItem + ".ds", TemplatePaths.Item(ListBox2.SelectedIndex), TabControl2.TabCount.ToString)
         OpenMS_File(TemplatePaths.Item(ListBox2.SelectedIndex) + "/" + ListBox2.SelectedItem + ".ds")
     End Sub
@@ -1343,13 +1349,13 @@ InputBox("What line within the document do you want to send the cursor to?", _
             Next
             UpdateSegments()
         End If
-        If SectionIdx(lastTab) <> 0 Then
-            Dim section As TDSSegment = TabSections(lastTab)(SectionIdx(lastTab) - 1)
+        If SectionIdx(TabControl2.SelectedIndex) > 0 Then
+            Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(SectionIdx(TabControl2.SelectedIndex) - 1)
             section.lines.Clear()
             For i = 0 To MS_Editor.Lines.Count - 1
                 section.lines.Add(MS_Editor.Lines(i))
             Next
-            TabSections(lastTab)(SectionIdx(lastTab) - 1) = section
+            TabSections(TabControl2.SelectedIndex)(SectionIdx(TabControl2.SelectedIndex) - 1) = section
         End If
     End Sub
 
