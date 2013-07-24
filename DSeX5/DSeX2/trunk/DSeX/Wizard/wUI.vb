@@ -28,7 +28,6 @@ End Module
 Public Class wUI
 #Region "Properties"
     'Dim ScriptPath = My.Application.Info.DirectoryPath() & "\Scripts\"
-    Public EditSettings As EditSettings
     Private WithEvents RTBWrapper As New cRTBWrapper()
     Public Code As String
     Dim WorkFileName As String = ""
@@ -232,8 +231,8 @@ Public Class wUI
             'tDict(Pattern, isRegex, isCase, value)
             'Variable
             .rtfSyntax.Clear()
-            .rtfSyntax.add("%([A-Za-z0-9]+)", True, True, EditSettings.VariableColor.ToArgb)
-            .rtfSyntax.add("~([A-Za-z0-9]+)", True, True, EditSettings.VariableColor.ToArgb)
+            .rtfSyntax.add("%([A-Za-z0-9_]+)", True, True, EditSettings.VariableColor.ToArgb)
+            .rtfSyntax.add("~([A-Za-z0-9_]+)", True, True, EditSettings.StringVariableColor.ToArgb)
             'string
             .rtfSyntax.add("\\{(.*?)\\}", True, True, EditSettings.StringColor.ToArgb)
             'Line ID
@@ -241,8 +240,8 @@ Public Class wUI
             'Comment
             .rtfSyntax.add("^\*(.*?)$", True, True, EditSettings.CommentColor.ToArgb)
             'Number
-            .rtfSyntax.add(" ([0-9]+)", True, True, EditSettings.NumberColor.ToArgb)
-            .rtfSyntax.add("\.([0-9]+)", True, True, EditSettings.NumberColor.ToArgb)
+            .rtfSyntax.add("([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
+            '.rtfSyntax.add("\.([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
 
             .colorDocument()
         End With

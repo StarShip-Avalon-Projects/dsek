@@ -13,7 +13,10 @@
     Sub New(ByRef pic As Image, ByVal msg As String)
         InitializeComponent()
         Me.PictureBox1.Image = pic
-        Me.Label1.Text = msg
+        If Me.Label1.Text <> msg Then
+            Me.Label1.Text = msg
+            Me.Refresh()
+        End If
     End Sub
 
 

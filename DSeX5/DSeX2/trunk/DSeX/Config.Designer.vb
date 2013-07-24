@@ -41,18 +41,15 @@
         Me.CommentPictureBox = New System.Windows.Forms.PictureBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.StringPictureBox = New System.Windows.Forms.PictureBox()
-        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
-        Me.NumericUpDown5 = New System.Windows.Forms.NumericUpDown()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.NumericUpDown4 = New System.Windows.Forms.NumericUpDown()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.NumericUpDown3 = New System.Windows.Forms.NumericUpDown()
-        Me.NumericUpDown2 = New System.Windows.Forms.NumericUpDown()
-        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.Label16 = New System.Windows.Forms.Label()
         Me.ConfigTabs = New System.Windows.Forms.TabControl()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.RadioSpace = New System.Windows.Forms.RadioButton()
+        Me.RadioTab = New System.Windows.Forms.RadioButton()
+        Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.TabPage5.SuspendLayout()
         Me.GroupBox8.SuspendLayout()
         CType(Me.StringVariableClrBx, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -61,13 +58,10 @@
         CType(Me.VariablePictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.CommentPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.StringPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox7.SuspendLayout()
-        CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.NumericUpDown4, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ConfigTabs.SuspendLayout()
+        Me.TabPage1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'BTN_Ok
@@ -97,7 +91,6 @@
         '
         Me.TabPage5.Controls.Add(Me.ChkBxAutoComplete)
         Me.TabPage5.Controls.Add(Me.GroupBox8)
-        Me.TabPage5.Controls.Add(Me.GroupBox7)
         Me.TabPage5.Location = New System.Drawing.Point(4, 22)
         Me.TabPage5.Name = "TabPage5"
         Me.TabPage5.Padding = New System.Windows.Forms.Padding(3)
@@ -132,7 +125,7 @@
         Me.GroupBox8.Controls.Add(Me.CommentPictureBox)
         Me.GroupBox8.Controls.Add(Me.Label4)
         Me.GroupBox8.Controls.Add(Me.StringPictureBox)
-        Me.GroupBox8.Location = New System.Drawing.Point(199, 6)
+        Me.GroupBox8.Location = New System.Drawing.Point(117, 6)
         Me.GroupBox8.Name = "GroupBox8"
         Me.GroupBox8.Size = New System.Drawing.Size(166, 160)
         Me.GroupBox8.TabIndex = 1
@@ -253,113 +246,96 @@
         Me.StringPictureBox.TabIndex = 33
         Me.StringPictureBox.TabStop = False
         '
-        'GroupBox7
-        '
-        Me.GroupBox7.Controls.Add(Me.NumericUpDown5)
-        Me.GroupBox7.Controls.Add(Me.Label5)
-        Me.GroupBox7.Controls.Add(Me.NumericUpDown4)
-        Me.GroupBox7.Controls.Add(Me.Label2)
-        Me.GroupBox7.Controls.Add(Me.NumericUpDown3)
-        Me.GroupBox7.Controls.Add(Me.NumericUpDown2)
-        Me.GroupBox7.Controls.Add(Me.NumericUpDown1)
-        Me.GroupBox7.Controls.Add(Me.Label18)
-        Me.GroupBox7.Controls.Add(Me.Label17)
-        Me.GroupBox7.Controls.Add(Me.Label16)
-        Me.GroupBox7.Location = New System.Drawing.Point(6, 6)
-        Me.GroupBox7.Name = "GroupBox7"
-        Me.GroupBox7.Size = New System.Drawing.Size(187, 160)
-        Me.GroupBox7.TabIndex = 0
-        Me.GroupBox7.TabStop = False
-        Me.GroupBox7.Text = "GroupBox7"
-        '
-        'NumericUpDown5
-        '
-        Me.NumericUpDown5.Location = New System.Drawing.Point(118, 127)
-        Me.NumericUpDown5.Name = "NumericUpDown5"
-        Me.NumericUpDown5.Size = New System.Drawing.Size(46, 20)
-        Me.NumericUpDown5.TabIndex = 26
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(28, 129)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(73, 13)
-        Me.Label5.TabIndex = 25
-        Me.Label5.Text = "Effects Indent"
-        '
-        'NumericUpDown4
-        '
-        Me.NumericUpDown4.Location = New System.Drawing.Point(118, 102)
-        Me.NumericUpDown4.Name = "NumericUpDown4"
-        Me.NumericUpDown4.Size = New System.Drawing.Size(46, 20)
-        Me.NumericUpDown4.TabIndex = 24
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(28, 104)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(67, 13)
-        Me.Label2.TabIndex = 23
-        Me.Label2.Text = "Areas Indent"
-        '
-        'NumericUpDown3
-        '
-        Me.NumericUpDown3.Location = New System.Drawing.Point(118, 24)
-        Me.NumericUpDown3.Name = "NumericUpDown3"
-        Me.NumericUpDown3.Size = New System.Drawing.Size(46, 20)
-        Me.NumericUpDown3.TabIndex = 22
-        '
-        'NumericUpDown2
-        '
-        Me.NumericUpDown2.Location = New System.Drawing.Point(118, 76)
-        Me.NumericUpDown2.Name = "NumericUpDown2"
-        Me.NumericUpDown2.Size = New System.Drawing.Size(46, 20)
-        Me.NumericUpDown2.TabIndex = 21
-        '
-        'NumericUpDown1
-        '
-        Me.NumericUpDown1.Location = New System.Drawing.Point(118, 50)
-        Me.NumericUpDown1.Name = "NumericUpDown1"
-        Me.NumericUpDown1.Size = New System.Drawing.Size(46, 20)
-        Me.NumericUpDown1.TabIndex = 20
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.Location = New System.Drawing.Point(28, 26)
-        Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(70, 13)
-        Me.Label18.TabIndex = 19
-        Me.Label18.Text = "Cause Indent"
-        '
-        'Label17
-        '
-        Me.Label17.AutoSize = True
-        Me.Label17.Location = New System.Drawing.Point(28, 78)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(67, 13)
-        Me.Label17.TabIndex = 18
-        Me.Label17.Text = "Filters Indent"
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(28, 52)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(84, 13)
-        Me.Label16.TabIndex = 17
-        Me.Label16.Text = "Condition Indent"
-        '
         'ConfigTabs
         '
         Me.ConfigTabs.Controls.Add(Me.TabPage5)
+        Me.ConfigTabs.Controls.Add(Me.TabPage1)
         Me.ConfigTabs.Location = New System.Drawing.Point(12, 12)
         Me.ConfigTabs.Name = "ConfigTabs"
         Me.ConfigTabs.SelectedIndex = 0
         Me.ConfigTabs.Size = New System.Drawing.Size(379, 256)
         Me.ConfigTabs.TabIndex = 11
+        '
+        'TabPage1
+        '
+        Me.TabPage1.Controls.Add(Me.ListBox1)
+        Me.TabPage1.Controls.Add(Me.Button1)
+        Me.TabPage1.Controls.Add(Me.Label2)
+        Me.TabPage1.Controls.Add(Me.NumericUpDown1)
+        Me.TabPage1.Controls.Add(Me.GroupBox2)
+        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage1.Name = "TabPage1"
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage1.Size = New System.Drawing.Size(371, 230)
+        Me.TabPage1.TabIndex = 5
+        Me.TabPage1.Text = "TabPage1"
+        Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.RadioTab)
+        Me.GroupBox2.Controls.Add(Me.RadioSpace)
+        Me.GroupBox2.Location = New System.Drawing.Point(185, 16)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(87, 71)
+        Me.GroupBox2.TabIndex = 1
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Indent Type"
+        '
+        'RadioSpace
+        '
+        Me.RadioSpace.AutoSize = True
+        Me.RadioSpace.Checked = True
+        Me.RadioSpace.Location = New System.Drawing.Point(6, 19)
+        Me.RadioSpace.Name = "RadioSpace"
+        Me.RadioSpace.Size = New System.Drawing.Size(61, 17)
+        Me.RadioSpace.TabIndex = 0
+        Me.RadioSpace.TabStop = True
+        Me.RadioSpace.Text = "Spaces"
+        Me.RadioSpace.UseVisualStyleBackColor = True
+        '
+        'RadioTab
+        '
+        Me.RadioTab.AutoSize = True
+        Me.RadioTab.Location = New System.Drawing.Point(6, 42)
+        Me.RadioTab.Name = "RadioTab"
+        Me.RadioTab.Size = New System.Drawing.Size(49, 17)
+        Me.RadioTab.TabIndex = 1
+        Me.RadioTab.Text = "Tabs"
+        Me.RadioTab.UseVisualStyleBackColor = True
+        '
+        'NumericUpDown1
+        '
+        Me.NumericUpDown1.Location = New System.Drawing.Point(185, 156)
+        Me.NumericUpDown1.Name = "NumericUpDown1"
+        Me.NumericUpDown1.Size = New System.Drawing.Size(120, 20)
+        Me.NumericUpDown1.TabIndex = 2
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(182, 132)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(111, 13)
+        Me.Label2.TabIndex = 3
+        Me.Label2.Text = "Spaces of Indentation"
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(240, 199)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(106, 25)
+        Me.Button1.TabIndex = 4
+        Me.Button1.Text = "Reset to Defaults"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'ListBox1
+        '
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.Location = New System.Drawing.Point(20, 16)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.Size = New System.Drawing.Size(156, 160)
+        Me.ListBox1.TabIndex = 5
         '
         'Config
         '
@@ -384,14 +360,12 @@
         CType(Me.VariablePictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.CommentPictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.StringPictureBox, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox7.ResumeLayout(False)
-        Me.GroupBox7.PerformLayout()
-        CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.NumericUpDown4, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.NumericUpDown2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ConfigTabs.ResumeLayout(False)
+        Me.TabPage1.ResumeLayout(False)
+        Me.TabPage1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
+        CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -399,13 +373,6 @@
     Friend WithEvents BTN_Cancel As System.Windows.Forms.Button
     Friend WithEvents IniBrowseDialog As System.Windows.Forms.OpenFileDialog
     Friend WithEvents TabPage5 As System.Windows.Forms.TabPage
-    Friend WithEvents GroupBox7 As System.Windows.Forms.GroupBox
-    Friend WithEvents NumericUpDown3 As System.Windows.Forms.NumericUpDown
-    Friend WithEvents NumericUpDown2 As System.Windows.Forms.NumericUpDown
-    Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
-    Friend WithEvents Label18 As System.Windows.Forms.Label
-    Friend WithEvents Label17 As System.Windows.Forms.Label
-    Friend WithEvents Label16 As System.Windows.Forms.Label
     Friend WithEvents ConfigTabs As System.Windows.Forms.TabControl
     Friend WithEvents GroupBox8 As System.Windows.Forms.GroupBox
     Friend WithEvents Label20 As System.Windows.Forms.Label
@@ -419,11 +386,15 @@
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents StringPictureBox As System.Windows.Forms.PictureBox
     Friend WithEvents ChkBxAutoComplete As System.Windows.Forms.CheckBox
-    Friend WithEvents NumericUpDown4 As System.Windows.Forms.NumericUpDown
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents NumericUpDown5 As System.Windows.Forms.NumericUpDown
-    Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents StringVariableClrBx As System.Windows.Forms.PictureBox
+    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
+    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents RadioTab As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioSpace As System.Windows.Forms.RadioButton
+    Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
 End Class
 

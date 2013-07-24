@@ -20,11 +20,6 @@ Public Class Config
         EditSettings.AutoCompleteEnable = ChkBxAutoComplete.Checked
         MS_Edit.AutocompleteMenu1.Enabled = ChkBxAutoComplete.Checked
 
-        EditSettings.CauseIndent = NumericUpDown3.Value
-        EditSettings.ConditionIndent = NumericUpDown1.Value
-        EditSettings.FiltersIndent = NumericUpDown2.Value
-        EditSettings.AreasIndent = NumericUpDown4.Value
-        EditSettings.EffectsIndent = NumericUpDown5.Value
 
         EditSettings.CommentColor = CommentPictureBox.BackColor
         EditSettings.StringColor = StringPictureBox.BackColor
@@ -32,7 +27,17 @@ Public Class Config
         EditSettings.VariableColor = VariablePictureBox.BackColor
         EditSettings.IDColor = IDPictureBox.BackColor
         EditSettings.StringVariableColor = StringVariableClrBx.BackColor
-
+        For i As Integer = 0 To ListBox1.Items.Count - 1
+            Dim KV() As String = ListBox1.Items(i).split("=")
+            ini.SetKeyValue("C-Indents", KV(0), KV(1))
+        Next
+        If RadioSpace.Checked Then
+            ini.SetKeyValue("Init-Types", "Character", "Space")
+        ElseIf RadioTab.Checked Then
+            ini.SetKeyValue("Init-Types", "Character", "Tab")
+        Else
+            ini.SetKeyValue("Init-Types", "Character", "Space")
+        End If
         'Save the settings to the ini file
         EditSettings.SaveEditorSettings()
 
@@ -69,13 +74,18 @@ Public Class Config
         VariablePictureBox.BackColor = EditSettings.VariableColor
         IDPictureBox.BackColor = EditSettings.IDColor
         StringVariableClrBx.BackColor = EditSettings.StringVariableColor
-
-        NumericUpDown3.Value = EditSettings.CauseIndent
-        NumericUpDown1.Value = EditSettings.ConditionIndent
-        NumericUpDown5.Value = EditSettings.EffectsIndent
-        NumericUpDown2.Value = EditSettings.FiltersIndent
-        NumericUpDown4.Value = EditSettings.AreasIndent
-
+        Dim count As Integer = ini.GetKeyValue("Init-Types", "Count").ToInteger
+        For i = 1 To count
+            Dim key As String = ini.GetKeyValue("Init-Types", i.ToString)
+            Dim s As String = ini.GetKeyValue("C-Indents", key)
+            ListBox1.Items.Add(key + "=" + s)
+        Next
+        Dim indentType As String = ini.GetKeyValue("Init-Types", "Character")
+        If indentType = "Space" Then
+            RadioSpace.Checked = True
+        ElseIf indentType = "Tab" Then
+            RadioTab.Checked = True
+        End If
         Me.Location = My.Settings.ConfigFormLocation
     End Sub
 
@@ -121,4 +131,38 @@ Public Class Config
         GetColor(StringVariableClrBx)
     End Sub
 
+    Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
+
+    End Sub
+
+    Private Sub NumericUpDown1_KeyUp(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles NumericUpDown1.KeyUp
+        Dim key As String = ListBox1.SelectedItem.split("=")(0)
+        Dim i As Integer = ListBox1.SelectedIndex
+        ListBox1.Items.RemoveAt(i)
+        ListBox1.Items.Insert(i, key + "=" + NumericUpDown1.Value.ToString)
+        ListBox1.SelectedIndex = i
+    End Sub
+
+    Private Sub ListBox1_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseUp
+        Dim str As String = ListBox1.SelectedItem
+        Dim Val As Integer = CInt(str.Split("=")(1))
+        NumericUpDown1.Value = Val
+    End Sub
+
+    Private Sub NumericUpDown1_ValueChanged(sender As Object, e As System.EventArgs) Handles NumericUpDown1.ValueChanged
+        Dim i As Integer = ListBox1.SelectedIndex
+        Dim Key As String = ""
+        Try
+            Key = ListBox1.SelectedItem.split("=")(0)
+
+
+            ListBox1.Items.RemoveAt(i)
+            ListBox1.Items.Insert(i, key + "=" + NumericUpDown1.Value.ToString)
+        Catch
+            ListBox1.Items.RemoveAt(i)
+            Key = ini.GetKeyValue("Init-Types", i.ToString)
+            ListBox1.Items.Insert(i, Key + "=0")
+        End Try
+        ListBox1.SelectedIndex = i
+    End Sub
 End Class
