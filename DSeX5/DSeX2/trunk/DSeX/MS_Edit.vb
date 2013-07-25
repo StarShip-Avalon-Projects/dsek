@@ -233,6 +233,7 @@ Public Class MS_Edit
         Next
         'Set my user setting MainFormLocation to
         'the current form's location
+        EditSettings.SaveEditorSettings()
         My.Settings.EditFormLocation = Me.Location
         My.Settings.Save()
         Me.Dispose()

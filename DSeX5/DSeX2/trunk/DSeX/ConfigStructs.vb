@@ -110,7 +110,6 @@ Public Class ConfigStructs
             If File.Exists(SetFile) Then
                 ini.Load(SetFile, True)
             End If
-            ini.Save(SetFile)
 
 
             _IDcolor = ColorTranslator.FromHtml(ini.GetKeyValue("Editor", "IDColor"))

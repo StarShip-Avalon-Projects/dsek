@@ -136,10 +136,15 @@ Public Class Config
     End Sub
 
     Private Sub NumericUpDown1_KeyUp(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles NumericUpDown1.KeyUp
-        Dim key As String = ListBox1.SelectedItem.split("=")(0)
+
         Dim i As Integer = ListBox1.SelectedIndex
+        If i = -1 Then Exit Sub
+        Dim Key As String = ""
+        Key = ini.GetKeyValue("Init-Types", i.ToString)
+
         ListBox1.Items.RemoveAt(i)
-        ListBox1.Items.Insert(i, key + "=" + NumericUpDown1.Value.ToString)
+        ListBox1.Items.Insert(i, Key + "=" + NumericUpDown1.Value.ToString)
+
         ListBox1.SelectedIndex = i
     End Sub
 
@@ -150,19 +155,15 @@ Public Class Config
     End Sub
 
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As System.EventArgs) Handles NumericUpDown1.ValueChanged
+
         Dim i As Integer = ListBox1.SelectedIndex
+        If i = -1 Then Exit Sub
         Dim Key As String = ""
-        Try
-            Key = ListBox1.SelectedItem.split("=")(0)
+        Key = ini.GetKeyValue("Init-Types", i.ToString)
 
+        ListBox1.Items.RemoveAt(i)
+        ListBox1.Items.Insert(i, Key + "=" + NumericUpDown1.Value.ToString)
 
-            ListBox1.Items.RemoveAt(i)
-            ListBox1.Items.Insert(i, key + "=" + NumericUpDown1.Value.ToString)
-        Catch
-            ListBox1.Items.RemoveAt(i)
-            Key = ini.GetKeyValue("Init-Types", i.ToString)
-            ListBox1.Items.Insert(i, Key + "=0")
-        End Try
         ListBox1.SelectedIndex = i
     End Sub
 End Class
