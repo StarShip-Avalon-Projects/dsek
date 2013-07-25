@@ -186,7 +186,11 @@ Public Class MS_Edit
     Private Sub MS_Edit_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         For i = TabControl2.TabPages.Count - 1 To 0 Step -1
             If Not CanOpen(i) Then
-                Dim result = MessageBox.Show("Save your work before closing?", "caption", MessageBoxButtons.YesNoCancel)
+                Dim fname As String = WorkFileName(i)
+                If fname = "" Then
+                    fname = "(New File)" 'This really needs to be a constant somewhere.
+                End If
+                Dim result = MessageBox.Show(fname + " was modified." + Environment.NewLine + "Save your work before closing?", "Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 If result = DialogResult.Cancel Then
                     e.Cancel = True
                     CanOpen(i) = False
@@ -1154,8 +1158,13 @@ InputBox("What line within the document do you want to send the cursor to?", _
     Private Sub CloseTab(ByVal i As Integer)
         If i < 0 Or i > TabControl2.TabCount - 1 Then Exit Sub
 
+        Dim fname As String = WorkFileName(i)
+        If fname = "" Then
+            fname = "(New File)"
+        End If
+
         If Not CanOpen(i) Then
-            Dim reply As DialogResult = MessageBox.Show("Save changes? Yes or No", "Caption", _
+            Dim reply As DialogResult = MessageBox.Show(fname + " has been modified." + Environment.NewLine + "Save the changes?", "Warning", _
       MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
 
             If reply = DialogResult.Yes Then
