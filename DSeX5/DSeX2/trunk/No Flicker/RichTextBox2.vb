@@ -135,12 +135,19 @@ Public Class RichTextBox2
         End Get
     End Property
 
+    Public Shadows Sub Paste()
+        UpdateLastRestorableItem()
+        MyBase.Paste()
+    End Sub
+    Public Shadows Sub Paste(ByRef o As DataFormats.Format)
+        UpdateLastRestorableItem()
+        MyBase.Paste(o)
+    End Sub
     Public Shadows Sub Undo()
         UpdateLastRestorableItem()
         UndoRestorableItem(UndoRedoHandler.CurrentItem)
         UndoRedoHandler.Undo()
     End Sub
-
     Public Shadows Sub Redo()
         UndoRedoHandler.Redo()
         RedoRestorableItem(UndoRedoHandler.CurrentItem)
@@ -152,6 +159,12 @@ Public Class RichTextBox2
                 UpdateLastRestorableItem()
             Case WindowMessages.WM_CUT
                 AddRestorableItem(EditType.Cut, Me.SelectionStart, Me.SelectedText)
+            Case WindowMessages.WM_PASTE
+                Debug.WriteLine("WM_PASTE")
+                If Me.SelectionLength > 0 Then      '' overtyping?
+                    AddRestorableItem(EditType.Deleted, Me.SelectionStart, Me.SelectedText)
+                End If
+                AddRestorableItem(EditType.Paste, Me.SelectionStart, My.Computer.Clipboard.GetText)
             Case WindowMessages.WM_KEYDOWN
                 Dim keyCode As Keys = CType(m.WParam, Keys) And Keys.KeyCode
                 Select Case keyCode
@@ -163,9 +176,9 @@ Public Class RichTextBox2
                         IsTyping = True
 
                         '' Uncomment the following lines to save at words instead of sentences.
-                        'Case Keys.Space
-                        '    AddRestorableItem(EditType.Inserted, Me.SelectionStart, Space(1))
-                        '    IsTyping = True
+                    Case Keys.Space
+                        AddRestorableItem(EditType.Inserted, Me.SelectionStart, Space(1))
+                        IsTyping = True
 
                     Case Keys.Back
                         If Me.SelectionLength = 0 Then
@@ -185,16 +198,6 @@ Public Class RichTextBox2
                             AddRestorableItem(EditType.Deleted, Me.SelectionStart, Me.SelectedText)
                         End If
 
-
-
-
-                    Case CType(WindowMessages.WM_PASTE, Keys)
-                        If Me.SelectionLength > 0 Then      '' overtyping?
-                            AddRestorableItem(EditType.Deleted, Me.SelectionStart, Me.SelectedText)
-                        End If
-                        AddRestorableItem(EditType.Paste, Me.SelectionStart, "")
-
-
                     Case Else
                         If Not IsTyping Then
                             If Me.SelectionLength > 0 Then      '' overtyping?
@@ -204,12 +207,14 @@ Public Class RichTextBox2
                             IsTyping = True
                         End If
                 End Select
+            Case WM_SETREDRAW
         End Select
 
         MyBase.WndProc(m)
     End Sub
 
     Private Sub AddRestorableItem(editType As EditType, position As Integer, text As String)
+        Trace.WriteLine("AddRestorableItem()")
         UpdateLastRestorableItem()
         With UndoRedoHandler
             If .CurrentItem.EditType = editType.Inserted AndAlso String.IsNullOrEmpty(.CurrentItem.Text) Then
@@ -232,8 +237,8 @@ Public Class RichTextBox2
                 If Me.SelectionLength > 0 Then      '' overtyping?
                     AddRestorableItem(EditType.Deleted, Me.SelectionStart, Me.SelectedText)
                 End If
-                AddRestorableItem(EditType.Inserted, Me.SelectionStart, "")
-                IsTyping = True
+                AddRestorableItem(EditType.Inserted, Me.SelectionStart, value)
+                'IsTyping = True
             End If
             MyBase.SelectedText = value
             'IsTyping = False
@@ -256,14 +261,16 @@ Public Class RichTextBox2
         End Set
     End Property
     Private Sub UpdateLastRestorableItem()
+        Trace.WriteLine("UpdateLastRestorableItem()")
         If IsTyping Then
             With UndoRedoHandler.CurrentItem
                 If .EditType = EditType.Inserted Then
-                    Try
-                        .Text = Me.Text.Substring(.Position, Me.SelectionStart - .Position)
-                    Catch ex As Exception
-                        Dim x As New ErrorLogging(ex, Me)
-                    End Try
+                    'Try
+
+                    .Text = Me.Text.Substring(.Position, Me.SelectionStart - .Position)
+                    'Catch ex As Exception
+                    'Dim x As New ErrorLogging(ex, Me)
+                    'End Try
                 End If
                 IsTyping = False
             End With
@@ -280,8 +287,8 @@ Public Class RichTextBox2
                     Me.SelectedText = ""
                 Case EditType.BackSpace
                     Me.SelectedText = .Text
-                Case EditType.Deleted,
-                    CType(Me.SelectedText = .Text, Global.No_Flicker.RichTextBox2.EditType)
+                Case EditType.Deleted
+                    Me.SelectedText = .Text
                 Case EditType.Cut
                     Me.SelectedText = .Text
                 Case EditType.Paste
