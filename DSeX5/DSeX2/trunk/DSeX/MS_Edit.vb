@@ -492,14 +492,14 @@ Public Class MS_Edit
     End Function
 
     Private Sub TextInsert(ByRef LB As ListView, Optional ByVal Spaces As Integer = 0)
-        Dim chr As String = " "
-        If ini.GetKeyValue("Init-Types", "Character") = "Tab" Then chr = vbTab
-        Dim insertText = StrDup(Spaces, chr) & LB.SelectedItems(0).Text
+        Dim ch As String = " "
+        If ini.GetKeyValue("Init-Types", "Character") = "Tab" Then ch = vbTab
+        Dim insertText = StrDup(Spaces, ch) & LB.SelectedItems(0).Text
 
         Dim insertPos As Integer = MS_Editor.SelectionStart
         'MS_Editor.
 
-        MS_Editor.SelectedText2 = insertText + Chr(10)
+        MS_Editor.SelectedText2 = insertText + chr(10)
 
         RTBWrapper.ColorLine(MS_Editor.GetLineFromCharIndex(MS_Editor.SelectionStart - 1))
         ' MS_Editor.SelectionStart = insertPos + insertText.Length
@@ -824,30 +824,31 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Private Sub FixIndentsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles FixIndentsToolStripMenuItem.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        Dim StrArray() As String
-        MS_Editor.BeginUpdate()
-        StrArray = MS_Editor.Lines
+        Dim StrArray() As String = MS_Editor.Lines
+        'MS_Editor.BeginUpdate()
+
         Dim str As String
-        Dim pattern(ini.GetKeyValue("Init-Types", "Count").ToInteger) As String
-        Dim pat(ini.GetKeyValue("Init-Types", "Count").ToInteger) As Integer
+        Dim Count As Integer = ini.GetKeyValue("Init-Types", "Count").ToInteger
+        Dim pattern(Count - 1) As String
+        Dim pat(Count - 1) As Integer
         Dim chr As String = " "
         If ini.GetKeyValue("Init-Types", "Character") = "Tab" Then Chr = vbTab
         Dim T As String = " "
 
-        For I As Integer = 1 To pattern.Length - 1
+        For I As Integer = 1 To Count
             T = KeysIni.GetKeyValue("Init-Types", I.ToString)
             Dim s As String = ini.GetKeyValue("Indent-Lookup", T)
             Dim u As String = ini.GetKeyValue("C-Indents", T)
-            pattern(I) = "(" + s
-            pat(I) = u.ToInteger
+            pattern(I - 1) = "(" + s
+            pat(I - 1) = u.ToInteger
         Next
         Dim insertPos As Integer = MS_Editor.SelectionStart
         For I As Integer = 0 To StrArray.Length - 1
             str = StrArray(I).Trim
 
-            For N As Integer = 1 To pattern.Length - 1
+            For N As Integer = 0 To pattern.Length - 1
                 If str.StartsWith(pattern(N)) Then
-                    Dim count As Integer = pattern(N).Substring(1, 1)
+                    Dim c As Integer = pattern(N).Substring(1, 1)
                     StrArray(I) = StrDup(pat(N), chr) & str
                     Exit For
                 End If
@@ -856,7 +857,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
         MS_Editor.Lines = StrArray
 
-        MS_Editor.EndUpdate()
+        'MS_Editor.EndUpdate()
 
         RTBWrapper.colorDocument()
         MS_Editor.SelectionStart = insertPos
