@@ -1200,7 +1200,9 @@ InputBox("What line within the document do you want to send the cursor to?", _
             str += reader.ReadLine + vbLf
         Loop
         reader.Close()
+        Dim pos As Integer = MS_Editor.SelectionStart
         MS_Editor.SelectedText2 = str
+        MS_Editor.SelectionStart = pos + str.Length
         RTBWrapper.colorDocument()
     End Sub
 
