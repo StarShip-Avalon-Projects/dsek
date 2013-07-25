@@ -96,6 +96,8 @@ Public Class MS_Edit
     Dim FullFile As List(Of List(Of String)) = New List(Of List(Of String))
     Dim SectionIdx As List(Of Integer) = New List(Of Integer)
 
+    Private Const New_File_Tag As String = "(New File)"
+
     Enum TSecType
         SecNormal
         SecEnd
@@ -188,7 +190,7 @@ Public Class MS_Edit
             If Not CanOpen(i) Then
                 Dim fname As String = WorkFileName(i)
                 If fname = "" Then
-                    fname = "(New File)" 'This really needs to be a constant somewhere.
+                    fname = New_File_Tag 'This really needs to be a constant somewhere.
                 End If
                 Dim result = MessageBox.Show(fname + " was modified." + Environment.NewLine + "Save your work before closing?", "Warning", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
                 If result = DialogResult.Cancel Then
@@ -744,7 +746,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
         If IsInteger(i) And i > 0 Then
             If i > MS_Editor.Lines.Count Then i = MS_Editor.Lines.Count
-            MS_Editor.SelectionStart = MS_Editor.GetFirstCharIndexFromLine(i - 1)
+            MS_Editor.SelectionStart = MS_Editor.GetFirstCharIndexFromLine(i.ToInteger - 1)
 
             sb.Panels.Item(0).Text = "Cursor Position: " & MS_Editor.SelectionStart.ToString
             sb.Panels.Item(1).Text = "Current Line: " & MS_Editor.GetLineFromCharIndex(MS_Editor.SelectionStart) + 1
@@ -788,7 +790,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         For i = 0 To MS_Editor.Lines.Count - 1
             FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines(i))
         Next
-        TabControl2.SelectedTab.Text = "(New File)"
+        TabControl2.SelectedTab.Text = New_File_Tag
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
         UpdateSegments()
@@ -815,7 +817,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         For i = 0 To MS_Editor.Lines.Count - 1
             FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines(i))
         Next
-        TabControl2.SelectedTab.Text = "(New File)"
+        TabControl2.SelectedTab.Text = New_File_Tag
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
         UpdateSegments()
@@ -1157,10 +1159,9 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Private Sub CloseTab(ByVal i As Integer)
         If i < 0 Or i > TabControl2.TabCount - 1 Then Exit Sub
-
         Dim fname As String = WorkFileName(i)
         If fname = "" Then
-            fname = "(New File)"
+            fname = New_File_Tag
         End If
 
         If Not CanOpen(i) Then
@@ -1199,7 +1200,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             str += reader.ReadLine + vbLf
         Loop
         reader.Close()
-        MS_Editor.SelectedText = str
+        MS_Editor.SelectedText2 = str
         RTBWrapper.colorDocument()
     End Sub
 
