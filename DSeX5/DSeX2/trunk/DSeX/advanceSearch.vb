@@ -240,7 +240,10 @@ Public Class frmSearch
 
     Private Sub btnFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFind.Click
         '
-        '
+        If IsNothing(MS_Edit.MS_Editor) Then
+            MsgBox("No editor open to search", MsgBoxStyle.OkOnly, "Warning")
+            Exit Sub
+        End If
         If MS_Edit.MS_Editor.TextLength <= 1 Then Exit Sub
         '
         'MS_Editor
@@ -365,7 +368,7 @@ Public Class frmSearch
     Private Sub btnFindNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFindNext.Click
         '
         '
-        If MS_Edit.MS_Editor.TextLength <= 1 Then Exit Sub
+        If IsNothing(MS_Edit.MS_Editor) Or MS_Edit.MS_Editor.TextLength <= 1 Then Exit Sub
         '
         '
         If optWhole.Checked Then
@@ -457,7 +460,7 @@ Public Class frmSearch
     End Sub
 
     Private Sub btnReplace_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnReplace.Click
-
+        If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
         If (MS_Edit.MS_Editor.SelectedText.ToLower) = (cmbSearch.Text.ToLower) Then
 
             MS_Edit.MS_Editor.SelectedText = cmbReplace.Text
@@ -467,7 +470,7 @@ Public Class frmSearch
     End Sub
 
     Private Sub btnReplaceAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnReplaceAll.Click
-
+        If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
         Dim i As Integer
         Dim t As Integer = 0
 

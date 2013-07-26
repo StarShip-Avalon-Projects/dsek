@@ -499,6 +499,8 @@ Public Class MS_Edit
     End Function
 
     Private Sub TextInsert(ByRef LB As ListView, Optional ByVal Spaces As Integer = 0)
+
+        If IsNothing(MS_Editor) Then Exit Sub
         Dim ch As String = " "
         If ini.GetKeyValue("Init-Types", "Character") = "Tab" Then ch = vbTab
         Dim insertText = StrDup(Spaces, ch) & LB.SelectedItems(0).Text
@@ -1193,6 +1195,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Private Sub ListBox2_DoubleClick(sender As Object, e As System.EventArgs) Handles ListBox2.DoubleClick, InsertToDSFileToolStripMenuItem.Click
+        If IsNothing(MS_Editor) Then Exit Sub
         Dim p As String = TemplatePaths.Item(ListBox2.SelectedIndex) + ListBox2.SelectedItem + ".ds"
         Dim reader As New StreamReader(p)
         Dim str As String = ""
