@@ -106,7 +106,7 @@ Public Class RichTextBox2
         Cut
         Wizard_Insert
         Fix_Indents
-
+        InsertedRTF
     End Enum
 
     Private Enum WindowMessages
@@ -249,15 +249,12 @@ Public Class RichTextBox2
             Return MyBase.SelectedRtf
         End Get
         Set(value As String)
-            If Not IsTyping Then
-                If Me.SelectionLength > 0 Then      '' overtyping?
-                    AddRestorableItem(EditType.Deleted, Me.SelectionStart, Me.SelectedText)
-                End If
-                AddRestorableItem(EditType.Inserted, Me.SelectionStart, "")
-                IsTyping = True
+            If Me.SelectionLength > 0 Then      '' overtyping?
+                AddRestorableItem(EditType.Deleted, Me.SelectionStart, Me.SelectedText)
             End If
+            AddRestorableItem(EditType.InsertedRTF, Me.SelectionStart, value)
+
             MyBase.SelectedRtf = value
-            'IsTyping = False
         End Set
     End Property
     Private Sub UpdateLastRestorableItem()
@@ -294,6 +291,9 @@ Public Class RichTextBox2
                 Case EditType.Paste
                     Me.SelectionLength = .Text.Length
                     Me.SelectedText = ""
+                Case EditType.InsertedRTF
+                    Me.SelectionLength = ConvertRtfToText(.Text).Length
+                    Me.SelectedRtf = ""
             End Select
         End With
     End Sub
@@ -320,7 +320,8 @@ Public Class RichTextBox2
                     Me.SelectedText = .Text
                 Case EditType.Wizard_Insert
                     Me.SelectedText = .Text
-
+                Case EditType.InsertedRTF
+                    Me.SelectedRtf = .Text
             End Select
         End With
     End Sub
@@ -331,6 +332,18 @@ Public Class RichTextBox2
     Public Sub ReDoE() Handles UndoRedoHandler.RedoHappened
         RaiseEvent UndoEvent(Me, New UndoRedoEventArgs(UndoRedoHandler.CurrentItem))
     End Sub
+
+    Private Shared Function ConvertRtfToText(ByVal input As String) As String
+        Dim returnValue As String = String.Empty
+
+        Using converter As New System.Windows.Forms.RichTextBox()
+            converter.Rtf = input
+            returnValue = converter.Text
+        End Using
+
+        Return returnValue
+
+    End Function
 End Class
 
 
