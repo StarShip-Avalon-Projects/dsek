@@ -41,8 +41,6 @@ Partial Class wUI
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.dsdesc2 = New System.Windows.Forms.RichTextBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
@@ -51,7 +49,6 @@ Partial Class wUI
         Me.Label5 = New System.Windows.Forms.Label()
         Me.solution = New No_Flicker.RichTextBox2()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.Label8 = New System.Windows.Forms.Label()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.MyPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -65,7 +62,7 @@ Partial Class wUI
         Me.selecter2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.selecter2.ForeColor = System.Drawing.SystemColors.WindowText
         Me.selecter2.FormattingEnabled = True
-        Me.selecter2.Location = New System.Drawing.Point(199, 42)
+        Me.selecter2.Location = New System.Drawing.Point(236, 40)
         Me.selecter2.Name = "selecter2"
         Me.selecter2.Size = New System.Drawing.Size(223, 106)
         Me.selecter2.TabIndex = 2
@@ -100,7 +97,7 @@ Partial Class wUI
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Button1.Location = New System.Drawing.Point(428, 198)
+        Me.Button1.Location = New System.Drawing.Point(401, 198)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(98, 23)
         Me.Button1.TabIndex = 11
@@ -180,7 +177,7 @@ Partial Class wUI
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(196, 26)
+        Me.Label2.Location = New System.Drawing.Point(244, 24)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(45, 13)
         Me.Label2.TabIndex = 12
@@ -189,7 +186,7 @@ Partial Class wUI
         'NumericUpDown1
         '
         Me.NumericUpDown1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.NumericUpDown1.Location = New System.Drawing.Point(428, 165)
+        Me.NumericUpDown1.Location = New System.Drawing.Point(401, 165)
         Me.NumericUpDown1.Name = "NumericUpDown1"
         Me.NumericUpDown1.Size = New System.Drawing.Size(98, 20)
         Me.NumericUpDown1.TabIndex = 14
@@ -198,7 +195,7 @@ Partial Class wUI
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(372, 167)
+        Me.Label4.Location = New System.Drawing.Point(345, 167)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(50, 13)
         Me.Label4.TabIndex = 15
@@ -213,31 +210,9 @@ Partial Class wUI
         Me.dsdesc2.Location = New System.Drawing.Point(0, 42)
         Me.dsdesc2.Name = "dsdesc2"
         Me.dsdesc2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical
-        Me.dsdesc2.Size = New System.Drawing.Size(193, 104)
+        Me.dsdesc2.Size = New System.Drawing.Size(230, 104)
         Me.dsdesc2.TabIndex = 1
         Me.dsdesc2.Text = ""
-        '
-        'Label3
-        '
-        Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(425, 26)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(34, 13)
-        Me.Label3.TabIndex = 13
-        Me.Label3.Text = "Mode"
-        '
-        'ListBox1
-        '
-        Me.ListBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox1.BackColor = System.Drawing.SystemColors.Window
-        Me.ListBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.ListBox1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(428, 42)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(105, 106)
-        Me.ListBox1.TabIndex = 10
         '
         'TextBox1
         '
@@ -315,22 +290,12 @@ Partial Class wUI
         Me.Button2.Text = ">>"
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(119, 11)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(58, 13)
-        Me.Label8.TabIndex = 27
-        Me.Label8.Text = "Messages:"
-        '
         'wUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLight
         Me.ClientSize = New System.Drawing.Size(538, 457)
-        Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label1)
@@ -339,10 +304,8 @@ Partial Class wUI
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.NumericUpDown1)
-        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.MyPictureBox)
         Me.Controls.Add(Me.BtnImport)
         Me.Controls.Add(Me.generate)
@@ -382,8 +345,6 @@ Partial Class wUI
     Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents dsdesc2 As System.Windows.Forms.RichTextBox
-    Friend WithEvents Label3 As System.Windows.Forms.Label
-    Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
@@ -391,5 +352,4 @@ Partial Class wUI
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents Label8 As System.Windows.Forms.Label
 End Class

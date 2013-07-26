@@ -101,7 +101,6 @@ Public Class wMain
         Try
 
             wUI.Code = ScriptIni.Code
-            wUI.ListBox1.Items.Clear()
             wUI.selecter2.Items.Clear()
             Dim s As String = " "
             Dim t As String = ""
@@ -110,8 +109,8 @@ Public Class wMain
                 s = ScriptIni.GetKeyValue("main", "v" + i.ToString)
                 If s <> "" Then wUI.selecter2.Items.Add(s)
                 t = ScriptIni.GetKeyValue("main", "m" + i.ToString)
-                If t = "" And s <> "" Then t = "text"
-                If t <> "" Then wUI.ListBox1.Items.Add(t)
+                'If t = "" And s <> "" Then t = "text"
+                'If t <> "" Then wUI.ListBox1.Items.Add(t)
                 i += 1
             Loop
             wUI.SetUI()
