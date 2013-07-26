@@ -366,7 +366,6 @@ Public Class wUI
                     ComboBox1.Visible = False
                     Label1.Visible = False
                     Label5.Visible = False
-
                     If DefaultStr <> "" Then
                         TextBox1.Text = DefaultStr
                     ElseIf wVariables.ContainsKey(n) Then
