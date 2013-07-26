@@ -240,8 +240,8 @@ Public Class wUI
             'Comment
             .rtfSyntax.add("^\*(.*?)$", True, True, EditSettings.CommentColor.ToArgb)
             'Number
-            .rtfSyntax.add("([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
-            '.rtfSyntax.add("\.([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
+            .rtfSyntax.add(" ([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
+            .rtfSyntax.add("\.([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
 
             .colorDocument()
         End With
@@ -258,7 +258,6 @@ Public Class wUI
 
     Private Sub selecter2_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles selecter2.SelectedIndexChanged, selecter2.Click
         Dim s = selecter2.GetItemText(selecter2.SelectedItem)
-        ListBox1.SelectedIndex = selecter2.SelectedIndex
         Dim Space As Integer = selecter2.SelectedIndex + 1
         Dim t As String = ScriptIni.GetKeyValue("main", "t" + Space.ToString)
         If t <> "" Then ToolTip.SetToolTip(selecter2, t)
@@ -266,10 +265,6 @@ Public Class wUI
         SetUI()
     End Sub
 
-    Private Sub ListBox1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ListBox1.SelectedIndexChanged, ListBox1.Click
-        selecter2.SelectedIndex = ListBox1.SelectedIndex
-        SetUI()
-    End Sub
     'Fade effect Timer (fade-in)
     Private Sub Timer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer.Tick
         'decreases opacity in turms of timer interval 
@@ -334,7 +329,6 @@ Public Class wUI
         End Select
         If selecter2.SelectedIndex + 1 <> selecter2.Items.Count() Then
             selecter2.SelectedIndex = selecter2.SelectedIndex + 1
-            ListBox1.SelectedIndex = selecter2.SelectedIndex
             SetUI()
         Else
             generate.Enabled = False
@@ -542,7 +536,6 @@ Public Class wUI
     Private Sub ReloadToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadToolStripMenuItem.Click
         solution.Text = ""
         selecter2.Items.Clear()
-        ListBox1.Items.Clear()
         wMain.GetParams(ScriptPaths(PathIndex) & Me.Text())
         selecter2.SelectedIndex = 0
         SetUI()
