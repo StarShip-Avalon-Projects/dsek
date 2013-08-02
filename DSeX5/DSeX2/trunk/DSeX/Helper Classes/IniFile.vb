@@ -41,40 +41,40 @@ Public Class IniFile
                 Dim m As Match = Nothing
                 If regexcomment.Match(line).Success Then
                     m = regexcomment.Match(line)
-#If DEBUG2 Then
-                        Trace.WriteLine(String.Format("Skipping Comment: {0}", m.Groups(0).Value))
-#End If
+
+                        Debug.Writeline(String.Format("Skipping Comment: {0}", m.Groups(0).Value))
+
 
                 ElseIf regexsection.Match(line).Success Then
                     m = regexsection.Match(line)
                     If m.Groups(1).Value.ToLower = "code" Then
-#If DEBUG2 Then
-                        Trace.WriteLine(String.Format("Copying Code Section [{0}]", m.Groups(1).Value))
-#End If
+
+                        Debug.WriteLine(String.Format("Copying Code Section [{0}]", m.Groups(1).Value))
+
                         _code = oReader.ReadToEnd
                     Else
-#If DEBUG2 Then
-                        Trace.WriteLine(String.Format("Adding section [{0}]", m.Groups(1).Value))
-#End If
+
+                        Debug.WriteLine(String.Format("Adding section [{0}]", m.Groups(1).Value))
+
                         tempsection = AddSection(m.Groups(1).Value)
                     End If
 
                 ElseIf regexkey.Match(line).Success AndAlso tempsection IsNot Nothing Then
                     m = regexkey.Match(line)
 
-                    Trace.WriteLine(String.Format("Adding Key [{0}]=[{1}]", m.Groups(1).Value, m.Groups(2).Value))
+                    Debug.WriteLine(String.Format("Adding Key [{0}]=[{1}]", m.Groups(1).Value, m.Groups(2).Value))
                     tempsection.AddKey(m.Groups(1).Value).Value = m.Groups(2).Value
                 ElseIf tempsection IsNot Nothing Then
                     '  Handle Key without value
-#If DEBUG2 Then
-                    Trace.WriteLine(String.Format("Adding Key [{0}]", line))
-#End If
+
+                    Debug.WriteLine(String.Format("Adding Key [{0}]", line))
+
                     tempsection.AddKey(line)
                 Else
                     '  This should not occur unless the tempsection is not created yet...
-#If DEBUG2 Then
-                    Trace.WriteLine(String.Format("Skipping unknown type of data: {0}", line))
-#End If
+
+                    Debug.WriteLine(String.Format("Skipping unknown type of data: {0}", line))
+
                 End If
             End If
         End While
@@ -85,20 +85,20 @@ Public Class IniFile
     Public Sub Save(ByVal sFileName As String)
         Dim oWriter As New StreamWriter(sFileName, False)
         For Each s As IniSection In Sections
-#If DEBUG2 Then
-            Trace.WriteLine(String.Format("Writing Section: [{0}]", s.Name))
-#End If
+
+            Debug.WriteLine(String.Format("Writing Section: [{0}]", s.Name))
+
             oWriter.WriteLine(String.Format("[{0}]", s.Name))
             For Each k As IniSection.IniKey In s.Keys
                 If k.Value <> String.Empty Then
-#If DEBUG2 Then
-                    Trace.WriteLine(String.Format("Writing Key: {0}={1}", k.Name, k.Value))
-#End If
+
+                    Debug.WriteLine(String.Format("Writing Key: {0}={1}", k.Name, k.Value))
+
                     oWriter.WriteLine(String.Format("{0}={1}", k.Name, k.Value))
                 Else
-#If DEBUG2 Then
-                    Trace.WriteLine(String.Format("Writing Key: {0}", k.Name))
-#End If
+
+                    Debug.WriteLine(String.Format("Writing Key: {0}", k.Name))
+
                     oWriter.WriteLine(String.Format("{0}", k.Name))
                 End If
             Next
@@ -140,7 +140,7 @@ Public Class IniFile
                 m_sections.Remove(Section.Name)
                 Return True
             Catch ex As Exception
-                Trace.WriteLine(ex.Message)
+                Debug.WriteLine(ex.Message)
             End Try
         End If
         Return False
@@ -277,7 +277,7 @@ Public Class IniFile
                     m_keys.Remove(Key.Name)
                     Return True
                 Catch ex As Exception
-                    Trace.WriteLine(ex.Message)
+                    Debug.WriteLine(ex.Message)
                 End Try
             End If
             Return False
@@ -317,7 +317,7 @@ Public Class IniFile
                     m_sSection = sSection
                     Return True
                 Catch ex As Exception
-                    Trace.WriteLine(ex.Message)
+                    Debug.WriteLine(ex.Message)
                 End Try
             End If
             Return False
@@ -387,7 +387,7 @@ Public Class IniFile
                         m_sKey = sKey
                         Return True
                     Catch ex As Exception
-                        Trace.WriteLine(ex.Message)
+                        Debug.WriteLine(ex.Message)
                     End Try
                 End If
                 Return False

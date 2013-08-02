@@ -1,0 +1,20 @@
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\bin\Debug\ScintillaNET.dll
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\bin\Debug\ScintillaNET.pdb
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\ScintillaNET\obj\Debug\ScintillaNET.FindReplaceDialog.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\ScintillaNET\obj\Debug\ScintillaNET.IncrementalSearcher.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\ScintillaNET\obj\Debug\ScintillaNET.GoToDialog.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\ScintillaNET\obj\Debug\ScintillaNET.Properties.Resources.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\ScintillaNET\obj\Debug\ScintillaNET.SnippetChooser.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\ScintillaNET\obj\Debug\ScintillaNET.csproj.GenerateResource.Cache
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\ScintillaNET\obj\Debug\ScintillaNET.dll
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\ScintillaNET v2.5.2\Releases\2.5\ScintillaNET\obj\Debug\ScintillaNET.pdb
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\bin\Debug\ScintillaNET.dll
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\bin\Debug\ScintillaNET.pdb
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\ScintillaNET\obj\Debug\ScintillaNET.FindReplaceDialog.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\ScintillaNET\obj\Debug\ScintillaNET.IncrementalSearcher.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\ScintillaNET\obj\Debug\ScintillaNET.GoToDialog.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\ScintillaNET\obj\Debug\ScintillaNET.Properties.Resources.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\ScintillaNET\obj\Debug\ScintillaNET.SnippetChooser.resources
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\ScintillaNET\obj\Debug\ScintillaNET.csproj.GenerateResource.Cache
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\ScintillaNET\obj\Debug\ScintillaNET.dll
+C:\Users\Gerolkae\Documents\Visual Studio 2010\Projects\DSeX2\ScintillaNET\obj\Debug\ScintillaNET.pdb
