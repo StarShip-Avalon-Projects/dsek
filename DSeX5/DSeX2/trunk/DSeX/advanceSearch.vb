@@ -240,97 +240,97 @@ Public Class frmSearch
 
     Private Sub btnFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFind.Click
         '
-        If IsNothing(MS_Edit.MS_Editor) Then
-            MsgBox("No editor open to search", MsgBoxStyle.OkOnly, "Warning")
-            Exit Sub
-        End If
-        If MS_Edit.MS_Editor.TextLength <= 1 Then Exit Sub
-        '
-        'MS_Editor
-        If optWhole.Checked Then
+        'If IsNothing(MS_Edit.MS_Editor) Then
+        '    MsgBox("No editor open to search", MsgBoxStyle.OkOnly, "Warning")
+        '    Exit Sub
+        'End If
+        'If MS_Edit.MS_Editor.TextLength <= 1 Then Exit Sub
+        ''
+        ''MS_Editor
+        'If optWhole.Checked Then
 
-            If chkMatchCase.Checked Then
+        '    If chkMatchCase.Checked Then
 
-                If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                     RichTextBoxFinds.WholeWord Or _
-                         RichTextBoxFinds.MatchCase) = -1 Then
+        '        If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '             RichTextBoxFinds.WholeWord Or _
+        '                 RichTextBoxFinds.MatchCase) = -1 Then
 
-                    MessageBox.Show("Finished searching the document", " Finished Searching", _
-                        MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '            MessageBox.Show("Finished searching the document", " Finished Searching", _
+        '                MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                End If
+        '        End If
 
-                MS_Edit.MS_Editor.Focus()
+        '        MS_Edit.MS_Editor.Focus()
 
-            Else
+        '    Else
 
-                If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                     RichTextBoxFinds.WholeWord) = -1 Then
+        '        If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '             RichTextBoxFinds.WholeWord) = -1 Then
 
-                    MessageBox.Show("Finished searching the document", " Finished Searching", _
-                        MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '            MessageBox.Show("Finished searching the document", " Finished Searching", _
+        '                MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                End If
+        '        End If
 
-                MS_Edit.MS_Editor.Focus()
-            End If
+        '        MS_Edit.MS_Editor.Focus()
+        '    End If
 
-        ElseIf optPre.Checked Then
+        'ElseIf optPre.Checked Then
 
-            If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                    RichTextBoxFinds.WholeWord Or _
-                        RichTextBoxFinds.MatchCase) = -1 Then
+        '    If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '            RichTextBoxFinds.WholeWord Or _
+        '                RichTextBoxFinds.MatchCase) = -1 Then
 
-                MessageBox.Show("Finished searching the document", " Finished Searching", _
-                    MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '        MessageBox.Show("Finished searching the document", " Finished Searching", _
+        '            MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-            End If
+        '    End If
 
-            MS_Edit.MS_Editor.Focus()
+        '    MS_Edit.MS_Editor.Focus()
 
-        ElseIf optSub.Checked Then
+        'ElseIf optSub.Checked Then
 
-            MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                RichTextBoxFinds.WholeWord Or _
-                    RichTextBoxFinds.MatchCase)
+        '    'MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '        RichTextBoxFinds.WholeWord Or _
+        '            RichTextBoxFinds.MatchCase)
 
-            MS_Edit.MS_Editor.Focus()
+        '    MS_Edit.MS_Editor.Focus()
 
-        ElseIf optNone.Checked Then
+        'ElseIf optNone.Checked Then
 
 
-            If chkMatchCase.Checked Then
+        '    If chkMatchCase.Checked Then
 
-                If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                     RichTextBoxFinds.None Or _
-                         RichTextBoxFinds.MatchCase) = -1 Then
+        '        If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '             RichTextBoxFinds.None Or _
+        '                 RichTextBoxFinds.MatchCase) = -1 Then
 
-                    MessageBox.Show("Finished searching the document", " Finished Searching", _
-                        MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '            MessageBox.Show("Finished searching the document", " Finished Searching", _
+        '                MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                End If
+        '        End If
 
-                MS_Edit.MS_Editor.Focus()
+        '        MS_Edit.MS_Editor.Focus()
 
-            Else
+        '    Else
 
-                If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                RichTextBoxFinds.None) = -1 Then
+        '        If MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '        RichTextBoxFinds.None) = -1 Then
 
-                    MessageBox.Show("Finished searching the document", " Finished Searching", _
-                        MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '            MessageBox.Show("Finished searching the document", " Finished Searching", _
+        '                MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                End If
+        '        End If
 
-                MS_Edit.MS_Editor.Focus()
+        '        MS_Edit.MS_Editor.Focus()
 
-            End If
+        '    End If
 
-        End If
+        'End If
 
-        btnFindNext.Enabled = True
+        'btnFindNext.Enabled = True
 
-        MS_Edit.MS_Editor.Focus()
+        'MS_Edit.MS_Editor.Focus()
 
     End Sub
 
@@ -368,136 +368,136 @@ Public Class frmSearch
     Private Sub btnFindNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFindNext.Click
         '
         '
-        If IsNothing(MS_Edit.MS_Editor) Or MS_Edit.MS_Editor.TextLength <= 1 Then Exit Sub
-        '
-        '
-        If optWhole.Checked Then
+        'If IsNothing(MS_Edit.MS_Editor) Or MS_Edit.MS_Editor.TextLength <= 1 Then Exit Sub
+        ''
+        ''
+        'If optWhole.Checked Then
 
-            If chkMatchCase.Checked Then
-                '
-                If MS_Edit.MS_Editor.SelectionStart = MS_Edit.MS_Editor.TextLength Then
+        '    If chkMatchCase.Checked Then
+        '        '
+        '        If MS_Edit.MS_Editor.Selection.Start = MS_Edit.MS_Editor.TextLength Then
 
-                    MessageBox.Show("Search has reached the end of the document.", " Finished Search", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '            MessageBox.Show("Search has reached the end of the document.", " Finished Search", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                    Exit Sub
+        '            Exit Sub
 
-                End If
-                '
-                'A search string was already selected and the user wants to find
-                'more occurrences of the same string. So start searching at the
-                'postition of the cursor.
-                MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                    MS_Edit.MS_Editor.SelectionStart + 1, _
-                    RichTextBoxFinds.WholeWord Or _
-                        RichTextBoxFinds.MatchCase)
+        '        End If
+        '        '
+        '        'A search string was already selected and the user wants to find
+        '        'more occurrences of the same string. So start searching at the
+        '        'postition of the cursor.
+        '        MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '            MS_Edit.MS_Editor.Selection.Start + 1, _
+        '            RichTextBoxFinds.WholeWord Or _
+        '                RichTextBoxFinds.MatchCase)
 
-            Else
-                '
-                If MS_Edit.MS_Editor.SelectionStart = MS_Edit.MS_Editor.TextLength Then
+        '    Else
+        '        '
+        '        If MS_Edit.MS_Editor.Selection.Start = MS_Edit.MS_Editor.TextLength Then
 
-                    MessageBox.Show("Search has reached the end of the document.", " Finished Search", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '            MessageBox.Show("Search has reached the end of the document.", " Finished Search", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                    Exit Sub
+        '            Exit Sub
 
-                End If
-                '
-                'A search string was already selected and the user wants to find
-                'more occurrences of the same string. So start searching at the
-                'postition of the cursor.
-                MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                    MS_Edit.MS_Editor.SelectionStart + 1, _
-                        RichTextBoxFinds.WholeWord)
+        '        End If
+        '        '
+        '        'A search string was already selected and the user wants to find
+        '        'more occurrences of the same string. So start searching at the
+        '        'postition of the cursor.
+        '        MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '            MS_Edit.MS_Editor.Selection.Start, _
+        '                RichTextBoxFinds.WholeWord)
 
-            End If
+        '    End If
 
-        ElseIf optPre.Checked Then
+        'ElseIf optPre.Checked Then
 
-        ElseIf optSub.Checked Then
+        'ElseIf optSub.Checked Then
 
-        ElseIf optNone.Checked Then
+        'ElseIf optNone.Checked Then
 
-            If chkMatchCase.Checked Then
-                '
-                If MS_Edit.MS_Editor.SelectionStart = MS_Edit.MS_Editor.TextLength Then
+        '    If chkMatchCase.Checked Then
+        '        '
+        '        If MS_Edit.MS_Editor.Selection.Start = MS_Edit.MS_Editor.TextLength Then
 
-                    MessageBox.Show("Search has reached the end of the document.", " Finished Search", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '            MessageBox.Show("Search has reached the end of the document.", " Finished Search", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                    Exit Sub
+        '            Exit Sub
 
-                End If
-                '
-                'A search string was already selected and the user wants to find
-                'more occurrences of the same string. So start searching at the
-                'postition of the cursor.
-                MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                    MS_Edit.MS_Editor.SelectionStart + 1, _
-                    RichTextBoxFinds.None Or _
-                        RichTextBoxFinds.MatchCase)
+        '        End If
+        '        '
+        '        'A search string was already selected and the user wants to find
+        '        'more occurrences of the same string. So start searching at the
+        '        'postition of the cursor.
+        '        MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '            MS_Edit.MS_Editor.Selection.Start + 1, _
+        '            RichTextBoxFinds.None Or _
+        '                RichTextBoxFinds.MatchCase)
 
-            Else
-                '
-                If MS_Edit.MS_Editor.SelectionStart = MS_Edit.MS_Editor.TextLength Then
+        '    Else
+        '        '
+        '        If MS_Edit.MS_Editor.Selection.Start = MS_Edit.MS_Editor.TextLength Then
 
-                    MessageBox.Show("Search has reached the end of the document.", " Finished Search", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '            MessageBox.Show("Search has reached the end of the document.", " Finished Search", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-                    Exit Sub
+        '            Exit Sub
 
-                End If
-                '
-                'A search string was already selected and the user wants to find
-                'more occurrences of the same string. So start searching at the
-                'postition of the cursor.
-                MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                    MS_Edit.MS_Editor.SelectionStart + 1, _
-                        RichTextBoxFinds.None)
+        '        End If
+        '        '
+        '        'A search string was already selected and the user wants to find
+        '        'more occurrences of the same string. So start searching at the
+        '        'postition of the cursor.
+        '        MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+        '            MS_Edit.MS_Editor.Selection.Start + 1, _
+        '                RichTextBoxFinds.None)
 
-            End If
+        '    End If
 
-        End If
+        'End If
 
-        MS_Edit.MS_Editor.Focus()
+        'MS_Edit.MS_Editor.Focus()
 
     End Sub
 
     Private Sub btnReplace_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnReplace.Click
-        If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
-        If (MS_Edit.MS_Editor.SelectedText.ToLower) = (cmbSearch.Text.ToLower) Then
+        'If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
+        'If (MS_Edit.MS_Editor.SelectedText.ToLower) = (cmbSearch.Text.ToLower) Then
 
-            MS_Edit.MS_Editor.SelectedText = cmbReplace.Text
+        '    MS_Edit.MS_Editor.SelectedText = cmbReplace.Text
 
-        End If
+        'End If
 
     End Sub
 
     Private Sub btnReplaceAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnReplaceAll.Click
-        If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
-        Dim i As Integer
-        Dim t As Integer = 0
+        'If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
+        'Dim i As Integer
+        'Dim t As Integer = 0
 
-        Do
+        'Do
 
-            Application.DoEvents()
+        '    Application.DoEvents()
 
-            btnFind.PerformClick()
+        '    btnFind.PerformClick()
 
-            If (MS_Edit.MS_Editor.SelectedText.ToLower) = (cmbSearch.Text.ToLower) Then
+        '    If (MS_Edit.MS_Editor.SelectedText.ToLower) = (cmbSearch.Text.ToLower) Then
 
-                i = 1
-                MS_Edit.MS_Editor.SelectedText = cmbReplace.Text
+        '        i = 1
+        '        MS_Edit.MS_Editor.SelectedText = cmbReplace.Text
 
-                t += 1
+        '        t += 1
 
-            Else
+        '    Else
 
-                i = 0
+        '        i = 0
 
-            End If
+        '    End If
 
-        Loop Until i < 1
+        'Loop Until i < 1
 
-        MessageBox.Show("A total of: " & t.ToString & " was found and replaced.", "Search/Replace All Finished", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        'MessageBox.Show("A total of: " & t.ToString & " was found and replaced.", "Search/Replace All Finished", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
-        MS_Edit.lblStatus.Text = "Status: A total of: " & t.ToString & " was found and replaced."
+        'MS_Edit.lblStatus.Text = "Status: A total of: " & t.ToString & " was found and replaced."
 
     End Sub
 

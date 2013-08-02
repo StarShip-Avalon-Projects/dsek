@@ -41,7 +41,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
@@ -81,6 +81,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -134,12 +135,10 @@
     <Compile Include="Controls\TabControlEx.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="cRTBWrapper.vb" />
-    <Compile Include="cRTFSyntax.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="dsLexer.vb" />
     <Compile Include="Helper Classes\ErrorLogging.vb" />
     <Compile Include="Helper Classes\IniFile.vb" />
+    <Compile Include="IniLexer.vb" />
     <Compile Include="MainModule.vb" />
     <Compile Include="MS_Edit.Designer.vb">
       <DependentUpon>MS_Edit.vb</DependentUpon>
@@ -204,9 +203,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProgressFrm.resx">
       <DependentUpon>ProgressFrm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="cRTFSyntax.resx">
-      <DependentUpon>cRTFSyntax.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MS_Edit.resx">
       <DependentUpon>MS_Edit.vb</DependentUpon>
@@ -450,6 +446,16 @@
     <None Include="Resources\dm128x128.ico" />
     <None Include="Resources\upArrow.png" />
     <None Include="Resources\uparrow.bmp" />
+    <Content Include="SciLexer.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SciLexer64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ScintillaNET.dll" />
+    <Content Include="ScintillaNET.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -460,13 +466,9 @@
       <Project>{156C2AF0-3DA8-4D8C-A525-5400185579B3}</Project>
       <Name>FurcadiaLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AutocompleteMenu\AutocompleteMenu.csproj">
-      <Project>{43CBC9AA-6A8E-463F-83A9-AFF3124AFDB6}</Project>
-      <Name>AutocompleteMenu</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\No Flicker\No Flicker.vbproj">
-      <Project>{79F79005-BCF0-4F23-9EAD-15AF85CCEAAB}</Project>
-      <Name>No Flicker</Name>
+    <ProjectReference Include="..\ScintillaNET\ScintillaNET.csproj">
+      <Project>{F9B6DABD-BBC1-4638-8CE6-A5C9506BFDCB}</Project>
+      <Name>ScintillaNET</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

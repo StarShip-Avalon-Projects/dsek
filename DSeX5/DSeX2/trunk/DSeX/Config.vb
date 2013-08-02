@@ -18,7 +18,7 @@ Public Class Config
         'Editor settings
 
         EditSettings.AutoCompleteEnable = ChkBxAutoComplete.Checked
-        MS_Edit.AutocompleteMenu1.Enabled = ChkBxAutoComplete.Checked
+        ' MS_Edit.AutocompleteMenu1.Enabled = ChkBxAutoComplete.Checked
 
 
         EditSettings.CommentColor = CommentPictureBox.BackColor
@@ -102,33 +102,12 @@ Public Class Config
         End If
     End Sub
 
-    Private Sub CommentPictureBox_Click(sender As System.Object, e As System.EventArgs) Handles CommentPictureBox.Click
-        GetColor(CommentPictureBox)
-    End Sub
-
-    Private Sub StringPictureBox_Click(sender As System.Object, e As System.EventArgs) Handles StringPictureBox.Click
-        GetColor(StringPictureBox)
-    End Sub
-
-    Private Sub NumberPictureBox_Click(sender As System.Object, e As System.EventArgs) Handles NumberPictureBox.Click
-        GetColor(NumberPictureBox)
-    End Sub
-
-    Private Sub VariablePictureBox_Click(sender As System.Object, e As System.EventArgs) Handles VariablePictureBox.Click
-        GetColor(VariablePictureBox)
-    End Sub
-
-    Private Sub IDPictureBox_Click(sender As System.Object, e As System.EventArgs) Handles IDPictureBox.Click
-        GetColor(IDPictureBox)
+    Private Sub CommentPictureBox_Click(sender As System.Object, e As System.EventArgs) Handles CommentPictureBox.Click, StringPictureBox.Click, NumberPictureBox.Click, VariablePictureBox.Click, IDPictureBox.Click, StringVariableClrBx.Click
+        GetColor(sender)
     End Sub
 
     Private Sub ChkBxAutoComplete_CheckedChanged(sender As System.Object, e As System.EventArgs) Handles ChkBxAutoComplete.CheckedChanged
         EditSettings.AutoCompleteEnable = ChkBxAutoComplete.Checked
-    End Sub
-
-
-    Private Sub StringVariableClrBx_Click(sender As System.Object, e As System.EventArgs) Handles StringVariableClrBx.Click
-        GetColor(StringVariableClrBx)
     End Sub
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
@@ -150,7 +129,7 @@ Public Class Config
 
     Private Sub ListBox1_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseUp
         Dim str As String = ListBox1.SelectedItem
-        Dim Val As Integer = CInt(str.Split("=")(1))
+        Dim Val As Integer = str.Split("=")(1).ToInteger
         NumericUpDown1.Value = Val
     End Sub
 
@@ -163,7 +142,6 @@ Public Class Config
 
         ListBox1.Items.RemoveAt(i)
         ListBox1.Items.Insert(i, Key + "=" + NumericUpDown1.Value.ToString)
-
         ListBox1.SelectedIndex = i
     End Sub
 End Class

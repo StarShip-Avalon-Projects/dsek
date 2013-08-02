@@ -23,12 +23,29 @@ Public Module MyExtensions
             Return 0
         End If
     End Function
+
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Function IsDouble(ByVal value As String) As Boolean
+        If String.IsNullOrEmpty(value) Then
+            Return False
+        Else
+            Return Double.TryParse(value, Nothing)
+        End If
+    End Function
+
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Function ToDouble(ByVal value As String) As Integer
+        If value.IsDouble() Then
+            Return Double.Parse(value)
+        Else
+            Return 0
+        End If
+    End Function
 End Module
 
 Public Class wUI
 #Region "Properties"
     'Dim ScriptPath = My.Application.Info.DirectoryPath() & "\Scripts\"
-    Private WithEvents RTBWrapper As New cRTBWrapper()
     Public Code As String
     Dim WorkFileName As String = ""
     Dim WorkPath As String = ""
@@ -222,29 +239,11 @@ Public Class wUI
         End If
 
         selecter2.SelectedIndex = 0
-        solution.Text = vbLf + vbLf + vbLf
+        'solution.Text = vbLf + vbLf + vbLf
         Dim n As Integer = selecter2.SelectedIndex + 1
         Dim s As String = ScriptIni.GetKeyValue("main", "b" + n.ToString)
         If s <> "" Then TextBox1.Text = s
-        With RTBWrapper
-            .bind(solution)
-            'tDict(Pattern, isRegex, isCase, value)
-            'Variable
-            .rtfSyntax.Clear()
-            .rtfSyntax.add("%([A-Za-z0-9_]+)", True, True, EditSettings.VariableColor.ToArgb)
-            .rtfSyntax.add("~([A-Za-z0-9_]+)", True, True, EditSettings.StringVariableColor.ToArgb)
-            'string
-            .rtfSyntax.add("\\{(.*?)\\}", True, True, EditSettings.StringColor.ToArgb)
-            'Line ID
-            .rtfSyntax.add("\(([0-9]*)\:([0-9]*)\)", True, True, EditSettings.IDColor.ToArgb)
-            'Comment
-            .rtfSyntax.add("^\*(.*?)$", True, True, EditSettings.CommentColor.ToArgb)
-            'Number
-            .rtfSyntax.add(" ([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
-            .rtfSyntax.add("\.([0-9#]+)", True, True, EditSettings.NumberColor.ToArgb)
-
-            .colorDocument()
-        End With
+       
     End Sub
 
 
@@ -489,7 +488,8 @@ Public Class wUI
 
 
     Private Sub ProcessIterations(ByRef Values As List(Of List(Of String)))
-        solution.Text = ""
+        ' solution.Text = ""
+        Exit Sub
         For i As Integer = 0 To NumericUpDown1.Value - 1
             Dim template As String = Code
             For t = 1 To Values(i).Count
@@ -506,9 +506,9 @@ Public Class wUI
                     template = Regex.Replace(template, "\^" & s.groups(0) & "\^", CalcMath(str, List), RegexOptions.IgnoreCase)
                 Next
             Next
-            solution.AppendText(template + vbLf)
+            'solution.AppendText(template + vbLf)
         Next
-        RTBWrapper.colorDocument()
+
     End Sub
 
     Private Sub CloseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CloseToolStripMenuItem.Click
@@ -533,7 +533,7 @@ Public Class wUI
     End Sub
 
     Private Sub ReloadToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadToolStripMenuItem.Click
-        solution.Text = ""
+        'solution.Text = ""
         selecter2.Items.Clear()
         wMain.GetParams(ScriptPaths(PathIndex) & Me.Text())
         selecter2.SelectedIndex = 0
@@ -541,7 +541,6 @@ Public Class wUI
         Dim n As Integer = selecter2.SelectedIndex + 1
         Dim s As String = ScriptIni.GetKeyValue("main", "b" + n.ToString)
         If s <> "" Then TextBox1.Text = s
-        RTBWrapper.colorDocument()
         wVariables.Clear()
         s = ScriptIni.GetKeyValue("main", "DefaultRepeat")
         If s <> "" Then NumericUpDown1.Value = s.ToInteger Else NumericUpDown1.Value = 1
@@ -549,48 +548,7 @@ Public Class wUI
 
 
 
-#Region "Gutter"
-    Private Sub DrawRichTextBoxLineNumbers(ByRef g As Graphics, ByRef RTF As RichTextBox2)
-        Try
-            'calculate font heigth as the difference in Y coordinate between line 2 and line 1
-            'note that the RichTextBox text must have at least two lines. So the initial Text property of the RichTextBox should not be an empty string. It could be something like vbcrlf & vbcrlf & vbcrlf 
-            If RTF.Lines.Count < 3 Then RTF.Text = vbCrLf & vbCrLf & vbCrLf
-            Dim font_height As Single = RTF.GetPositionFromCharIndex(RTF.GetFirstCharIndexFromLine(2)).Y - RTF.GetPositionFromCharIndex(RTF.GetFirstCharIndexFromLine(1)).Y
-            If font_height = 0 Then Exit Sub
 
-            'Get the first line index and location
-            Dim firstIndex As Integer = RTF.GetCharIndexFromPosition(New Point(0, g.VisibleClipBounds.Y + font_height / 3))
-            Dim firstLine As Integer = RTF.GetLineFromCharIndex(firstIndex)
-            Dim firstLineY As Integer = RTF.GetPositionFromCharIndex(firstIndex).Y
-
-            'Print on the PictureBox the visible line numbers of the RichTextBox
-            g.Clear(Control.DefaultBackColor)
-            Dim i As Integer = firstLine
-            Dim y As Single
-            Do While y < g.VisibleClipBounds.Y + g.VisibleClipBounds.Height And RTF.Lines.Count > 1
-                y = firstLineY + 2 + font_height * (i - firstLine - 1)
-                g.DrawString((i).ToString, RTF.Font, Brushes.DarkBlue, MyPictureBox.Width - g.MeasureString((i).ToString, RTF.Font).Width, y)
-                i += 1
-            Loop
-        Catch ex As Exception
-            Dim logError As New ErrorLogging(ex, Me)
-        End Try
-        'Debug.WriteLine("Finished: " & firstLine + 1 & " " & i - 1)
-    End Sub
-
-    Private Sub r_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles solution.Resize
-        MyPictureBox.Invalidate()
-    End Sub
-
-    Private Sub r_VScroll(ByVal sender As Object, ByVal e As System.EventArgs) Handles solution.VScroll
-        MyPictureBox.Invalidate()
-    End Sub
-
-    Private Sub p_Paint(ByVal sender As Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles MyPictureBox.Paint
-        DrawRichTextBoxLineNumbers(e.Graphics, solution)
-    End Sub
-
-#End Region
 
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles Button1.Click
@@ -598,8 +556,8 @@ Public Class wUI
     End Sub
 
     Private Sub BtnImport_Click(sender As System.Object, e As System.EventArgs) Handles BtnImport.Click
-        If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
-        MS_Edit.MS_Editor.SelectedRTF2 = solution.Rtf
+        'If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
+        'MS_Edit.MS_Editor.InsertText(solution.text)
     End Sub
 
 
