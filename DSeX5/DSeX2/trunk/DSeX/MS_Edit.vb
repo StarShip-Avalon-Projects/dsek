@@ -265,9 +265,8 @@ Public Class MS_Edit
                 frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
                 Me.Text = frmTitle(TabControl2.SelectedIndex)
                 lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
-                Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-                'MS_Editor.Lines = File.ReadAllLines(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
 
+                Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
                 MS_Editor.Text = ""
                 FullFile(TabControl2.SelectedIndex).Clear()
                 Do While reader.Peek <> -1
@@ -275,6 +274,7 @@ Public Class MS_Edit
                     FullFile(TabControl2.SelectedIndex).Add(line)
                     MS_Editor.AppendText(line + vbCrLf)
                 Loop
+                reader.Close()
 
                 UpdateSegments()
                 UpdateSegmentList()
@@ -295,15 +295,15 @@ Public Class MS_Edit
         frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
         Me.Text = frmTitle(TabControl2.SelectedIndex)
         lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
-        Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-        'MS_Editor.Lines = File.ReadAllLines(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
 
+        Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
         MS_Editor.Text = ""
         Do While reader.Peek <> -1
             Dim line As String = reader.ReadLine
             FullFile(TabControl2.SelectedIndex).Add(line)
             MS_Editor.AppendText(line + vbCrLf)
         Loop
+        reader.Close()
 
         UpdateSegments()
 
@@ -501,7 +501,7 @@ updateStatusBar()
                 Dim slashPosition As Integer = .FileName.LastIndexOf("\")
                 WorkFileName(TabControl2.SelectedIndex) = .FileName.Substring(slashPosition + 1)
                 WorkPath(TabControl2.SelectedIndex) = .FileName.Replace(WorkFileName(TabControl2.SelectedIndex), "")
-                SaveMS_File(WorkPath(TabControl2.SelectedIndex) & "/" & WorkFileName(TabControl2.SelectedIndex), RichTextBoxStreamType.PlainText)
+                SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
                 lblStatus.Text = "Status: Saved " & WorkFileName(TabControl2.SelectedIndex)
                 frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
                 Me.Text = frmTitle(TabControl2.SelectedIndex)
@@ -664,13 +664,13 @@ updateStatusBar()
         If IsNothing(MS_Editor) Then Exit Sub
         Dim i As String = _
 InputBox("What line within the document do you want to send the cursor to?", _
-" Location to send the Cursor?", "1")
+" Location to send the Cursor?", "0")
+        If String.IsNullOrEmpty(i) Then Exit Sub
+        If IsInteger(i) And i.ToInteger > 0 Then
+            If i > MS_Editor.Lines.Count - 1 Then i = MS_Editor.Lines.Count - 1
+            MS_Editor.GoTo.Line(i.ToInteger)
 
-        If IsInteger(i) And i > 0 Then
-            If i > MS_Editor.Lines.Count Then i = MS_Editor.Lines.Count
-            MS_Editor.GoTo.Line(i)
-
-updateStatusBar()
+            UpdateStatusBar()
 
         End If
     End Sub
