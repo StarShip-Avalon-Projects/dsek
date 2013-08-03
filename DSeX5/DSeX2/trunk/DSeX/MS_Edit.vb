@@ -138,7 +138,7 @@ Public Class MS_Edit
 
     Public Function MS_Editor() As Scintilla
         If TabControl2.TabCount = 0 Then Return Nothing
-        Return CType(TabControl2.TabPages.Item(TabControl2.SelectedIndex).Controls.Find("edit" + TabControl2.SelectedIndex.ToString, True)(0), Scintilla)
+        Return FindControl(TabControl2.TabPages.Item(TabControl2.SelectedIndex), "edit")
     End Function '+ TabControl2.SelectedIndex.ToString
 
 
@@ -255,74 +255,73 @@ Public Class MS_Edit
         With MS_BrosweDialog
             ' Select Character ini file
             .InitialDirectory = Environment.SpecialFolder.MyDocuments & "\Furcadia\"
-            'If .ShowDialog = DialogResult.OK Then
-            '    AddNewEditorTab("", "", "")
-            '    TabSections(TabControl2.SelectedIndex).Clear()
-            '    Dim slashPosition As Integer = .FileName.LastIndexOf("\")
-            '    WorkFileName(TabControl2.SelectedIndex) = .FileName.Substring(slashPosition + 1)
-            '    WorkPath(TabControl2.SelectedIndex) = .FileName.Replace(WorkFileName(TabControl2.SelectedIndex), "")
+            If .ShowDialog = DialogResult.OK Then
+                AddNewEditorTab("", "", "")
+                TabSections(TabControl2.SelectedIndex).Clear()
+                Dim slashPosition As Integer = .FileName.LastIndexOf("\")
+                WorkFileName(TabControl2.SelectedIndex) = .FileName.Substring(slashPosition + 1)
+                WorkPath(TabControl2.SelectedIndex) = .FileName.Replace(WorkFileName(TabControl2.SelectedIndex), "")
 
-            '    frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
-            '    Me.Text = frmTitle(TabControl2.SelectedIndex)
-            '    lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
-            '    Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-            '    'MS_Editor.Lines = File.ReadAllLines(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-            '    MS_Editor.BeginUpdate()
-            '    MS_Editor.Text = ""
-            '    FullFile(TabControl2.SelectedIndex).Clear()
-            '    Do While reader.Peek <> -1
-            '        Dim line As String = reader.ReadLine
-            '        FullFile(TabControl2.SelectedIndex).Add(line)
-            '        MS_Editor.AppendLine(line)
-            '    Loop
-            '    MS_Editor.EndUpdate()
-            '    UpdateSegments()
-            '    UpdateSegmentList()
-            '    RTBWrapper.colorDocument()
-            '    CanOpen(TabControl2.SelectedIndex) = True
-            '    TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
-            '    TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
-            'End If
+                frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
+                Me.Text = frmTitle(TabControl2.SelectedIndex)
+                lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
+                Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
+                'MS_Editor.Lines = File.ReadAllLines(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
+
+                MS_Editor.Text = ""
+                FullFile(TabControl2.SelectedIndex).Clear()
+                Do While reader.Peek <> -1
+                    Dim line As String = reader.ReadLine
+                    FullFile(TabControl2.SelectedIndex).Add(line)
+                    MS_Editor.AppendText(line + vbCrLf)
+                Loop
+
+                UpdateSegments()
+                UpdateSegmentList()
+                CanOpen(TabControl2.SelectedIndex) = True
+                TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
+                TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
+            End If
         End With
 
     End Sub
 
     Public Sub OpenMS_File(ByRef filename As String)
 
-        'Dim slashPosition As Integer = filename.LastIndexOf("\")
-        'WorkFileName(TabControl2.SelectedIndex) = filename.Substring(slashPosition + 1)
-        'WorkPath(TabControl2.SelectedIndex) = filename.Replace(WorkFileName(TabControl2.SelectedIndex), "")
+        Dim slashPosition As Integer = filename.LastIndexOf("\")
+        WorkFileName(TabControl2.SelectedIndex) = filename.Substring(slashPosition + 1)
+        WorkPath(TabControl2.SelectedIndex) = filename.Replace(WorkFileName(TabControl2.SelectedIndex), "")
 
-        'frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
-        'Me.Text = frmTitle(TabControl2.SelectedIndex)
-        'lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
-        'Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-        ''MS_Editor.Lines = File.ReadAllLines(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-        'MS_Editor.BeginUpdate()
-        'MS_Editor.Text = ""
-        'Do While reader.Peek <> -1
-        '    Dim line As String = reader.ReadLine
-        '    FullFile(TabControl2.SelectedIndex).Add(line)
-        '    MS_Editor.AppendLine(line)
-        'Loop
-        'MS_Editor.EndUpdate()
-        'UpdateSegments()
-        'RTBWrapper.colorDocument()
-        'CanOpen(TabControl2.SelectedIndex) = True
-        'TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
-        'TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
+        frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
+        Me.Text = frmTitle(TabControl2.SelectedIndex)
+        lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
+        Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
+        'MS_Editor.Lines = File.ReadAllLines(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
+
+        MS_Editor.Text = ""
+        Do While reader.Peek <> -1
+            Dim line As String = reader.ReadLine
+            FullFile(TabControl2.SelectedIndex).Add(line)
+            MS_Editor.AppendText(line + vbCrLf)
+        Loop
+
+        UpdateSegments()
+
+        CanOpen(TabControl2.SelectedIndex) = True
+        TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
+        TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
 
     End Sub
 
     Public Sub Reset()
-        'If IsNothing(MS_Editor) Then Exit Sub
-        'For i = 0 To SettingsChanged.Count - 1
-        '    If i <> TabControl2.SelectedIndex Then
-        '        SettingsChanged(i) = True
-        '    End If
-        'Next
-        'Reset(MS_Editor)
-        'RTBWrapper.colorDocument()
+        If IsNothing(MS_Editor) Then Exit Sub
+        For i = 0 To SettingsChanged.Count - 1
+            If i <> TabControl2.SelectedIndex Then
+                SettingsChanged(i) = True
+            End If
+        Next
+        MS_Editor.Lexing.Colorize()
+
     End Sub
 
 
@@ -545,7 +544,7 @@ updateStatusBar()
     End Sub
 
     Private Sub SaveToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SaveToolStripMenuItem.Click
-        '  SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
+        SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
     End Sub
 
     Private Sub MenuCopy_Click(sender As System.Object, e As System.EventArgs) Handles MenuCopy.Click, EditDropCopy.Click
@@ -718,31 +717,31 @@ updateStatusBar()
         UpdateSegmentList()
     End Sub
     Public Sub NewScript()
-        '  If Not CanOpen(TabControl2.SelectedIndex) Then
-        '      Dim reply As DialogResult = MessageBox.Show("Save changes? Yes or No", "Caption", _
-        'MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
+        If Not CanOpen(TabControl2.SelectedIndex) Then
+            Dim reply As DialogResult = MessageBox.Show("Save changes? Yes or No", "Caption", _
+      MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
 
-        '      If reply = DialogResult.Yes Then
-        '          SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
-        '      End If
-        '  End If
-        '  TabSections(TabControl2.SelectedIndex).Clear()
-        '  MS_Editor.Text = NewDMScript()
-        '  RTBWrapper.colorDocument()
-        '  WorkFileName(TabControl2.SelectedIndex) = ""
+            If reply = DialogResult.Yes Then
+                SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
+            End If
+        End If
+        TabSections(TabControl2.SelectedIndex).Clear()
+        MS_Editor.Text = NewDMScript()
 
-        '  lblStatus.Text = "Status: Opened New Draconian Magic Script "
-        '  frmTitle(TabControl2.SelectedIndex) = "DSeX - New File"
-        '  FullFile(TabControl2.SelectedIndex).Clear()
-        '  Me.Text = frmTitle(TabControl2.SelectedIndex)
-        '  For i = 0 To MS_Editor.Lines.Count - 1
-        '      FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines(i))
-        '  Next
-        '  TabControl2.SelectedTab.Text = New_File_Tag
-        '  CanOpen(TabControl2.SelectedIndex) = True
-        '  TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
-        '  UpdateSegments()
-        '  UpdateSegmentList()
+        WorkFileName(TabControl2.SelectedIndex) = ""
+
+        lblStatus.Text = "Status: Opened New Draconian Magic Script "
+        frmTitle(TabControl2.SelectedIndex) = "DSeX - New File"
+        FullFile(TabControl2.SelectedIndex).Clear()
+        Me.Text = frmTitle(TabControl2.SelectedIndex)
+        For i = 0 To MS_Editor.Lines.Count - 1
+            FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines.Item(i).Text)
+        Next
+        TabControl2.SelectedTab.Text = New_File_Tag
+        CanOpen(TabControl2.SelectedIndex) = True
+        TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
+        UpdateSegments()
+        UpdateSegmentList()
     End Sub
 
     Private Sub ToolBoxNew_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxNew.Click, NewMonkeySpeakToolStripMenuItem.Click
@@ -965,7 +964,7 @@ updateStatusBar()
 
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)
 
-
+        AddHandler lstView.TextChanged, AddressOf MS_Editor_TextChanged
         AddHandler lstView.StyleNeeded, AddressOf Scintilla2_StyleNeeded
         AddHandler lstView.MouseUp, AddressOf MS_EditRightClick
         AddHandler lstView.CursorChanged, AddressOf MS_Editor_CursorChanged
@@ -1046,7 +1045,7 @@ updateStatusBar()
         CloseTab(i)
     End Sub
 
-    Private Sub TabControl2_CloseButtonClick(sender As Object, e As System.ComponentModel.CancelEventArgs)
+    Private Sub TabControl2_CloseButtonClick(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles TabControl2.CloseButtonClick
         e.Cancel = True
         CloseTab(sender.TabIndex)
         TabControl2.RePositionCloseButtons()
@@ -1432,7 +1431,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         ElseIf "ds".Equals(language, StringComparison.OrdinalIgnoreCase) Then
             ' Reset/set all styles and prepare _scintilla for custom lexing
             TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
-            dsLexer.Init(MS_Editor)
+            PwrLexer.Init(MS_Editor)
         Else
             ' Use a built-in lexer and configuration
             'Me.IniLexer = False
@@ -1446,7 +1445,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             Case EditStyles.ini
                 IniLexer.StyleNeeded(sender, e.Range)
             Case EditStyles.ds
-                dsLexer.StyleNeeded(sender, e.Range)
+                PwrLexer.StyleNeeded(sender, e.Range)
         End Select
 
     End Sub
