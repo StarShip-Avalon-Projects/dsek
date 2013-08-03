@@ -508,6 +508,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Builtin\cpp.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libraries\SciLexer.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libraries\SciLexer64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libraries\WeifenLuo.WinFormsUI.Docking.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -520,8 +529,6 @@
     <PreBuildEvent>
     </PreBuildEvent>
     <PostBuildEvent>
-      xcopy "$(ProjectDir)..\Libraries\SciLexer*.dll" "$(TargetDir)" /D /F /K /R /Y
-      xcopy "$(ProjectDir)..\License.txt" "$(TargetDir)" /D /F /K /R /Y
     </PostBuildEvent>
   </PropertyGroup>
 </Project>
