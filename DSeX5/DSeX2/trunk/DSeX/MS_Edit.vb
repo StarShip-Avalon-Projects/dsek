@@ -751,7 +751,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Private Sub FixIndentsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles FixIndentsToolStripMenuItem.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        Dim StrArray() As String = MS_Editor.Text.Split(vbCrLf)
+        Dim StrArray() As String = MS_Editor.Text.Replace(vbCr, "").Split(vbLf)
         Dim str As String
         Dim Count As Integer = ini.GetKeyValue("Init-Types", "Count").ToInteger
         Dim pattern(Count - 1) As String
@@ -959,6 +959,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         lstView.Anchor = AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Bottom + AnchorStyles.Right
         lstView.Name = "edit" + n
         lstView.Dock = DockStyle.Fill
+        lstView.Margins(0).Width = 20
         lstView.Show()
         lstView.ContextMenuStrip = SectionMenu
 
