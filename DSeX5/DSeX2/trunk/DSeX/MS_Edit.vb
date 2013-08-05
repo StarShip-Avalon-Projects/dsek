@@ -272,9 +272,10 @@ Public Class MS_Edit
                 Do While reader.Peek <> -1
                     Dim line As String = reader.ReadLine
                     FullFile(TabControl2.SelectedIndex).Add(line)
-                    MS_Editor.AppendText(line + vbCrLf)
                 Loop
+                MS_Editor.Text = String.Join(vbCrLf,FullFile(TabControl2.SelectedIndex).ToArray)
                 reader.Close()
+
 
                 UpdateSegments()
                 UpdateSegmentList()
@@ -1281,14 +1282,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             RebuildFullFile()
             MS_Editor.Text = ""
             MS_Editor.UndoRedo.EmptyUndoBuffer()
-            For i = 0 To FullFile(TabControl2.SelectedIndex).Count - 1
-                If i = FullFile(TabControl2.SelectedIndex).Count - 1 Then
-                    MS_Editor.AppendText(FullFile(TabControl2.SelectedIndex)(i))
-                Else
-                    MS_Editor.AppendText(FullFile(TabControl2.SelectedIndex)(i) + vbCrLf)
-                End If
-
-            Next
+            MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
             UpdateSegments()
         Else
             DisplaySection(ListBox1.SelectedIndex - 1)
@@ -1301,15 +1295,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
     Private Sub DisplaySection(ByRef j As Integer)
         MS_Editor.Text = ""
-
-        For i = 0 To TabSections(TabControl2.SelectedIndex)(j).lines.Count - 1
-            If i = TabSections(TabControl2.SelectedIndex)(j).lines.Count - 1 Then
-                MS_Editor.AppendText(TabSections(TabControl2.SelectedIndex)(j).lines(i))
-            Else
-                MS_Editor.AppendText(TabSections(TabControl2.SelectedIndex)(j).lines(i) + vbCrLf)
-            End If
-
-        Next
+        MS_Editor.Text = String.Join(vbCrLf, TabSections(TabControl2.SelectedIndex)(j).lines.ToArray)
     End Sub
 
     Private Sub RebuildFullFile()
