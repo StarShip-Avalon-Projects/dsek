@@ -149,7 +149,7 @@ Public Class MS_Edit
 #End Region
 
     Private Sub GetTemplates()
-        Dim path As String = Application.StartupPath + "/Templates/"
+        Dim path As String = Application.StartupPath + "/Templates"
         Directory.CreateDirectory(path)
         TemplatePaths.Clear()
         ListBox2.Items.Clear()
@@ -160,7 +160,7 @@ Public Class MS_Edit
             ListBox2.Items.Add(s.Remove(s.Length - 3, 3))
             TemplatePaths.Add(path)
         Next
-        path = Furcadia.IO.Paths.GetFurcadiaDocPath + "/Templates/"
+        path = Furcadia.IO.Paths.GetFurcadiaDocPath + "/Templates"
         'path = Enviroment.GetFolderPath(Enviroment.SpecialFolderMyDocuments) + My_Docs + "/templates"
         Directory.CreateDirectory(path)
         For x = 0 To FileIO.FileSystem.GetFiles(path, FileIO.SearchOption.SearchTopLevelOnly, "*.ds").Count - 1
@@ -273,7 +273,7 @@ Public Class MS_Edit
                     Dim line As String = reader.ReadLine
                     FullFile(TabControl2.SelectedIndex).Add(line)
                 Loop
-                MS_Editor.Text = String.Join(vbCrLf,FullFile(TabControl2.SelectedIndex).ToArray)
+                MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
                 reader.Close()
 
 
@@ -302,8 +302,8 @@ Public Class MS_Edit
         Do While reader.Peek <> -1
             Dim line As String = reader.ReadLine
             FullFile(TabControl2.SelectedIndex).Add(line)
-            MS_Editor.AppendText(line + vbCrLf)
         Loop
+        MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
         reader.Close()
 
         UpdateSegments()
@@ -447,7 +447,7 @@ Public Class MS_Edit
         For i = 0 To CInt(KeysIni.GetKeyValue("MS-General", "InitLineSpaces"))
             str.AppendLine("")
         Next
-        str.AppendLine(KeysIni.GetKeyValue("MS-General", "Footer"))
+        str.Append(KeysIni.GetKeyValue("MS-General", "Footer"))
         Return str.ToString
     End Function
 
@@ -464,7 +464,7 @@ Public Class MS_Edit
         For i = 0 To CInt(KeysIni.GetKeyValue("DM-Script", "InitLineSpaces"))
             str.AppendLine("")
         Next
-        str.AppendLine(KeysIni.GetKeyValue("DM-Script", "Footer"))
+        str.Append(KeysIni.GetKeyValue("DM-Script", "Footer"))
         Return str.ToString
     End Function
 
@@ -476,7 +476,7 @@ Public Class MS_Edit
         Dim insertText = StrDup(Spaces, ch) & LB.SelectedItems(0).Text
 
         MS_Editor.InsertText(insertText + vbCrLf)
-updateStatusBar()
+        updateStatusBar()
     End Sub
 
 
@@ -561,7 +561,7 @@ updateStatusBar()
     End Sub
 
     Private Sub MS_Editor_CursorChanged(sender As Object, e As System.EventArgs)
-     updateStatusBar()
+        updateStatusBar()
 
     End Sub
 
@@ -786,64 +786,63 @@ InputBox("What line within the document do you want to send the cursor to?", _
         MS_Editor.Selection.Start = insertPos
     End Sub
 
-    Private Sub BtnComment_Click(sender As System.Object, e As System.EventArgs) Handles BtnComment.Click, ApplyCommentToolStripMenuItem.Click
+    Private Sub BtnComment_Click(sender As System.Object, e As System.EventArgs) Handles BtnComment.Click, ApplyCommentToolStripMenuItem.Click, AutocommentOnToolStripMenuItem.Click
         ApplyComment()
     End Sub
 
     Private Sub ApplyCommentToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles ApplyCommentToolStripMenuItem1.Click
-        'If IsNothing(MS_Editor) Then Exit Sub
+        If IsNothing(MS_Editor) Then Exit Sub
 
-        'Dim str() As String = MS_Editor.Lines
-        'If str.Length > 1 Then
-        '    For i As Integer = 0 To str.Length - 1
-        '        str(i) = "*" & str(i)
-        '    Next
-        '    MS_Editor.Lines = str
-        '    RTBWrapper.colorDocument()
-        'End If
+        Dim str() As String = MS_Editor.Text.Replace(vbCr, "").Split(vbLf)
+        If str.Length > 1 Then
+            For i As Integer = 0 To str.Length - 1
+                str(i) = "*" & str(i)
+            Next
+            MS_Editor.Text = String.Join(vbCrLf, str)
+
+        End If
     End Sub
 
-    Private Sub AutoCommentOffToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles AutoCommentOffToolStripMenuItem.Click
-        'If IsNothing(MS_Editor) Then Exit Sub
+    Private Sub AutoCommentOffToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles AutoCommentOffToolStripMenuItem.Click, AutocommentOffToolStripMenuItem1.Click
+        If IsNothing(MS_Editor) Then Exit Sub
 
-        'Dim str() As String = MS_Editor.Lines
-        'If str.Length > 1 Then
-        '    For i As Integer = 0 To str.Length - 1
-        '        If str(i).StartsWith("*") Then str(i) = str(i).Remove(0, 1)
-        '    Next
-        '    MS_Editor.Lines = str
-        '    RTBWrapper.colorDocument()
-        'End If
+        Dim str() As String = MS_Editor.Text.Replace(vbCr, "").Split(vbLf)
+        If str.Length > 1 Then
+            For i As Integer = 0 To str.Length - 1
+                If str(i).StartsWith("*") Then str(i) = str(i).Remove(0, 1)
+            Next
+            MS_Editor.Text = String.Join(vbCrLf, str)
+
+        End If
     End Sub
     Private Sub ApplyComment()
-        'If IsNothing(MS_Editor) Then Exit Sub
+        If IsNothing(MS_Editor) Then Exit Sub
 
-        'Dim this As String = MS_Editor.SelectedText
-        'Dim str() As String = this.Split(Chr(10))
-        'Dim str2 As String = ""
-        'If str.Length > 1 Then
-        '    For i As Integer = 0 To str.Length - 1
-        '        str2 &= Chr(10) & "*" & str(i)
-        '    Next
-        '    MS_Editor.SelectedText2 = str2.Substring(1)
-        '    RTBWrapper.colorDocument()
-        'End If
+        Dim this As String = MS_Editor.Selection.Text
+
+        Dim str() As String = this.Replace(vbCr, "").Split(Chr(10))
+        Dim str2 As String = ""
+        If str.Length > 1 Then
+        For i As Integer = 0 To str.Length - 1
+                str2 &= vbCrLf & "*" & str(i)
+        Next
+        MS_Editor.Selection.Text = str2.Substring(1)
+
+        End If
     End Sub
 
     Private Sub RemoveComment()
-        'If IsNothing(MS_Editor) Then Exit Sub
+        If IsNothing(MS_Editor) Then Exit Sub
 
-        'Dim this As String = MS_Editor.SelectedText
-        'Dim str() As String = this.Split(Chr(10))
-        'Dim str2 As String = ""
-        'If str.Length > 1 Then
-        '    For i As Integer = 0 To str.Length - 1
-        '        If str(i).StartsWith("*") Then str(i) = str(i).Remove(0, 1)
-        '        str2 &= Chr(10) & str(i)
-        '    Next
-        '    MS_Editor.SelectedText2 = str2.Substring(1)
-        '    RTBWrapper.colorDocument()
-        'End If
+        Dim this As String = MS_Editor.Selection.Text
+        Dim str() As String = this.Replace(vbCr, "").Split(Chr(10))
+        If str.Length > 1 Then
+            For i As Integer = 0 To str.Length - 1
+                If str(i).StartsWith("*") Then str(i) = str(i).Remove(0, 1)
+            Next
+            MS_Editor.Selection.Text = String.Join(vbCrLf, str)
+
+        End If
     End Sub
 
 
@@ -1406,6 +1405,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As System.EventArgs) Handles ListBox1.SelectedIndexChanged, ListBox2.SelectedIndexChanged
+        If IsNothing(sender.selecteditem) Then Exit Sub
         ToolTip1.SetToolTip(sender, sender.SelectedItem.ToString)
     End Sub
 
@@ -1436,4 +1436,8 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         End Select
 
     End Sub
+
+
+
+
 End Class

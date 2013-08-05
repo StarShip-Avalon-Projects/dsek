@@ -4,6 +4,8 @@ Imports System.Text.RegularExpressions
 Imports ScintillaNET
 Imports DSeX.ConfigStructs
 Class PwrLexer
+    ' Origional Thread for this class
+    'http://scintillanet.codeplex.com/discussions/42949
     Private Const ST_DEFAULT As Integer = 32
     Private Const ST_STRING_VAR As Integer = 11
     Private Const ST_NUM_VAR As Integer = 12
