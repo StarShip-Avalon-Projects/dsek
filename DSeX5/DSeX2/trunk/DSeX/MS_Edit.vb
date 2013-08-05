@@ -1090,7 +1090,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Private Sub ListBox2_DoubleClick(sender As Object, e As System.EventArgs) Handles ListBox2.DoubleClick, InsertToDSFileToolStripMenuItem.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        Dim p As String = TemplatePaths.Item(ListBox2.SelectedIndex) + ListBox2.SelectedItem + ".ds"
+        Dim p As String = TemplatePaths.Item(ListBox2.SelectedIndex) + "\" + ListBox2.SelectedItem + ".ds"
         Dim reader As New StreamReader(p)
         Dim str As String = ""
         Do While reader.Peek <> -1
