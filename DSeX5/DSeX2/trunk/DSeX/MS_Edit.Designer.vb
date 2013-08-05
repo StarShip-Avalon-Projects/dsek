@@ -102,6 +102,7 @@ Partial Class MS_Edit
         Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.RenameToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TabControl2 = New DSeX.TabControlEx()
         Me.ToolBox = New System.Windows.Forms.ToolStrip()
         Me.ToolBoxNew = New System.Windows.Forms.ToolStripButton()
         Me.ToolBoxOpen = New System.Windows.Forms.ToolStripButton()
@@ -131,37 +132,36 @@ Partial Class MS_Edit
         Me.panelTotalCharacters = New System.Windows.Forms.StatusBarPanel()
         Me.Causes = New System.Windows.Forms.TabControl()
         Me.Scintilla1 = New ScintillaNET.Scintilla()
-        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.TabControl2 = New DSeX.TabControlEx()
-        Me.EditMenu.SuspendLayout
-        Me.MenuStrip1.SuspendLayout
-        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer1.Panel1.SuspendLayout
-        Me.SplitContainer1.Panel2.SuspendLayout
-        Me.SplitContainer1.SuspendLayout
-        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SplitContainer2.Panel1.SuspendLayout
-        Me.SplitContainer2.Panel2.SuspendLayout
-        Me.SplitContainer2.SuspendLayout
-        Me.TabControl1.SuspendLayout
-        Me.TabPage1.SuspendLayout
-        Me.SectionMenu.SuspendLayout
-        Me.TabPage2.SuspendLayout
-        Me.TemplateMenu.SuspendLayout
-        Me.ToolBox.SuspendLayout
-        CType(Me.panelCurrentPosition,System.ComponentModel.ISupportInitialize).BeginInit
-        CType(Me.panelCurrentLine,System.ComponentModel.ISupportInitialize).BeginInit
-        CType(Me.panelTotalLines,System.ComponentModel.ISupportInitialize).BeginInit
-        CType(Me.panelTotalCharacters,System.ComponentModel.ISupportInitialize).BeginInit
-        CType(Me.Scintilla1,System.ComponentModel.ISupportInitialize).BeginInit
-        Me.SuspendLayout
+        Me.EditMenu.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
+        Me.TabControl1.SuspendLayout()
+        Me.TabPage1.SuspendLayout()
+        Me.SectionMenu.SuspendLayout()
+        Me.TabPage2.SuspendLayout()
+        Me.TemplateMenu.SuspendLayout()
+        Me.ToolBox.SuspendLayout()
+        CType(Me.panelCurrentPosition, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.panelCurrentLine, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.panelTotalLines, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.panelTotalCharacters, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.Scintilla1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
         '
         'MSSaveDialog
         '
         Me.MSSaveDialog.DefaultExt = "ds"
         Me.MSSaveDialog.Filter = "DragonSpeak Files)|*.ds"
-        Me.MSSaveDialog.RestoreDirectory = true
+        Me.MSSaveDialog.RestoreDirectory = True
         Me.MSSaveDialog.Title = "SaveAs"
         '
         'MS_BrosweDialog
@@ -174,27 +174,27 @@ Partial Class MS_Edit
         Me.EditMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MenuCopy, Me.MenuCut, Me.PasteToolStripMenuItem, Me.ToolStripSeparator12, Me.SelectAllToolStripMenuItem, Me.ToolStripSeparator3, Me.AutocommentOnToolStripMenuItem, Me.AutocommentOffToolStripMenuItem1})
         Me.EditMenu.Name = "EditMenu"
         Me.EditMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
-        Me.EditMenu.ShowImageMargin = false
-        Me.EditMenu.Size = New System.Drawing.Size(133, 148)
+        Me.EditMenu.ShowImageMargin = False
+        Me.EditMenu.Size = New System.Drawing.Size(133, 170)
         '
         'MenuCopy
         '
         Me.MenuCopy.Name = "MenuCopy"
-        Me.MenuCopy.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C),System.Windows.Forms.Keys)
+        Me.MenuCopy.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
         Me.MenuCopy.Size = New System.Drawing.Size(132, 22)
         Me.MenuCopy.Text = "Copy"
         '
         'MenuCut
         '
         Me.MenuCut.Name = "MenuCut"
-        Me.MenuCut.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.K),System.Windows.Forms.Keys)
+        Me.MenuCut.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.K), System.Windows.Forms.Keys)
         Me.MenuCut.Size = New System.Drawing.Size(132, 22)
         Me.MenuCut.Text = "Cut"
         '
         'PasteToolStripMenuItem
         '
         Me.PasteToolStripMenuItem.Name = "PasteToolStripMenuItem"
-        Me.PasteToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V),System.Windows.Forms.Keys)
+        Me.PasteToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
         Me.PasteToolStripMenuItem.Size = New System.Drawing.Size(132, 22)
         Me.PasteToolStripMenuItem.Text = "Paste"
         '
@@ -228,7 +228,7 @@ Partial Class MS_Edit
         '
         'imgList
         '
-        Me.imgList.ImageStream = CType(resources.GetObject("imgList.ImageStream"),System.Windows.Forms.ImageListStreamer)
+        Me.imgList.ImageStream = CType(resources.GetObject("imgList.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.imgList.TransparentColor = System.Drawing.Color.Transparent
         Me.imgList.Images.SetKeyName(0, "")
         Me.imgList.Images.SetKeyName(1, "")
@@ -275,21 +275,21 @@ Partial Class MS_Edit
         'NewMonkeySpeakToolStripMenuItem
         '
         Me.NewMonkeySpeakToolStripMenuItem.Name = "NewMonkeySpeakToolStripMenuItem"
-        Me.NewMonkeySpeakToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.N),System.Windows.Forms.Keys)
+        Me.NewMonkeySpeakToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.N), System.Windows.Forms.Keys)
         Me.NewMonkeySpeakToolStripMenuItem.Size = New System.Drawing.Size(153, 22)
         Me.NewMonkeySpeakToolStripMenuItem.Text = "New File"
         '
         'OpenToolStripMenuItem
         '
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
-        Me.OpenToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O),System.Windows.Forms.Keys)
+        Me.OpenToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.O), System.Windows.Forms.Keys)
         Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(153, 22)
         Me.OpenToolStripMenuItem.Text = "Open"
         '
         'SaveToolStripMenuItem
         '
         Me.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem"
-        Me.SaveToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.S),System.Windows.Forms.Keys)
+        Me.SaveToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.S), System.Windows.Forms.Keys)
         Me.SaveToolStripMenuItem.Size = New System.Drawing.Size(153, 22)
         Me.SaveToolStripMenuItem.Text = "Save"
         '
@@ -307,7 +307,7 @@ Partial Class MS_Edit
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F4),System.Windows.Forms.Keys)
+        Me.ExitToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F4), System.Windows.Forms.Keys)
         Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(153, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
@@ -333,21 +333,21 @@ Partial Class MS_Edit
         'EditDropCopy
         '
         Me.EditDropCopy.Name = "EditDropCopy"
-        Me.EditDropCopy.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C),System.Windows.Forms.Keys)
+        Me.EditDropCopy.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.C), System.Windows.Forms.Keys)
         Me.EditDropCopy.Size = New System.Drawing.Size(194, 22)
         Me.EditDropCopy.Text = "Copy"
         '
         'EditDropCut
         '
         Me.EditDropCut.Name = "EditDropCut"
-        Me.EditDropCut.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.X),System.Windows.Forms.Keys)
+        Me.EditDropCut.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.X), System.Windows.Forms.Keys)
         Me.EditDropCut.Size = New System.Drawing.Size(194, 22)
         Me.EditDropCut.Text = "Cut"
         '
         'EditDropPaste
         '
         Me.EditDropPaste.Name = "EditDropPaste"
-        Me.EditDropPaste.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V),System.Windows.Forms.Keys)
+        Me.EditDropPaste.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.V), System.Windows.Forms.Keys)
         Me.EditDropPaste.Size = New System.Drawing.Size(194, 22)
         Me.EditDropPaste.Text = "Paste"
         '
@@ -359,7 +359,7 @@ Partial Class MS_Edit
         'FindReplaceToolStripMenuItem
         '
         Me.FindReplaceToolStripMenuItem.Name = "FindReplaceToolStripMenuItem"
-        Me.FindReplaceToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F),System.Windows.Forms.Keys)
+        Me.FindReplaceToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.F), System.Windows.Forms.Keys)
         Me.FindReplaceToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.FindReplaceToolStripMenuItem.Text = "&Find and Replace"
         '
@@ -371,7 +371,7 @@ Partial Class MS_Edit
         'UndoToolStripMenuItem
         '
         Me.UndoToolStripMenuItem.Name = "UndoToolStripMenuItem"
-        Me.UndoToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Z),System.Windows.Forms.Keys)
+        Me.UndoToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Control Or System.Windows.Forms.Keys.Z), System.Windows.Forms.Keys)
         Me.UndoToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.UndoToolStripMenuItem.Text = "Undo"
         '
@@ -523,59 +523,59 @@ Partial Class MS_Edit
         Me.TabPage1.Size = New System.Drawing.Size(113, 204)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Sections"
-        Me.TabPage1.UseVisualStyleBackColor = true
+        Me.TabPage1.UseVisualStyleBackColor = True
         '
         'BtnSectionDelete
         '
-        Me.BtnSectionDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.BtnSectionDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.BtnSectionDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.BtnSectionDelete.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnSectionDelete.Location = New System.Drawing.Point(73, 178)
         Me.BtnSectionDelete.Name = "BtnSectionDelete"
         Me.BtnSectionDelete.Size = New System.Drawing.Size(22, 23)
         Me.BtnSectionDelete.TabIndex = 9
         Me.BtnSectionDelete.Text = "-"
-        Me.BtnSectionDelete.UseVisualStyleBackColor = true
+        Me.BtnSectionDelete.UseVisualStyleBackColor = True
         '
         'BtnSectionDown
         '
-        Me.BtnSectionDown.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.BtnSectionDown.Font = New System.Drawing.Font("Wingdings", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2,Byte))
+        Me.BtnSectionDown.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.BtnSectionDown.Font = New System.Drawing.Font("Wingdings", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnSectionDown.Location = New System.Drawing.Point(25, 178)
         Me.BtnSectionDown.Name = "BtnSectionDown"
         Me.BtnSectionDown.Size = New System.Drawing.Size(19, 23)
         Me.BtnSectionDown.TabIndex = 9
         Me.BtnSectionDown.Text = "â"
-        Me.BtnSectionDown.UseVisualStyleBackColor = true
+        Me.BtnSectionDown.UseVisualStyleBackColor = True
         '
         'BtnSectionUp
         '
-        Me.BtnSectionUp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.BtnSectionUp.Font = New System.Drawing.Font("Wingdings", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2,Byte))
+        Me.BtnSectionUp.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.BtnSectionUp.Font = New System.Drawing.Font("Wingdings", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnSectionUp.Location = New System.Drawing.Point(-1, 178)
         Me.BtnSectionUp.Name = "BtnSectionUp"
         Me.BtnSectionUp.Size = New System.Drawing.Size(20, 23)
         Me.BtnSectionUp.TabIndex = 9
         Me.BtnSectionUp.Text = "á"
-        Me.BtnSectionUp.UseVisualStyleBackColor = true
+        Me.BtnSectionUp.UseVisualStyleBackColor = True
         '
         'BtnSectionAdd
         '
-        Me.BtnSectionAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
-        Me.BtnSectionAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.BtnSectionAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.BtnSectionAdd.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.BtnSectionAdd.Location = New System.Drawing.Point(50, 178)
         Me.BtnSectionAdd.Name = "BtnSectionAdd"
         Me.BtnSectionAdd.Size = New System.Drawing.Size(17, 23)
         Me.BtnSectionAdd.TabIndex = 9
         Me.BtnSectionAdd.Text = "+"
-        Me.BtnSectionAdd.UseVisualStyleBackColor = true
+        Me.BtnSectionAdd.UseVisualStyleBackColor = True
         '
         'ListBox1
         '
-        Me.ListBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.ListBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListBox1.ContextMenuStrip = Me.SectionMenu
-        Me.ListBox1.FormattingEnabled = true
+        Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.Items.AddRange(New Object() {"Entire Document", "DS-Start", "   Default Section", "DS-End"})
         Me.ListBox1.Location = New System.Drawing.Point(0, 0)
         Me.ListBox1.Name = "ListBox1"
@@ -650,35 +650,35 @@ Partial Class MS_Edit
         Me.TabPage2.Size = New System.Drawing.Size(113, 204)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Templates"
-        Me.TabPage2.UseVisualStyleBackColor = true
+        Me.TabPage2.UseVisualStyleBackColor = True
         '
         'BtnTemplateAdd
         '
-        Me.BtnTemplateAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.BtnTemplateAdd.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.BtnTemplateAdd.Location = New System.Drawing.Point(3, 178)
         Me.BtnTemplateAdd.Name = "BtnTemplateAdd"
         Me.BtnTemplateAdd.Size = New System.Drawing.Size(52, 23)
         Me.BtnTemplateAdd.TabIndex = 2
         Me.BtnTemplateAdd.Text = "Add"
-        Me.BtnTemplateAdd.UseVisualStyleBackColor = true
+        Me.BtnTemplateAdd.UseVisualStyleBackColor = True
         '
         'BtnTemplateDelete
         '
-        Me.BtnTemplateDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left),System.Windows.Forms.AnchorStyles)
+        Me.BtnTemplateDelete.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.BtnTemplateDelete.Location = New System.Drawing.Point(61, 178)
         Me.BtnTemplateDelete.Name = "BtnTemplateDelete"
         Me.BtnTemplateDelete.Size = New System.Drawing.Size(46, 23)
         Me.BtnTemplateDelete.TabIndex = 1
         Me.BtnTemplateDelete.Text = "Delete"
-        Me.BtnTemplateDelete.UseVisualStyleBackColor = true
+        Me.BtnTemplateDelete.UseVisualStyleBackColor = True
         '
         'ListBox2
         '
-        Me.ListBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.ListBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListBox2.ContextMenuStrip = Me.TemplateMenu
-        Me.ListBox2.FormattingEnabled = true
+        Me.ListBox2.FormattingEnabled = True
         Me.ListBox2.Location = New System.Drawing.Point(3, 3)
         Me.ListBox2.Name = "ListBox2"
         Me.ListBox2.Size = New System.Drawing.Size(107, 173)
@@ -740,6 +740,15 @@ Partial Class MS_Edit
         Me.EditToolStripMenuItem1.Name = "EditToolStripMenuItem1"
         Me.EditToolStripMenuItem1.Size = New System.Drawing.Size(164, 22)
         Me.EditToolStripMenuItem1.Text = "Edit"
+        '
+        'TabControl2
+        '
+        Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl2.Name = "TabControl2"
+        Me.TabControl2.SelectedIndex = 0
+        Me.TabControl2.Size = New System.Drawing.Size(622, 230)
+        Me.TabControl2.TabIndex = 0
         '
         'ToolBox
         '
@@ -877,7 +886,7 @@ Partial Class MS_Edit
         'BtnComment
         '
         Me.BtnComment.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BtnComment.Image = CType(resources.GetObject("BtnComment.Image"),System.Drawing.Image)
+        Me.BtnComment.Image = CType(resources.GetObject("BtnComment.Image"), System.Drawing.Image)
         Me.BtnComment.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BtnComment.Name = "BtnComment"
         Me.BtnComment.Size = New System.Drawing.Size(23, 22)
@@ -887,7 +896,7 @@ Partial Class MS_Edit
         'BtnUncomment
         '
         Me.BtnUncomment.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.BtnUncomment.Image = CType(resources.GetObject("BtnUncomment.Image"),System.Drawing.Image)
+        Me.BtnUncomment.Image = CType(resources.GetObject("BtnUncomment.Image"), System.Drawing.Image)
         Me.BtnUncomment.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.BtnUncomment.Name = "BtnUncomment"
         Me.BtnUncomment.Size = New System.Drawing.Size(23, 22)
@@ -901,7 +910,7 @@ Partial Class MS_Edit
         '
         'lblStatus
         '
-        Me.lblStatus.AutoSize = false
+        Me.lblStatus.AutoSize = False
         Me.lblStatus.Name = "lblStatus"
         Me.lblStatus.Size = New System.Drawing.Size(366, 22)
         Me.lblStatus.Text = "Status:"
@@ -921,17 +930,17 @@ Partial Class MS_Edit
         Me.BtnFind.Size = New System.Drawing.Size(75, 23)
         Me.BtnFind.TabIndex = 7
         Me.BtnFind.Text = "Find"
-        Me.BtnFind.UseVisualStyleBackColor = true
+        Me.BtnFind.UseVisualStyleBackColor = True
         '
         'sb
         '
-        Me.sb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.sb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.sb.Location = New System.Drawing.Point(0, 149)
         Me.sb.Name = "sb"
         Me.sb.Panels.AddRange(New System.Windows.Forms.StatusBarPanel() {Me.panelCurrentPosition, Me.panelCurrentLine, Me.panelTotalLines, Me.panelTotalCharacters})
-        Me.sb.ShowPanels = true
+        Me.sb.ShowPanels = True
         Me.sb.Size = New System.Drawing.Size(747, 24)
-        Me.sb.SizingGrip = false
+        Me.sb.SizingGrip = False
         Me.sb.TabIndex = 6
         '
         'panelCurrentPosition
@@ -962,9 +971,9 @@ Partial Class MS_Edit
         '
         'Causes
         '
-        Me.Causes.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom)  _
-            Or System.Windows.Forms.AnchorStyles.Left)  _
-            Or System.Windows.Forms.AnchorStyles.Right),System.Windows.Forms.AnchorStyles)
+        Me.Causes.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Causes.Location = New System.Drawing.Point(0, 30)
         Me.Causes.Name = "Causes"
         Me.Causes.SelectedIndex = 0
@@ -983,15 +992,6 @@ Partial Class MS_Edit
         Me.ColumnHeader3.DisplayIndex = 0
         Me.ColumnHeader3.Text = ""
         Me.ColumnHeader3.Width = 640
-        '
-        'TabControl2
-        '
-        Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl2.Name = "TabControl2"
-        Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(622, 230)
-        Me.TabControl2.TabIndex = 0
         '
         'MS_Edit
         '
