@@ -13,7 +13,7 @@ Class PwrLexer
     Private Const ST_COMMENT As Integer = 16
     Private Const ST_HEADER As Integer = 17
 
-    Private Shared RegWhiteSpace As New Regex("^\s+")
+    Private Shared RegWhiteSpace As New Regex("^\s+") '\s+
     Private Shared RegStrVar As New Regex("^~([A-Za-z0-9_]+)")
     Private Shared RegNumVar As New Regex("^%([A-Za-z0-9_]+)")
     Private Shared RegString As New Regex("^\{(.*?)\}")
@@ -58,8 +58,7 @@ Class PwrLexer
         Dim pos As Integer = start
         While pos < [end]
             Dim curr As String = scintilla.GetRange(pos, [end]).Text.ToUpper()
-
-            'make a couple of direct checks for special hanlding (comments/string literals) pass the rest to a RegEx handler
+            'make a couple of direct checks for special handling (comments/string literals) pass the rest to a RegEx handler
             If (curr.Length > 1) AndAlso (curr(0) = "*"c) Then
                 pos += StyleCommentSingle(scintilla, pos, [end], max)
             ElseIf RegHeader.IsMatch(curr) Then
@@ -74,12 +73,16 @@ Class PwrLexer
                 pos += StyleRegExWhole(scintilla, curr, RegLineID, ST_ID, pos, [end], max)
             ElseIf RegNumber.IsMatch(curr) Then
                 pos += StyleRegExWhole(scintilla, curr, RegNumber, ST_NUMBER, pos, [end], max)
-            ElseIf RegWhiteSpace.IsMatch(curr) Then
-                pos += StyleRegExWhole(scintilla, curr, RegWhiteSpace, ST_DEFAULT, pos, [end], max)
-
+                'ElseIf RegWhiteSpace.IsMatch(curr) Then
+                '    pos += StyleRegExWhole(scintilla, curr, RegWhiteSpace, ST_DEFAULT, pos, [end], max)
             Else
+                'This is probably creating way too many style points, but for now it's fixing the lack of default.
+                DirectCast(scintilla, INativeScintilla).StartStyling(pos, &H1F)
+                DirectCast(scintilla, INativeScintilla).SetStyling(1, ST_DEFAULT)
                 pos += 1
+
             End If
+
         End While
     End Sub
 
@@ -96,7 +99,7 @@ Class PwrLexer
     Public Shared Function StyleCommentSingle(scintilla As Scintilla, start As Integer, [end] As Integer, max As Integer) As Integer
         Dim full As String = scintilla.GetRange(start, max).Text.ToUpper()
         Dim offset As Integer = 0
-        While (full(offset) <> ControlChars.Cr) AndAlso (full(offset) <> ControlChars.Lf) AndAlso (start + offset < max)
+        While (full(offset) <> ControlChars.Cr) AndAlso (full(offset) <> ControlChars.Lf) AndAlso (start + offset < max - 1)
             offset += 1
         End While
         DirectCast(scintilla, INativeScintilla).StartStyling(start, &H1F)
@@ -107,7 +110,7 @@ Class PwrLexer
     Public Shared Function StyleString(scintilla As Scintilla, text As String, start As Integer, [end] As Integer, max As Integer) As Integer
         Dim full As String = scintilla.GetRange(start, max).Text.ToUpper()
         Dim offset As Integer = 1
-        While (full(offset) <> ControlChars.Cr) AndAlso (full(offset) <> ControlChars.Lf) AndAlso (full(offset) <> "}"c) AndAlso (start + offset < max)
+        While (full(offset) <> ControlChars.Cr) AndAlso (full(offset) <> ControlChars.Lf) AndAlso (full(offset) <> "}"c) AndAlso (start + offset < max - 1)
             offset += 1
         End While
         offset += 1
