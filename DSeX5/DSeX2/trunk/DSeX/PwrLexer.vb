@@ -138,25 +138,6 @@ Public Class PwrLexer
         DirectCast(scintilla, INativeScintilla).SetStyling(offset, ST_HEADER)
         Return offset
     End Function
-    Public Shared Function StyleCommentMulti(ByRef scintilla As Scintilla, ByRef start As Integer, ByRef [end] As Integer, ByRef max As Integer) As Integer
-        ''2's : skip over initial "/*"
-        Dim full As String = scintilla.GetRange(start, max).Text.ToUpper()
-        Dim offset As Integer = 2
-        Dim depth As Integer = 1
-        While (depth > 0) AndAlso (offset + start - 1 < max)
-            If (full(offset) = "/"c) AndAlso (full(offset + 1) = "*"c) Then
-                depth += 1
-                offset += 1
-            ElseIf (full(offset) = "*"c) AndAlso (full(offset + 1) = "/"c) Then
-                depth -= 1
-                offset += 1
-            End If
-            offset += 1
-        End While
-        DirectCast(scintilla, INativeScintilla).StartStyling(start, &H1F)
-        DirectCast(scintilla, INativeScintilla).SetStyling(offset, ST_COMMENT)
-        Return offset
-    End Function
     Public Shared Function StyleCommentSingle(ByRef scintilla As Scintilla, ByRef start As Integer, ByRef [end] As Integer, ByRef max As Integer) As Integer
         Dim full As String = scintilla.GetRange(start, max).Text.ToUpper()
         Dim offset As Integer = 0
@@ -181,7 +162,7 @@ Public Class PwrLexer
     End Function
 
     Public Shared Function StyleRegExWhole(ByRef scintilla As Scintilla, ByRef text As String, ByRef reg As Regex, ByRef style As Integer, ByRef start As Integer, ByRef [end] As Integer, _
-     max As Integer) As Integer
+     ByRef max As Integer) As Integer
         'match & style an entire regex
         Dim match As String = reg.Match(text).Value
         DirectCast(scintilla, INativeScintilla).StartStyling(start, &H1F)
@@ -189,14 +170,6 @@ Public Class PwrLexer
         Return match.Length
     End Function
 
-    Public Shared Function StyleRegExSection(ByRef scintilla As Scintilla, ByRef text As String, ByRef reg As Regex, ByRef style As Integer, ByRef start As Integer, ByRef [end] As Integer, _
-     max As Integer) As Integer
-        'match & style first subgroup of regex
-        Dim match As String = reg.Match(text).Groups(1).Value
-        DirectCast(scintilla, INativeScintilla).StartStyling(start, &H1F)
-        DirectCast(scintilla, INativeScintilla).SetStyling(match.Length, style)
-        Return match.Length
-    End Function
     Private Shared Function InlineAssignHelper(Of T)(ByRef target As T, value As T) As T
         target = value
         Return value

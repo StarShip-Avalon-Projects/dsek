@@ -102,7 +102,6 @@ Partial Class MS_Edit
         Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.RenameToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TabControl2 = New DSeX.TabControlEx()
         Me.ToolBox = New System.Windows.Forms.ToolStrip()
         Me.ToolBoxNew = New System.Windows.Forms.ToolStripButton()
         Me.ToolBoxOpen = New System.Windows.Forms.ToolStripButton()
@@ -134,6 +133,11 @@ Partial Class MS_Edit
         Me.Scintilla1 = New ScintillaNET.Scintilla()
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.BookmakrsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RemoveAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GotoNextToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GotoPreviousToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TabControl2 = New DSeX.TabControlEx()
         Me.EditMenu.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -175,7 +179,7 @@ Partial Class MS_Edit
         Me.EditMenu.Name = "EditMenu"
         Me.EditMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional
         Me.EditMenu.ShowImageMargin = False
-        Me.EditMenu.Size = New System.Drawing.Size(133, 170)
+        Me.EditMenu.Size = New System.Drawing.Size(133, 148)
         '
         'MenuCopy
         '
@@ -383,7 +387,7 @@ Partial Class MS_Edit
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.WindowsToolStripMenuItem, Me.HelpToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.BookmakrsToolStripMenuItem, Me.WindowsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(747, 24)
@@ -741,15 +745,6 @@ Partial Class MS_Edit
         Me.EditToolStripMenuItem1.Size = New System.Drawing.Size(164, 22)
         Me.EditToolStripMenuItem1.Text = "Edit"
         '
-        'TabControl2
-        '
-        Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl2.Name = "TabControl2"
-        Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(622, 230)
-        Me.TabControl2.TabIndex = 0
-        '
         'ToolBox
         '
         Me.ToolBox.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolBoxNew, Me.ToolBoxOpen, Me.ToolBoxSave, Me.ToolBoxSaveAs, Me.ToolStripSeparator2, Me.ToolBoxCut, Me.ToolBoxyCopy, Me.ToolBoxPaste, Me.ToolStripSeparator4, Me.ToolBoxUndo, Me.ToolBoxRedo, Me.ToolStripSeparator5, Me.ToolBoxFindReplace, Me.ToolStripButton1, Me.seperateor, Me.BtnComment, Me.BtnUncomment, Me.ToolStripSeparator7, Me.lblStatus})
@@ -993,6 +988,40 @@ Partial Class MS_Edit
         Me.ColumnHeader3.Text = ""
         Me.ColumnHeader3.Width = 640
         '
+        'BookmakrsToolStripMenuItem
+        '
+        Me.BookmakrsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RemoveAllToolStripMenuItem, Me.GotoNextToolStripMenuItem, Me.GotoPreviousToolStripMenuItem})
+        Me.BookmakrsToolStripMenuItem.Name = "BookmakrsToolStripMenuItem"
+        Me.BookmakrsToolStripMenuItem.Size = New System.Drawing.Size(70, 20)
+        Me.BookmakrsToolStripMenuItem.Text = "Bookmakrs"
+        '
+        'RemoveAllToolStripMenuItem
+        '
+        Me.RemoveAllToolStripMenuItem.Name = "RemoveAllToolStripMenuItem"
+        Me.RemoveAllToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RemoveAllToolStripMenuItem.Text = "Remove All"
+        '
+        'GotoNextToolStripMenuItem
+        '
+        Me.GotoNextToolStripMenuItem.Name = "GotoNextToolStripMenuItem"
+        Me.GotoNextToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.GotoNextToolStripMenuItem.Text = "Goto Next"
+        '
+        'GotoPreviousToolStripMenuItem
+        '
+        Me.GotoPreviousToolStripMenuItem.Name = "GotoPreviousToolStripMenuItem"
+        Me.GotoPreviousToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.GotoPreviousToolStripMenuItem.Text = "Goto Previous"
+        '
+        'TabControl2
+        '
+        Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl2.Name = "TabControl2"
+        Me.TabControl2.SelectedIndex = 0
+        Me.TabControl2.Size = New System.Drawing.Size(622, 230)
+        Me.TabControl2.TabIndex = 0
+        '
         'MS_Edit
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -1143,4 +1172,8 @@ End Sub
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents Scintilla1 As ScintillaNET.Scintilla
     Friend WithEvents TabControl2 As DSeX.TabControlEx
+    Friend WithEvents BookmakrsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RemoveAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents GotoNextToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents GotoPreviousToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class
