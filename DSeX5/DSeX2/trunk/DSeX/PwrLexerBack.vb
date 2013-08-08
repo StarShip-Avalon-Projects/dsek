@@ -3,7 +3,7 @@ Imports System.Drawing
 Imports System.Text.RegularExpressions
 Imports ScintillaNET
 Imports DSeX.ConfigStructs
-Public Class PwrLexer
+Public Class PwrLexerBack
 
     Private Shared Lock As Boolean = False
     ' Origional Thread for this class
@@ -17,14 +17,13 @@ Public Class PwrLexer
     Private Const ST_COMMENT As Integer = 16
     Private Const ST_HEADER As Integer = 17
 
-    Private Shared HEADER As String = KeysIni.GetKeyValue("MS-General", "Header")
     Private Shared RegWhiteSpace As New Regex("^\s+") '\s+
-    Private Shared RegStrVar As New Regex("^~([A-Za-z0-9_]+)", RegexOptions.IgnoreCase)
-    Private Shared RegNumVar As New Regex("^%([A-Za-z0-9_]+)", RegexOptions.IgnoreCase)
+    Private Shared RegStrVar As New Regex("^~([A-Za-z0-9_]+)")
+    Private Shared RegNumVar As New Regex("^%([A-Za-z0-9_]+)")
     Private Shared RegString As New Regex("^\{(.*?)\}")
     Private Shared RegLineID As New Regex("^\(([0-9]*)\:([0-9]*)\)")
     Private Shared RegNumber As New Regex("^([0-9#]+)")
-    Private Shared RegHeader As New Regex("^(" + HEADER + ")", RegexOptions.IgnoreCase)
+    Private Shared RegHeader As New Regex("^(" + KeysIni.GetKeyValue("MS-General", "Header") + ")", RegexOptions.IgnoreCase)
 
     Public Shared Sub Init(scintilla As Scintilla)
         scintilla.Indentation.SmartIndentType = SmartIndent.None
@@ -64,67 +63,41 @@ Public Class PwrLexer
 
     Public Shared Sub StyleSection(ByRef scintilla As Scintilla, ByRef start As Integer, ByRef [end] As Integer, ByRef max As Integer, ByRef Txt As String)
         Dim pos As Integer = start
-        Dim i As Integer = 0
+
         While pos < [end]
-
             Dim curr As String = scintilla.GetRange(pos, [end]).Text
-
             'make a couple of direct checks for special handling (comments/string literals) pass the rest to a RegEx handler
-            'If (curr.Length > 1)' AndAlso (curr(0) = "*"c) Then
-            ' pos += StyleCommentSingle(scintilla, pos, [end], max)
-            If RegHeader.IsMatch(curr) Then
+            If (curr.Length > 1) AndAlso (curr(0) = "*"c) Then
+                pos += StyleCommentSingle(scintilla, pos, [end], max)
+                ' Exit While
+            ElseIf RegHeader.IsMatch(curr) Then
                 pos += StyleRegExWhole(scintilla, curr, RegHeader, ST_HEADER, pos, [end], max)
 
-                'ElseIf (curr(0) = "{"c) Then
-                '    pos += StyleString(scintilla, curr, pos, [end], max)
+            ElseIf (curr(0) = "{"c) Then
+                pos += StyleString(scintilla, curr, pos, [end], max)
 
-                'ElseIf RegStrVar.IsMatch(curr) Then
-                '    pos += StyleRegExWhole(scintilla, curr, RegStrVar, ST_STRING_VAR, pos, [end], max)
+            ElseIf RegStrVar.IsMatch(curr) Then
+                pos += StyleRegExWhole(scintilla, curr, RegStrVar, ST_STRING_VAR, pos, [end], max)
 
-                'ElseIf RegNumVar.IsMatch(curr) Then
-                '    pos += StyleRegExWhole(scintilla, curr, RegNumVar, ST_NUM_VAR, pos, [end], max)
+            ElseIf RegNumVar.IsMatch(curr) Then
+                pos += StyleRegExWhole(scintilla, curr, RegNumVar, ST_NUM_VAR, pos, [end], max)
 
-                'ElseIf RegLineID.IsMatch(curr) Then
-                '    pos += StyleRegExWhole(scintilla, curr, RegLineID, ST_ID, pos, [end], max)
+            ElseIf RegLineID.IsMatch(curr) Then
+                pos += StyleRegExWhole(scintilla, curr, RegLineID, ST_ID, pos, [end], max)
 
-                'ElseIf RegNumber.IsMatch(curr) Then
-                '    pos += StyleRegExWhole(scintilla, curr, RegNumber, ST_NUMBER, pos, [end], max)
+            ElseIf RegNumber.IsMatch(curr) Then
+                pos += StyleRegExWhole(scintilla, curr, RegNumber, ST_NUMBER, pos, [end], max)
 
                 'ElseIf RegWhiteSpace.IsMatch(curr) Then
                 '    pos += StyleRegExWhole(scintilla, curr, RegWhiteSpace, ST_DEFAULT, pos, [end], max)
             Else
+                'This is probably creating way too many style points, but for now it's fixing the lack of default.
+                DirectCast(scintilla, INativeScintilla).StartStyling(pos, &H1F)
+                DirectCast(scintilla, INativeScintilla).SetStyling(1, ST_DEFAULT)
+                pos += 1
 
-                Select Case curr(0)
-                    'Case vbLf
-                    '    pos += 1
-                    'Case vbCr
-                    '    pos += 1
-                    Case "*"c
-                        i = StyleCommentSingle(scintilla, pos, [end], max)
-                    Case "("c
-                        i = StyleRegExWhole(scintilla, curr, RegLineID, ST_ID, pos, [end], max)
-
-                    Case "%"c
-                        i = StyleRegExWhole(scintilla, curr, RegNumVar, ST_STRING_VAR, pos, [end], max)
-
-                    Case "0"c To "9"c
-                        i = StyleRegExWhole(scintilla, curr, RegNumber, ST_NUMBER, pos, [end], max)
-                    Case "{"c
-                        i = StyleString(scintilla, curr, pos, [end], max)
-                    Case "~"c
-                        i = StyleRegExWhole(scintilla, curr, RegStrVar, ST_STRING_VAR, pos, [end], max)
-
-                    Case Else
-                        i = 0
-                End Select
-                If i = 0 Then
-                    DirectCast(scintilla, INativeScintilla).StartStyling(pos, &H1F)
-                    DirectCast(scintilla, INativeScintilla).SetStyling(1, ST_DEFAULT)
-                    pos += 1
-                Else
-                    pos += i
-                End If
             End If
+
         End While
     End Sub
 
@@ -138,6 +111,8 @@ Public Class PwrLexer
         DirectCast(scintilla, INativeScintilla).SetStyling(offset, ST_HEADER)
         Return offset
     End Function
+
+
     Public Shared Function StyleCommentMulti(ByRef scintilla As Scintilla, ByRef start As Integer, ByRef [end] As Integer, ByRef max As Integer) As Integer
         ''2's : skip over initial "/*"
         Dim full As String = scintilla.GetRange(start, max).Text.ToUpper()

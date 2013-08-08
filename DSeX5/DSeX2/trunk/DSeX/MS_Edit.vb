@@ -275,7 +275,7 @@ Public Class MS_Edit
                 Loop
                 MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
                 reader.Close()
-
+                'MS_Editor.Lexing.Colorize()
 
                 UpdateSegments()
                 UpdateSegmentList()
@@ -311,7 +311,7 @@ Public Class MS_Edit
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
-
+        SetLanguage("ds")
     End Sub
 
     Public Sub Reset()
@@ -1419,6 +1419,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             ' Reset/set all styles and prepare _scintilla for custom lexing
             TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
             PwrLexer.Init(MS_Editor)
+            'MS_Editor.Lexing.Colorize()
         Else
             ' Use a built-in lexer and configuration
             'Me.IniLexer = False

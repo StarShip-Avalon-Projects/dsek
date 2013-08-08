@@ -362,10 +362,12 @@ Public Class frmSearch
                 'A search string was already selected and the user wants to find
                 'more occurrences of the same string. So start searching at the
                 'postition of the cursor.
-                MS_Edit.MS_Editor.Find(cmbSearch.Text, _
-                    MS_Edit.MS_Editor.Selection.Start, _
-                        RichTextBoxFinds.WholeWord)
-
+                'MS_Edit.MS_Editor.Find(cmbSearch.Text, _
+                '    MS_Edit.MS_Editor.Selection.Start, _
+                '        RichTextBoxFinds.WholeWord)
+                test = MS_Edit.MS_Editor.FindReplace.FindNext(cmbSearch.Text, True, SearchFlags.WholeWord)
+                MS_Edit.MS_Editor.Selection.Start = test.Start
+                MS_Edit.MS_Editor.Selection.End = test.End
             End If
 
 
