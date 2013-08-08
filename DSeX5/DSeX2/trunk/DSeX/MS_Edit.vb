@@ -960,11 +960,14 @@ InputBox("What line within the document do you want to send the cursor to?", _
         lstView.Name = "edit" + n
         lstView.Dock = DockStyle.Fill
         lstView.Margins(0).Width = 20
+        lstView.Margins(1).Width = 20
+        lstView.Margins.Margin0.IsClickable = True
+        lstView.Margins.Margin1.IsClickable = True
         lstView.Show()
         lstView.ContextMenuStrip = SectionMenu
-
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)
 
+        AddHandler lstView.MarginClick, AddressOf Margin_Click
         AddHandler lstView.TextChanged, AddressOf MS_Editor_TextChanged
         AddHandler lstView.StyleNeeded, AddressOf Scintilla2_StyleNeeded
         AddHandler lstView.MouseUp, AddressOf MS_EditRightClick
@@ -975,7 +978,18 @@ InputBox("What line within the document do you want to send the cursor to?", _
         UpdateSegments()
     End Sub
 
+    Private Sub Margin_Click(sender As Object, e As ScintillaNET.MarginClickEventArgs)
 
+        Dim currentLine As ScintillaNET.Line = e.Line
+        If (sender.Markers.GetMarkerMask(currentLine) = 0) Then
+
+            currentLine.AddMarker(0)
+
+        Else
+
+            currentLine.DeleteMarker(0)
+        End If
+    End Sub
     Private Sub MS_EditRightClick(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
         If e.Button = Windows.Forms.MouseButtons.Right Then
             Me.EditMenu.Show(MS_Editor, New Point(e.X, e.Y))
@@ -1441,4 +1455,27 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
 
 
 
+    Private Sub GotoNextToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoNextToolStripMenuItem.Click
+        GotoBookMark()
+    End Sub
+    Private Sub GotoBookMark()
+        If IsNothing(MS_Editor) Then Exit Sub
+        Dim l As Line = MS_Editor.Lines.Current.FindNextMarker(1)
+        If Not IsNothing(l) Then l.Goto()
+    End Sub
+
+    Private Sub GotoPreviousToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoPreviousToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub GotoBookPrevMark()
+        If IsNothing(MS_Editor) Then Exit Sub
+        Dim l As Line = MS_Editor.Lines.Current.FindPreviousMarker(1)
+        If Not IsNothing(l) Then l.Goto()
+    End Sub
+
+    Private Sub RemoveAllToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RemoveAllToolStripMenuItem.Click
+        If IsNothing(MS_Editor) Then Exit Sub
+        MS_Editor.Markers.DeleteAll(0)
+    End Sub
 End Class
