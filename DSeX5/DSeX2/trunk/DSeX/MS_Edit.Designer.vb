@@ -1,5 +1,4 @@
-﻿Imports No_Flicker
-Imports System.ComponentModel
+﻿Imports System.ComponentModel
 
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class MS_Edit
@@ -130,7 +129,6 @@ Partial Class MS_Edit
         Me.panelTotalLines = New System.Windows.Forms.StatusBarPanel()
         Me.panelTotalCharacters = New System.Windows.Forms.StatusBarPanel()
         Me.Causes = New System.Windows.Forms.TabControl()
-        Me.Scintilla1 = New ScintillaNET.Scintilla()
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.BookmakrsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -158,7 +156,6 @@ Partial Class MS_Edit
         CType(Me.panelCurrentLine, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.panelTotalLines, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.panelTotalCharacters, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.Scintilla1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'MSSaveDialog
@@ -974,14 +971,6 @@ Partial Class MS_Edit
         Me.Causes.SelectedIndex = 0
         Me.Causes.Size = New System.Drawing.Size(744, 113)
         Me.Causes.TabIndex = 5
-        '
-        'Scintilla1
-        '
-        Me.Scintilla1.Location = New System.Drawing.Point(0, 0)
-        Me.Scintilla1.Name = "Scintilla1"
-        Me.Scintilla1.Size = New System.Drawing.Size(200, 100)
-        Me.Scintilla1.TabIndex = 0
-        '
         'ColumnHeader3
         '
         Me.ColumnHeader3.DisplayIndex = 0
@@ -1057,8 +1046,7 @@ Partial Class MS_Edit
         CType(Me.panelCurrentLine,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.panelTotalLines,System.ComponentModel.ISupportInitialize).EndInit
         CType(Me.panelTotalCharacters,System.ComponentModel.ISupportInitialize).EndInit
-        CType(Me.Scintilla1,System.ComponentModel.ISupportInitialize).EndInit
-        Me.ResumeLayout(false)
+        Me.ResumeLayout(False)
         Me.PerformLayout
 
 End Sub
@@ -1170,7 +1158,6 @@ End Sub
     Friend WithEvents RenameToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EditToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
-    Friend WithEvents Scintilla1 As ScintillaNET.Scintilla
     Friend WithEvents TabControl2 As DSeX.TabControlEx
     Friend WithEvents BookmakrsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RemoveAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

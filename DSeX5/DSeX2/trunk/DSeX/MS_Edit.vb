@@ -311,7 +311,7 @@ Public Class MS_Edit
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
-        SetLanguage("ds")
+        'SetLanguage("ds")
     End Sub
 
     Public Sub Reset()
@@ -716,6 +716,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
         UpdateSegments()
         UpdateSegmentList()
+        MS_Editor.Lexing.Colorize()
     End Sub
     Public Sub NewScript()
         If Not CanOpen(TabControl2.SelectedIndex) Then
@@ -954,33 +955,36 @@ InputBox("What line within the document do you want to send the cursor to?", _
         'Creates the listview and displays it in the new tab
         Dim lstView As Scintilla = New Scintilla
         lstView.ContextMenuStrip = Me.EditMenu
+        ' lstView.ma()
+        lstView.Encoding = Encoding.UTF8
         lstView.AcceptsTab = True
         lstView.Parent = tp
         lstView.Anchor = AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Bottom + AnchorStyles.Right
         lstView.Name = "edit" + n
         lstView.Dock = DockStyle.Fill
-        lstView.Margins(0).Width = 20
+        lstView.Margins(0).Width = 40
         lstView.Margins(1).Width = 20
         lstView.Margins.Margin0.IsClickable = True
         lstView.Margins.Margin1.IsClickable = True
         lstView.Show()
         lstView.ContextMenuStrip = SectionMenu
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)
-
+        lstView.ConfigurationManager.Language = "dragonspeak"
+        lstView.ConfigurationManager.CustomLocation = "hilighter"
         AddHandler lstView.MarginClick, AddressOf Margin_Click
         AddHandler lstView.TextChanged, AddressOf MS_Editor_TextChanged
-        AddHandler lstView.StyleNeeded, AddressOf Scintilla2_StyleNeeded
+        '        AddHandler lstView.StyleNeeded, AddressOf Scintilla2_StyleNeeded
         AddHandler lstView.MouseUp, AddressOf MS_EditRightClick
         AddHandler lstView.CursorChanged, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.MouseClick, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.KeyUp, AddressOf MS_Editor_CursorChanged
-        SetLanguage("ds")
-        UpdateSegments()
+        ' SetLanguage("ds")
+        'UpdateSegments()
     End Sub
 
-    Private Sub Margin_Click(sender As Object, e As ScintillaNET.MarginClickEventArgs)
+    Private Sub Margin_Click(sender As Object, e As MarginClickEventArgs)
 
-        Dim currentLine As ScintillaNET.Line = e.Line
+        Dim currentLine As Line = e.Line
         If (sender.Markers.GetMarkerMask(currentLine) = 0) Then
 
             currentLine.AddMarker(0)
@@ -1018,7 +1022,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             Dim x As New ContextMenuStrip
             Dim s As ToolStripItem = x.Items.Add("New Tab", Nothing, AddressOf ToolBoxNew_Click)
             s.Tag = sender
-            Dim t As ToolStripItem = x.Items.Add("Close All Tabs But this one", Nothing, AddressOf FCloseAllTab_Click)
+            Dim t As ToolStripItem = x.Items.Add("Close All Other Tabs", Nothing, AddressOf FCloseAllTab_Click)
             Dim v As ToolStripItem = x.Items.Add("Close Tab", Nothing, AddressOf FCloseTab_Click)
             x.Items.Add(New ToolStripSeparator)
             Dim u As ToolStripItem = x.Items.Add("Save File", Nothing, AddressOf FSave_Click)
@@ -1425,32 +1429,32 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
 
 
     Private Sub SetLanguage(language As String)
-        If "ini".Equals(language, StringComparison.OrdinalIgnoreCase) Then
-            ' Reset/set all styles and prepare _scintilla for custom lexing
-            TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ini
-            IniLexer.Init(MS_Editor)
-        ElseIf "ds".Equals(language, StringComparison.OrdinalIgnoreCase) Then
-            ' Reset/set all styles and prepare _scintilla for custom lexing
-            TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
-            PwrLexer.Init(MS_Editor)
-            'MS_Editor.Lexing.Colorize()
-        Else
-            ' Use a built-in lexer and configuration
-            'Me.IniLexer = False
-            MS_Editor.ConfigurationManager.Language = language
+        'If "ini".Equals(language, StringComparison.OrdinalIgnoreCase) Then
+        '    ' Reset/set all styles and prepare _scintilla for custom lexing
+        '    TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ini
+        '    IniLexer.Init(MS_Editor)
+        'ElseIf "ds".Equals(language, StringComparison.OrdinalIgnoreCase) Then
+        '    ' Reset/set all styles and prepare _scintilla for custom lexing
+        '    TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
+        '    PwrLexer.Init(MS_Editor)
+        '    'MS_Editor.Lexing.Colorize()
+        'Else
+        ' Use a built-in lexer and configuration
+        'Me.IniLexer = False
+        MS_Editor.ConfigurationManager.Language = language
 
-        End If
+        ' End If
     End Sub
 
-    Private Sub Scintilla2_StyleNeeded(sender As Object, e As ScintillaNET.StyleNeededEventArgs)
-        Select Case TabEditStyles(TabControl2.SelectedIndex)
-            Case EditStyles.ini
-                IniLexer.StyleNeeded(sender, e.Range)
-            Case EditStyles.ds
-                PwrLexer.StyleNeeded(sender, e.Range)
-        End Select
+    'Private Sub Scintilla2_StyleNeeded(sender As Object, e As ScintillaNET.StyleNeededEventArgs)
+    '    Select Case TabEditStyles(TabControl2.SelectedIndex)
+    '        Case EditStyles.ini
+    '            IniLexer.StyleNeeded(sender, e.Range)
+    '        Case EditStyles.ds
+    '            PwrLexer.StyleNeeded(sender, e.Range)
+    '    End Select
 
-    End Sub
+    'End Sub
 
 
 
