@@ -284,7 +284,7 @@ Public Class MS_Edit
                 TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
             End If
         End With
-
+        SetLanguage("dragonspeak")
     End Sub
 
     Public Sub OpenMS_File(ByRef filename As String)
@@ -311,7 +311,7 @@ Public Class MS_Edit
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
-        'SetLanguage("ds")
+        SetLanguage("dragonspeak")
     End Sub
 
     Public Sub Reset()
@@ -969,8 +969,9 @@ InputBox("What line within the document do you want to send the cursor to?", _
         lstView.Show()
         lstView.ContextMenuStrip = SectionMenu
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)
-        lstView.ConfigurationManager.Language = "dragonspeak"
-        lstView.ConfigurationManager.CustomLocation = "hilighter"
+        'lstView.Lexing.LexerName = "dragonspeak"
+        'lstView.ConfigurationManager.Language = "dragonspeak"
+        'lstView.ConfigurationManager.CustomLocation = "hilighter"
         AddHandler lstView.MarginClick, AddressOf Margin_Click
         AddHandler lstView.TextChanged, AddressOf MS_Editor_TextChanged
         '        AddHandler lstView.StyleNeeded, AddressOf Scintilla2_StyleNeeded
@@ -978,7 +979,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         AddHandler lstView.CursorChanged, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.MouseClick, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.KeyUp, AddressOf MS_Editor_CursorChanged
-        ' SetLanguage("ds")
+        SetLanguage("dragonspeak")
         'UpdateSegments()
     End Sub
 
@@ -1433,17 +1434,17 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         '    ' Reset/set all styles and prepare _scintilla for custom lexing
         '    TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ini
         '    IniLexer.Init(MS_Editor)
-        'ElseIf "ds".Equals(language, StringComparison.OrdinalIgnoreCase) Then
-        '    ' Reset/set all styles and prepare _scintilla for custom lexing
-        '    TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
-        '    PwrLexer.Init(MS_Editor)
-        '    'MS_Editor.Lexing.Colorize()
-        'Else
-        ' Use a built-in lexer and configuration
-        'Me.IniLexer = False
-        MS_Editor.ConfigurationManager.Language = language
+        If "dragonspeak".Equals(language, StringComparison.OrdinalIgnoreCase) Then
+            ' Reset/set all styles and prepare _scintilla for custom lexing
+            TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
+            PwrLexer.Init(MS_Editor)
+            'MS_Editor.Lexing.Colorize()
+            'Else
+            ' Use a built-in lexer and configuration
+            'Me.IniLexer = False
+            'MS_Editor.ConfigurationManager.Language = language
 
-        ' End If
+        End If
     End Sub
 
     'Private Sub Scintilla2_StyleNeeded(sender As Object, e As ScintillaNET.StyleNeededEventArgs)

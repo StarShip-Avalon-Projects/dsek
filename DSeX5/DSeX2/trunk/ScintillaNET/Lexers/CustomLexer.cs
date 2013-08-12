@@ -581,26 +581,30 @@ namespace ScintillaNET.Lexers
 				{
 					Consume(2);
 				}
-				else if (CurrentCharacter == endChar)
-				{
-					if (doubleQuoteEscapes && NextCharacter == endChar)
-					{
-						Consume(2);
-					}
-					else
-					{
-						closed = true;
-						Consume();
-						break;
-					}
-				}
-				else if (breakAtEndOfLine && IsEndOfLine(CurrentCharacter))
-				{
-					MarkSyntaxError(CurrentBasePosition, CurrentPosition - CurrentBasePosition);
-					break;
-				}
-				else
-					Consume();
+                else if ((char)CurrentCharacter > 0x7F)
+                {
+                    Consume();
+                }
+                else if (CurrentCharacter == endChar)
+                {
+                    if (doubleQuoteEscapes && NextCharacter == endChar)
+                    {
+                        Consume(2);
+                    }
+                    else
+                    {
+                        closed = true;
+                        Consume();
+                        break;
+                    }
+                }
+                else if (breakAtEndOfLine && IsEndOfLine(CurrentCharacter))
+                {
+                    MarkSyntaxError(CurrentBasePosition, CurrentPosition - CurrentBasePosition);
+                    break;
+                }
+                else
+                    Consume();
 			}
 			if (!closed)
 				MarkSyntaxError(CurrentBasePosition, CurrentPosition - CurrentBasePosition);

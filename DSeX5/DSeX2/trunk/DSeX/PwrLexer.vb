@@ -8,14 +8,14 @@ Public Class PwrLexer
     Private Shared Lock As Boolean = False
     ' Origional Thread for this class
     'http://scintillanet.codeplex.com/discussions/42949
-    Private Const ST_DEFAULT As Integer = 32
-    Private Const ST_STRING_VAR As Integer = 11
-    Private Const ST_NUM_VAR As Integer = 12
-    Private Const ST_STRING As Integer = 13
-    Private Const ST_ID As Integer = 14
-    Private Const ST_NUMBER As Integer = 15
-    Private Const ST_COMMENT As Integer = 16
-    Private Const ST_HEADER As Integer = 17
+    Private Const STYLE_DEFAULT As Integer = 1
+    Private Const STYLE_STRING As Integer = 11
+    Private Const STYLE_NUMBER As Integer = 12
+    Private Const STYLE_COMMENT As Integer = 14
+    Private Const STYLE_NUM_VAR As Integer = 15
+    Private Const STYLE_STR_VAR As Integer = 16
+    Private Const STYLE_HEADER As Integer = 17
+    Private Const STYLE_ID As Integer = 18
 
     Private Shared HEADER As String = KeysIni.GetKeyValue("MS-General", "Header")
     Private Shared RegWhiteSpace As New Regex("^\s+") '\s+
@@ -28,19 +28,17 @@ Public Class PwrLexer
 
     Public Shared Sub Init(scintilla As Scintilla)
         scintilla.Indentation.SmartIndentType = SmartIndent.None
-        scintilla.ConfigurationManager.Language = [String].Empty
-        scintilla.Lexing.LexerName = "container"
-        scintilla.Lexing.Lexer = Lexer.Container
-
-        scintilla.Styles(ST_DEFAULT).ForeColor = Color.Black
-        scintilla.Styles(ST_STRING_VAR).ForeColor = EditSettings.StringVariableColor
-        scintilla.Styles(ST_NUM_VAR).ForeColor = EditSettings.VariableColor
-        scintilla.Styles(ST_STRING).ForeColor = EditSettings.StringColor
-        scintilla.Styles(ST_COMMENT).ForeColor = EditSettings.CommentColor
-        scintilla.Styles(ST_ID).ForeColor = EditSettings.IDColor
-        scintilla.Styles(ST_NUMBER).ForeColor = EditSettings.NumberColor
-        scintilla.Styles(ST_HEADER).ForeColor = Color.Green
-        scintilla.Styles(ST_HEADER).Bold = True
+        'scintilla.ConfigurationManager.Language = "dragonspeak"
+        scintilla.Lexing.LexerName = "dragonspeak"
+        scintilla.Styles(STYLE_DEFAULT).ForeColor = Color.Black
+        scintilla.Styles(STYLE_STR_VAR).ForeColor = EditSettings.StringVariableColor
+        scintilla.Styles(STYLE_NUM_VAR).ForeColor = EditSettings.VariableColor
+        scintilla.Styles(STYLE_STRING).ForeColor = EditSettings.StringColor
+        scintilla.Styles(STYLE_COMMENT).ForeColor = EditSettings.CommentColor
+        scintilla.Styles(STYLE_ID).ForeColor = EditSettings.IDColor
+        scintilla.Styles(STYLE_NUMBER).ForeColor = EditSettings.NumberColor
+        scintilla.Styles(STYLE_HEADER).ForeColor = Color.Green
+        scintilla.Styles(STYLE_HEADER).Bold = True
     End Sub
 
     Public Shared Sub StyleNeeded(ByRef scintilla As Scintilla, ByRef range As Range)
@@ -73,25 +71,25 @@ Public Class PwrLexer
             'If (curr.Length > 1)' AndAlso (curr(0) = "*"c) Then
             ' pos += StyleCommentSingle(scintilla, pos, [end], max)
             If RegHeader.IsMatch(curr) Then
-                pos += StyleRegExWhole(scintilla, curr, RegHeader, ST_HEADER, pos, [end], max)
+                pos += StyleRegExWhole(scintilla, curr, RegHeader, STYLE_HEADER, pos, [end], max)
 
                 'ElseIf (curr(0) = "{"c) Then
                 '    pos += StyleString(scintilla, curr, pos, [end], max)
 
                 'ElseIf RegStrVar.IsMatch(curr) Then
-                '    pos += StyleRegExWhole(scintilla, curr, RegStrVar, ST_STRING_VAR, pos, [end], max)
+                '    pos += StyleRegExWhole(scintilla, curr, RegStrVar, STYLE_STRING_VAR, pos, [end], max)
 
                 'ElseIf RegNumVar.IsMatch(curr) Then
-                '    pos += StyleRegExWhole(scintilla, curr, RegNumVar, ST_NUM_VAR, pos, [end], max)
+                '    pos += StyleRegExWhole(scintilla, curr, RegNumVar, STYLE_NUM_VAR, pos, [end], max)
 
                 'ElseIf RegLineID.IsMatch(curr) Then
-                '    pos += StyleRegExWhole(scintilla, curr, RegLineID, ST_ID, pos, [end], max)
+                '    pos += StyleRegExWhole(scintilla, curr, RegLineID, STYLE_ID, pos, [end], max)
 
                 'ElseIf RegNumber.IsMatch(curr) Then
-                '    pos += StyleRegExWhole(scintilla, curr, RegNumber, ST_NUMBER, pos, [end], max)
+                '    pos += StyleRegExWhole(scintilla, curr, RegNumber, STYLE_NUMBER, pos, [end], max)
 
                 'ElseIf RegWhiteSpace.IsMatch(curr) Then
-                '    pos += StyleRegExWhole(scintilla, curr, RegWhiteSpace, ST_DEFAULT, pos, [end], max)
+                '    pos += StyleRegExWhole(scintilla, curr, RegWhiteSpace, STYLE_DEFAULT, pos, [end], max)
             Else
 
                 Select Case curr(0)
@@ -102,24 +100,24 @@ Public Class PwrLexer
                     Case "*"c
                         i = StyleCommentSingle(scintilla, pos, [end], max)
                     Case "("c
-                        i = StyleRegExWhole(scintilla, curr, RegLineID, ST_ID, pos, [end], max)
+                        i = StyleRegExWhole(scintilla, curr, RegLineID, STYLE_ID, pos, [end], max)
 
                     Case "%"c
-                        i = StyleRegExWhole(scintilla, curr, RegNumVar, ST_STRING_VAR, pos, [end], max)
+                        i = StyleRegExWhole(scintilla, curr, RegNumVar, STYLE_STR_VAR, pos, [end], max)
 
                     Case "0"c To "9"c
-                        i = StyleRegExWhole(scintilla, curr, RegNumber, ST_NUMBER, pos, [end], max)
+                        i = StyleRegExWhole(scintilla, curr, RegNumber, STYLE_NUMBER, pos, [end], max)
                     Case "{"c
                         i = StyleString(scintilla, curr, pos, [end], max)
                     Case "~"c
-                        i = StyleRegExWhole(scintilla, curr, RegStrVar, ST_STRING_VAR, pos, [end], max)
+                        i = StyleRegExWhole(scintilla, curr, RegStrVar, STYLE_STR_VAR, pos, [end], max)
 
                     Case Else
                         i = 0
                 End Select
                 If i = 0 Then
                     DirectCast(scintilla, INativeScintilla).StartStyling(pos, &H1F)
-                    DirectCast(scintilla, INativeScintilla).SetStyling(1, ST_DEFAULT)
+                    DirectCast(scintilla, INativeScintilla).SetStyling(1, STYLE_DEFAULT)
                     pos += 1
                 Else
                     pos += i
@@ -135,7 +133,7 @@ Public Class PwrLexer
             offset += 1
         End While
         DirectCast(scintilla, INativeScintilla).StartStyling(start, &H1F)
-        DirectCast(scintilla, INativeScintilla).SetStyling(offset, ST_HEADER)
+        DirectCast(scintilla, INativeScintilla).SetStyling(offset, STYLE_HEADER)
         Return offset
     End Function
     Public Shared Function StyleCommentSingle(ByRef scintilla As Scintilla, ByRef start As Integer, ByRef [end] As Integer, ByRef max As Integer) As Integer
@@ -145,7 +143,7 @@ Public Class PwrLexer
             offset += 1
         End While
         DirectCast(scintilla, INativeScintilla).StartStyling(start, &H1F)
-        DirectCast(scintilla, INativeScintilla).SetStyling(offset, ST_COMMENT)
+        DirectCast(scintilla, INativeScintilla).SetStyling(offset, STYLE_COMMENT)
         Return offset
     End Function
 
@@ -157,7 +155,7 @@ Public Class PwrLexer
         End While
         offset += 1
         DirectCast(scintilla, INativeScintilla).StartStyling(start, &H1F)
-        DirectCast(scintilla, INativeScintilla).SetStyling(offset, ST_STRING)
+        DirectCast(scintilla, INativeScintilla).SetStyling(offset, STYLE_STRING)
         Return offset
     End Function
 
