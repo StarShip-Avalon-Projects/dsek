@@ -7,8 +7,7 @@ namespace ScintillaNET.Lexers
 	public sealed class dsLexer : CustomLexer
 	{
 		public override string LexerName { get { return "dragonspeak"; } }
-
-
+        
 		private const int STYLE_STRING = 11;
 		private const int STYLE_NUMBER = 12;
 		private const int STYLE_COMMENT = 14;
@@ -57,7 +56,7 @@ namespace ScintillaNET.Lexers
                 return new Dictionary<string, int>();
 			}
 		}
-
+     
         protected override void Initialize()
         {
 
@@ -96,7 +95,21 @@ namespace ScintillaNET.Lexers
 						bool consumed = false;
 						switch (CurrentCharacter)
 						{
-
+                            case '0':
+                            case '1':
+                            case '2':
+                            case '3':
+                            case '4':
+                            case '5':
+                            case '6':
+                            case '7':
+                            case '8':
+                            case '9':
+                            case '#':
+                                 CurrentState = State.Number;
+                                 Consume();
+                                 SetStyle(STYLE_NUMBER);
+                                    break;
 							case '{':
 								CurrentState = State.String;
 								break;
@@ -151,7 +164,7 @@ namespace ScintillaNET.Lexers
 						else
 						{
                             Consume();
-							SetStyle(STYLE_NUM_VAR,1); 
+							SetStyle(STYLE_NUM_VAR); 
 							
 						}
 
@@ -171,6 +184,19 @@ namespace ScintillaNET.Lexers
 						
 					   
 						break;
+                    case State.Number:
+                          if (IsNum(CurrentCharacter))
+                          {
+                              Consume(); 
+                                SetStyle(STYLE_NUMBER);
+                        
+                            }
+                          else
+                          {
+                              CurrentState = State.Unknown;
+                              SetStyle(STYLE_DEFAULT);
+                          }
+                          break;
 					default:
 						throw new Exception("Unknown state!");
 				}
@@ -189,7 +215,11 @@ namespace ScintillaNET.Lexers
 					SetStyle(STYLE_STRING);
 					StyleNextLine(); // Continue the style to the next line
 					break;
-				default:
+                case State.Number:
+                       SetStyle(STYLE_NUMBER);
+                      Consume();
+                       break;
+                default:
 					throw new Exception("Unknown state!");
 			}
 		}
