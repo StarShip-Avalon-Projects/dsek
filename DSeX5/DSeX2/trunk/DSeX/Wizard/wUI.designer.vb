@@ -47,10 +47,10 @@ Partial Class wUI
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.solution = New ScintillaNET.Scintilla()
+
         Me.MenuStrip1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.solution, System.ComponentModel.ISupportInitialize).BeginInit()
+
         Me.SuspendLayout()
         '
         'selecter2
@@ -264,23 +264,12 @@ Partial Class wUI
         Me.Button2.Text = ">>"
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'solution
-        '
-        Me.solution.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.solution.Location = New System.Drawing.Point(12, 226)
-        Me.solution.Name = "solution"
-        Me.solution.Size = New System.Drawing.Size(514, 200)
-        Me.solution.TabIndex = 27
-        '
         'wUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLight
         Me.ClientSize = New System.Drawing.Size(538, 457)
-        Me.Controls.Add(Me.solution)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label1)
@@ -304,7 +293,6 @@ Partial Class wUI
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.solution, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout
 
@@ -333,5 +321,5 @@ End Sub
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents solution As ScintillaNET.Scintilla
+
 End Class

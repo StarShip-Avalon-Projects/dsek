@@ -225,12 +225,12 @@ Public Class frmSearch
         If MS_Edit.MS_Editor.Text.Length <= 1 Then Exit Sub
         '
         'MS_Editor
-        Dim test As ScintillaNET.Range
+        Dim test As Range
         If optWhole.Checked Then
 
             If chkMatchCase.Checked Then
 
-                test = MS_Edit.MS_Editor.FindReplace.Find(cmbSearch.Text, searchflags:=ScintillaNET.SearchFlags.MatchCase & SearchFlags.WholeWord)
+                test = MS_Edit.MS_Editor.FindReplace.Find(cmbSearch.Text, searchflags:=SearchFlags.MatchCase & SearchFlags.WholeWord)
 
                 If IsNothing(test) Then
 
@@ -263,7 +263,7 @@ Public Class frmSearch
 
 
             If chkMatchCase.Checked Then
-                test = MS_Edit.MS_Editor.FindReplace.Find(cmbSearch.Text, searchflags:=ScintillaNET.SearchFlags.MatchCase)
+                test = MS_Edit.MS_Editor.FindReplace.Find(cmbSearch.Text, searchflags:=SearchFlags.MatchCase)
                 If IsNothing(test) Then
                     MessageBox.Show("Finished searching the document", " Finished Searching", _
                         MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -328,7 +328,7 @@ Public Class frmSearch
         '
         '
         If IsNothing(MS_Edit.MS_Editor) Or MS_Edit.MS_Editor.TextLength <= 1 Then Exit Sub
-        Dim test As ScintillaNET.Range
+        Dim test As Range
         '
         If optWhole.Checked Then
 
