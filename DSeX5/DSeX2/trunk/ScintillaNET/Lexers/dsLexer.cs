@@ -22,10 +22,6 @@ namespace ScintillaNET.Lexers
 			Unknown = STATE_UNKNOWN,
 			String,
 			Comment,
-			Number,
-			StringVar,
-			NumVar,
-			Header
 		}
 
 		new private State CurrentState
@@ -72,12 +68,6 @@ namespace ScintillaNET.Lexers
 					break;
 				// Otherwise we don't need to carry the
 				// state on from the previous line.
-				case STYLE_HEADER:
-					CurrentState = State.Header;
-					break;
-                case STYLE_NUM_VAR:
-                    CurrentState = State.NumVar;
-                    break;
 				default:
 					break;
 			}
@@ -107,7 +97,10 @@ namespace ScintillaNET.Lexers
                             case '9':
                             case '#':
                             case '-':
-                                 CurrentState = State.Number;
+                                 
+                                 ConsumeNum(STYLE_NUMBER);
+                                 CurrentState = State.Unknown;
+                                 consumed = true;
                                  break;
 							case '{':
 								CurrentState = State.String;
@@ -117,16 +110,16 @@ namespace ScintillaNET.Lexers
 
 								break;
 							case '%':
-								CurrentState = State.NumVar;
-								//Consume();
-								//SetStyle(STYLE_NUM_VAR);
-								//consumed = true;
+                                Consume();
+                                ConsumeVariable(STYLE_NUM_VAR);
+                                CurrentState = State.Unknown;
+                                consumed = true;
 								break;
 							case '~':
-								CurrentState = State.StringVar;
-								//Consume();
-								//SetStyle(STYLE_STR_VAR);
-								//consumed = true;
+                                Consume();
+                                ConsumeVariable(STYLE_STR_VAR);
+                                consumed = true;
+                                CurrentState = State.Unknown;
 								break;
 							default:
 								if (IsWhitespace(CurrentCharacter))
@@ -154,51 +147,8 @@ namespace ScintillaNET.Lexers
 						consumed = true;
 						CurrentState = State.Unknown;
 						break;
-					case State.NumVar:
-						if (!IsIdentifier(CurrentCharacter))
-						{
-							CurrentState = State.Unknown;
-                            Consume();
-							SetStyle(STYLE_DEFAULT);
-						}
-						else
-						{
-                            Consume();
-							SetStyle(STYLE_NUM_VAR); 
-							
-						}
+				
 
-			  
-						break;
-					case State.StringVar:
-						if (!IsIdentifier(CurrentCharacter))
-						{
-							CurrentState = State.Unknown;
-							SetStyle(STYLE_DEFAULT);
-						}
-						else
-						{
-							SetStyle(STYLE_STR_VAR);
-							Consume();
-						}
-						
-					   
-						break;
-                    case State.Number:
-                          if (IsNum(CurrentCharacter))
-                          {
-                             
-                            SetStyle(STYLE_NUMBER);
-                         Consume(); 
-                            }
-                          else
-                          {
-                              CurrentState = State.Unknown;
-                             
-                              SetStyle(STYLE_DEFAULT);
-                                Consume(); 
-                          }
-                          break;
 					default:
 						throw new Exception("Unknown state!");
 				}
@@ -206,26 +156,50 @@ namespace ScintillaNET.Lexers
 
 			switch (CurrentState)
 			{
-				case State.Unknown: break;
-				case State.Comment:
-					SetStyle(STYLE_COMMENT);
-					break;
-                case State.NumVar:
-                    SetStyle(STYLE_NUM_VAR);
-                    break;
+				case State.Unknown:
+              	case State.Comment:
+                     break;
 				case State.String:
 					SetStyle(STYLE_STRING);
 					StyleNextLine(); // Continue the style to the next line
 					break;
-                case State.Number:
-                       SetStyle(STYLE_NUMBER);
-                      Consume();
-                       break;
                 default:
 					throw new Exception("Unknown state!");
 			}
 		}
 
+        void ConsumeVariable(int style)
+        {
+            while (!EndOfText)
+            {
+                if (!IsIdentifier(CurrentCharacter))
+                {
+                    Consume();
+                    SetStyle(style);
+                    return;
+                }
+                else
+                    Consume();
+            }
+        }
+        void ConsumeNum(int style)
+        {
+
+            while (!EndOfText)
+            {
+
+                    if (IsNum(CurrentCharacter))
+                    {
+                       
+                        Consume();
+                      
+                    }
+                    else 
+                        break;
+            }
+
+            SetStyle(style);
+        }
 	 bool IsNum(char c)
 		{
 			switch (c)
