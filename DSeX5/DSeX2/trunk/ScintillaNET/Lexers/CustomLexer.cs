@@ -156,7 +156,7 @@ namespace ScintillaNET.Lexers
 		protected void StartStyling()
 		{
 			if (!mLexerForcedRestyle)
-				mScintilla.NativeInterface.StartStyling(StartPosition, Constants.STYLE_MAX);
+				mScintilla.NativeInterface.StartStyling(StartPosition , Constants.STYLE_MAX);
 		}
 
 		protected const int STATE_UNKNOWN = -1;
@@ -487,11 +487,13 @@ namespace ScintillaNET.Lexers
 					CurrentColumn = 0;
 					mCurrentLineFlags = 0;
 					break;
+
 				default:
-                    ////if (Peek() > 0x7F)
-                    ////{
-                    ////    CurrentColumn++;
-                    ////}
+                    if (CurrentCharacter >= 0x7F)
+                    {
+                        CurrentPosition += 1;
+                        //CurrentColumn += 1 ;
+                    }
 					CurrentColumn++;
 					break;
 			}
@@ -588,15 +590,12 @@ namespace ScintillaNET.Lexers
 				{
 					Consume(2);
 				}
-                //else if ((char)CurrentCharacter > 0x7F)
-                //{
-                //    Consume();
-                //}
+
                 else if (CurrentCharacter == endChar)
                 {
-                    if (doubleQuoteEscapes && NextCharacter == endChar)
+                     if (doubleQuoteEscapes && NextCharacter == endChar)
                     {
-                        Consume(2);
+                        Consume();
                     }
                     else
                     {
@@ -794,7 +793,7 @@ namespace ScintillaNET.Lexers
 				(c >= 'a' && c <= 'z') ||
 				(c >= 'A' && c <= 'Z') ||
 				(c >= '0' && c <= '9') ||
-				(c == '_')
+                (c == '_') 
 			)
 			{
 				return true;

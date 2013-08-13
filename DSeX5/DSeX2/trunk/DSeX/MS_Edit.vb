@@ -311,7 +311,7 @@ Public Class MS_Edit
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
-        SetLanguage("dragonspeak")
+        'SetLanguage("dragonspeak")
     End Sub
 
     Public Sub Reset()
