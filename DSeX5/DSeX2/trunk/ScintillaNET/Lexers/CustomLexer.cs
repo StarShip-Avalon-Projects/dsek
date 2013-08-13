@@ -142,7 +142,10 @@ namespace ScintillaNET.Lexers
 			indicators[INDICATOR_ERROR].Style = IndicatorStyle.Squiggle;
 		}
 
-		protected void SetStyle(int style) { SetStyle(style, CurrentPosition - CurrentBasePosition); }
+		protected void SetStyle(int style) 
+        { 
+            SetStyle(style, CurrentPosition - CurrentBasePosition); 
+        }
 		protected void SetStyle(int style, int length)
 		{
 			if (length > 0)
@@ -485,6 +488,10 @@ namespace ScintillaNET.Lexers
 					mCurrentLineFlags = 0;
 					break;
 				default:
+                    ////if (Peek() > 0x7F)
+                    ////{
+                    ////    CurrentColumn++;
+                    ////}
 					CurrentColumn++;
 					break;
 			}
@@ -581,10 +588,10 @@ namespace ScintillaNET.Lexers
 				{
 					Consume(2);
 				}
-                else if ((char)CurrentCharacter > 0x7F)
-                {
-                    Consume();
-                }
+                //else if ((char)CurrentCharacter > 0x7F)
+                //{
+                //    Consume();
+                //}
                 else if (CurrentCharacter == endChar)
                 {
                     if (doubleQuoteEscapes && NextCharacter == endChar)
