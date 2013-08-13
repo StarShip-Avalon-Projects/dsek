@@ -407,7 +407,7 @@ namespace ScintillaNET.Lexers
 			get
 			{
 				if (CurrentPosition < 1)
-					throw new ArgumentOutOfRangeException("CurrentPosition", "The current position is at the start of the Text, there are no previous characters to read!");
+                    return '\0'; // throw new ArgumentOutOfRangeException("CurrentPosition", "The current position is at the start of the Text, there are no previous characters to read!");
 				if (CurrentPosition > Text.Length)
 					throw new ArgumentOutOfRangeException("CurrentPosition", "The current position is past the end of the Text, no characters can be read!");
 				return Text[CurrentPosition - 1];
@@ -489,11 +489,7 @@ namespace ScintillaNET.Lexers
 					break;
 
 				default:
-                    if (CurrentCharacter >= 0x7F)
-                    {
-                        CurrentPosition += 1;
-                        //CurrentColumn += 1 ;
-                    }
+
 					CurrentColumn++;
 					break;
 			}
@@ -567,6 +563,8 @@ namespace ScintillaNET.Lexers
 					SetStyle(style);
 					return;
 				}
+                else if (NextCharacter >= 0x7F )
+                    Consume(2);
 				else
 					Consume();
 			}
@@ -590,7 +588,8 @@ namespace ScintillaNET.Lexers
 				{
 					Consume(2);
 				}
-
+                else if (NextCharacter >= 0x7F)
+                    Consume(2);
                 else if (CurrentCharacter == endChar)
                 {
                      if (doubleQuoteEscapes && NextCharacter == endChar)
