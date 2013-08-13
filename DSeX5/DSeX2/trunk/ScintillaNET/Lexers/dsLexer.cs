@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ScintillaNET.Lexers
 {
@@ -79,7 +80,7 @@ namespace ScintillaNET.Lexers
 
 			while (!EndOfText)
 			{
-				switch (CurrentState)
+                switch (CurrentState)
 				{
 					case State.Unknown:
 						bool consumed = false;
@@ -97,7 +98,6 @@ namespace ScintillaNET.Lexers
                             case '9':
                             case '#':
                             case '-':
-                                 
                                  ConsumeNum(STYLE_NUMBER);
                                  CurrentState = State.Unknown;
                                  consumed = true;
@@ -125,12 +125,14 @@ namespace ScintillaNET.Lexers
 								if (IsWhitespace(CurrentCharacter))
 								{
 									ConsumeWhitespace();
-									consumed = true;
+                                    consumed = true;
 								}
 								else
 								{
+                                    Consume(); //This fixes the off-by-one issue and allows the style to be set right.
 									SetStyle(STYLE_DEFAULT);
-								}
+                                    consumed = true;
+                                }
 								break;
 						}
 						if (!consumed)
