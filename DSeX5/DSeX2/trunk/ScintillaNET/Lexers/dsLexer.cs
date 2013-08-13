@@ -106,10 +106,9 @@ namespace ScintillaNET.Lexers
                             case '8':
                             case '9':
                             case '#':
+                            case '-':
                                  CurrentState = State.Number;
-                                 Consume();
-                                 SetStyle(STYLE_NUMBER);
-                                    break;
+                                 break;
 							case '{':
 								CurrentState = State.String;
 								break;
@@ -159,6 +158,7 @@ namespace ScintillaNET.Lexers
 						if (!IsIdentifier(CurrentCharacter))
 						{
 							CurrentState = State.Unknown;
+                            Consume();
 							SetStyle(STYLE_DEFAULT);
 						}
 						else
@@ -187,14 +187,16 @@ namespace ScintillaNET.Lexers
                     case State.Number:
                           if (IsNum(CurrentCharacter))
                           {
-                              Consume(); 
-                                SetStyle(STYLE_NUMBER);
-                        
+                             
+                            SetStyle(STYLE_NUMBER);
+                         Consume(); 
                             }
                           else
                           {
                               CurrentState = State.Unknown;
+                             
                               SetStyle(STYLE_DEFAULT);
+                                Consume(); 
                           }
                           break;
 					default:
@@ -239,6 +241,7 @@ namespace ScintillaNET.Lexers
 				case '8':
 				case '9':
 				case '#':
+                case '-':
 					return true;
 				default:
 					return false;

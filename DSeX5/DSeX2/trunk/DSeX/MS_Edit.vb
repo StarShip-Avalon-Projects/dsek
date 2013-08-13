@@ -955,7 +955,6 @@ InputBox("What line within the document do you want to send the cursor to?", _
         'Creates the listview and displays it in the new tab
         Dim lstView As Scintilla = New Scintilla
         lstView.ContextMenuStrip = Me.EditMenu
-        ' lstView.ma()
         lstView.Encoding = Encoding.UTF8
         lstView.AcceptsTab = True
         lstView.Parent = tp
@@ -974,7 +973,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         'lstView.ConfigurationManager.CustomLocation = "hilighter"
         AddHandler lstView.MarginClick, AddressOf Margin_Click
         AddHandler lstView.TextChanged, AddressOf MS_Editor_TextChanged
-        '        AddHandler lstView.StyleNeeded, AddressOf Scintilla2_StyleNeeded
+        'AddHandler lstView.StyleNeeded, AddressOf Scintilla_StyleNeeded
         AddHandler lstView.MouseUp, AddressOf MS_EditRightClick
         AddHandler lstView.CursorChanged, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.MouseClick, AddressOf MS_Editor_CursorChanged
@@ -1447,15 +1446,15 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         End If
     End Sub
 
-    'Private Sub Scintilla2_StyleNeeded(sender As Object, e As ScintillaNET.StyleNeededEventArgs)
-    '    Select Case TabEditStyles(TabControl2.SelectedIndex)
-    '        Case EditStyles.ini
-    '            IniLexer.StyleNeeded(sender, e.Range)
-    '        Case EditStyles.ds
-    '            PwrLexer.StyleNeeded(sender, e.Range)
-    '    End Select
+    Private Sub Scintilla_StyleNeeded(sender As Object, e As ScintillaNET.StyleNeededEventArgs)
+        Select Case TabEditStyles(TabControl2.SelectedIndex)
+            Case EditStyles.ini
+                IniLexer.StyleNeeded(sender, e.Range)
+            Case EditStyles.ds
+                PwrLexer.StyleNeeded(sender, e.Range)
+        End Select
 
-    'End Sub
+    End Sub
 
 
 
