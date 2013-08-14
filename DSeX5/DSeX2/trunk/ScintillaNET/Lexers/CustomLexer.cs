@@ -565,8 +565,8 @@ namespace ScintillaNET.Lexers
 					SetStyle(style);
 					return;
 				}
-                else if (NextCharacter >= 0x7F )
-                    Consume(2);
+                //else if (NextCharacter >= 0x7F )
+                //    Consume(2);
 				else
 					Consume();
 			}
@@ -590,8 +590,8 @@ namespace ScintillaNET.Lexers
 				{
 					Consume(2);
 				}
-                else if (NextCharacter >= 0x7F)
-                    Consume(2);
+                //else if (NextCharacter >= 0x7F)
+                //    Consume(2);
                 else if (CurrentCharacter == endChar)
                 {
                      if (doubleQuoteEscapes && NextCharacter == endChar)

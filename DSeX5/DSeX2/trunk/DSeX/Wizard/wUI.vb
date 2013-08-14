@@ -1,6 +1,5 @@
 ﻿
 Imports System.Text.RegularExpressions
-Imports No_Flicker
 Imports DSeX.ConfigStructs
 Imports DSeX.IniFile
 Imports System.IO
@@ -239,7 +238,7 @@ Public Class wUI
         End If
 
         selecter2.SelectedIndex = 0
-        'solution.Text = vbLf + vbLf + vbLf
+        Solution.Text = ""
         Dim n As Integer = selecter2.SelectedIndex + 1
         Dim s As String = ScriptIni.GetKeyValue("main", "b" + n.ToString)
         If s <> "" Then TextBox1.Text = s
@@ -488,8 +487,7 @@ Public Class wUI
 
 
     Private Sub ProcessIterations(ByRef Values As List(Of List(Of String)))
-        ' solution.Text = ""
-        Exit Sub
+        Dim Lst As List(Of String) = New List(Of String)
         For i As Integer = 0 To NumericUpDown1.Value - 1
             Dim template As String = Code
             For t = 1 To Values(i).Count
@@ -506,9 +504,9 @@ Public Class wUI
                     template = Regex.Replace(template, "\^" & s.groups(0) & "\^", CalcMath(str, List), RegexOptions.IgnoreCase)
                 Next
             Next
-            'solution.AppendText(template + vbLf)
+            Lst.Add(template)
         Next
-
+        Solution.Text = String.Join(vbCrLf, Lst.ToArray)
     End Sub
 
     Private Sub CloseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CloseToolStripMenuItem.Click
@@ -556,8 +554,8 @@ Public Class wUI
     End Sub
 
     Private Sub BtnImport_Click(sender As System.Object, e As System.EventArgs) Handles BtnImport.Click
-        'If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
-        'MS_Edit.MS_Editor.InsertText(solution.text)
+        If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
+        MS_Edit.MS_Editor.Selection.Text = Solution.Text
     End Sub
 
 
