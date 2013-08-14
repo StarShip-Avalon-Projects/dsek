@@ -505,6 +505,8 @@ namespace ScintillaNET.Lexers
 
 		protected string GetRange(int start, int end)
 		{
+            if (Text.Length < end - start)
+                return null;
 			return Text.Substring(start, end - start);
 		}
 

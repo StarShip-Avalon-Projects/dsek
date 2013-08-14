@@ -8,13 +8,15 @@ namespace ScintillaNET.Lexers
 	public sealed class dsLexer : CustomLexer
 	{
 		public override string LexerName { get { return "dragonspeak"; } }
-        
+		
 		private const int STYLE_STRING = 11;
 		private const int STYLE_NUMBER = 12;
 		private const int STYLE_COMMENT = 14;
 		private const int STYLE_NUM_VAR = 15;
 		private const int STYLE_STR_VAR = 16;
 		private const int STYLE_HEADER = 17;
+
+		private const string HEADER = "DSPK V04.00 Furcadia";
 
 		public dsLexer(Scintilla scintilla) : base(scintilla) { }
 
@@ -23,6 +25,7 @@ namespace ScintillaNET.Lexers
 			Unknown = STATE_UNKNOWN,
 			String,
 			Comment,
+			Header
 		}
 
 		new private State CurrentState
@@ -50,15 +53,15 @@ namespace ScintillaNET.Lexers
 		{
 			get
 			{
-                return new Dictionary<string, int>();
+				return new Dictionary<string, int>();
 			}
 		}
-     
-        protected override void Initialize()
-        {
+	 
+		protected override void Initialize()
+		{
 
-            base.Initialize();
-        }
+			base.Initialize();
+		}
 
 		protected override void InitializeStateFromStyle(int style)
 		{
@@ -80,28 +83,38 @@ namespace ScintillaNET.Lexers
 
 			while (!EndOfText)
 			{
-                switch (CurrentState)
+				switch (CurrentState)
 				{
 					case State.Unknown:
 						bool consumed = false;
 						switch (CurrentCharacter)
 						{
-                            case '0':
-                            case '1':
-                            case '2':
-                            case '3':
-                            case '4':
-                            case '5':
-                            case '6':
-                            case '7':
-                            case '8':
-                            case '9':
-                            case '#':
-                            case '-':
-                                 ConsumeNum(STYLE_NUMBER);
-                                 CurrentState = State.Unknown;
-                                 consumed = true;
-                                 break;
+							case '0':
+							case '1':
+							case '2':
+							case '3':
+							case '4':
+							case '5':
+							case '6':
+							case '7':
+							case '8':
+							case '9':
+							case '#':
+							case '-':
+								 ConsumeNum(STYLE_NUMBER);
+								 CurrentState = State.Unknown;
+								 consumed = true;
+								 break;
+							case 'D':
+								 if (CurrentPosition == 0 && GetRange(CurrentPosition, HEADER.Length) == HEADER)
+								 {
+									 Consume(HEADER.Length);
+									 SetStyle(STYLE_HEADER);
+									consumed = true;
+									break;
+								 }
+								 CurrentState = State.Unknown;
+								 goto default;
 							case '{':
 								CurrentState = State.String;
 								break;
@@ -110,29 +123,29 @@ namespace ScintillaNET.Lexers
 
 								break;
 							case '%':
-                                Consume();
-                                ConsumeVariable(STYLE_NUM_VAR);
-                                CurrentState = State.Unknown;
-                                consumed = true;
+								Consume();
+								ConsumeVariable(STYLE_NUM_VAR);
+								CurrentState = State.Unknown;
+								consumed = true;
 								break;
 							case '~':
-                                Consume();
-                                ConsumeVariable(STYLE_STR_VAR);
-                                consumed = true;
-                                CurrentState = State.Unknown;
+								Consume();
+								ConsumeVariable(STYLE_STR_VAR);
+								consumed = true;
+								CurrentState = State.Unknown;
 								break;
 							default:
 								if (IsWhitespace(CurrentCharacter))
 								{
 									ConsumeWhitespace();
-                                    consumed = true;
+									consumed = true;
 								}
 								else
 								{
-                                    Consume(); //This fixes the off-by-one issue and allows the style to be set right.
+									Consume(); //This fixes the off-by-one issue and allows the style to be set right.
 									SetStyle(STYLE_DEFAULT);
-                                    consumed = true;
-                                }
+									consumed = true;
+								}
 								break;
 						}
 						if (!consumed)
@@ -149,8 +162,9 @@ namespace ScintillaNET.Lexers
 						consumed = true;
 						CurrentState = State.Unknown;
 						break;
-				
+					case State.Header:
 
+						break;
 					default:
 						throw new Exception("Unknown state!");
 				}
@@ -159,49 +173,49 @@ namespace ScintillaNET.Lexers
 			switch (CurrentState)
 			{
 				case State.Unknown:
-              	case State.Comment:
-                     break;
+				case State.Comment:
+					 break;
 				case State.String:
 					SetStyle(STYLE_STRING);
 					StyleNextLine(); // Continue the style to the next line
 					break;
-                default:
+				default:
 					throw new Exception("Unknown state!");
 			}
 		}
 
-        void ConsumeVariable(int style)
-        {
-            while (!EndOfText)
-            {
-                if (!IsIdentifier(CurrentCharacter))
-                {
-                    Consume();
-                    SetStyle(style);
-                    return;
-                }
-                else
-                    Consume();
-            }
-        }
-        void ConsumeNum(int style)
-        {
+		void ConsumeVariable(int style)
+		{
+			while (!EndOfText)
+			{
+				if (!IsIdentifier(CurrentCharacter))
+				{
+					Consume();
+					SetStyle(style);
+					return;
+				}
+				else
+					Consume();
+			}
+		}
+		void ConsumeNum(int style)
+		{
 
-            while (!EndOfText)
-            {
+			while (!EndOfText)
+			{
 
-                    if (IsNum(CurrentCharacter))
-                    {
-                       
-                        Consume();
-                      
-                    }
-                    else 
-                        break;
-            }
+					if (IsNum(CurrentCharacter))
+					{
+					   
+						Consume();
+					  
+					}
+					else 
+						break;
+			}
 
-            SetStyle(style);
-        }
+			SetStyle(style);
+		}
 	 bool IsNum(char c)
 		{
 			switch (c)
@@ -217,7 +231,7 @@ namespace ScintillaNET.Lexers
 				case '8':
 				case '9':
 				case '#':
-                case '-':
+				case '-':
 					return true;
 				default:
 					return false;
