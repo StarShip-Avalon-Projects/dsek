@@ -311,7 +311,7 @@ Public Class MS_Edit
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
-        'SetLanguage("dragonspeak")
+        SetLanguage("dragonspeak")
     End Sub
 
     Public Sub Reset()
@@ -955,7 +955,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         'Creates the listview and displays it in the new tab
         Dim lstView As Scintilla = New Scintilla
         lstView.ContextMenuStrip = Me.EditMenu
-        lstView.Encoding = Encoding.UTF8
+        lstView.Encoding = Encoding.ASCII
         lstView.AcceptsTab = True
         lstView.Parent = tp
         lstView.Anchor = AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Bottom + AnchorStyles.Right
@@ -1436,7 +1436,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         If "dragonspeak".Equals(language, StringComparison.OrdinalIgnoreCase) Then
             ' Reset/set all styles and prepare _scintilla for custom lexing
             TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
-            PwrLexer.Init(MS_Editor)
+            dsLexerInit.Init(MS_Editor)
             'MS_Editor.Lexing.Colorize()
             'Else
             ' Use a built-in lexer and configuration
@@ -1449,9 +1449,9 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
     Private Sub Scintilla_StyleNeeded(sender As Object, e As ScintillaNET.StyleNeededEventArgs)
         Select Case TabEditStyles(TabControl2.SelectedIndex)
             Case EditStyles.ini
-                IniLexer.StyleNeeded(sender, e.Range)
+                ' IniLexer.StyleNeeded(sender, e.Range)
             Case EditStyles.ds
-                PwrLexer.StyleNeeded(sender, e.Range)
+                dsLexerInit.StyleNeeded(sender, e.Range)
         End Select
 
     End Sub

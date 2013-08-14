@@ -3,7 +3,7 @@ Imports System.Drawing
 Imports System.Text.RegularExpressions
 Imports ScintillaNET
 Imports DSeX.ConfigStructs
-Public Class PwrLexer
+Public Class dsLexerInit
 
     Private Shared Lock As Boolean = False
     ' Origional Thread for this class
@@ -16,7 +16,6 @@ Public Class PwrLexer
     Private Const STYLE_STR_VAR As Integer = 16
     Private Const STYLE_HEADER As Integer = 17
     Private Const STYLE_ID As Integer = 18
-
     Private Shared HEADER As String = KeysIni.GetKeyValue("MS-General", "Header")
 
     Private Shared RegHeader As New Regex("^(" + HEADER + ")", RegexOptions.IgnoreCase)
@@ -34,6 +33,7 @@ Public Class PwrLexer
         scintilla.Styles(STYLE_NUMBER).ForeColor = EditSettings.NumberColor
         scintilla.Styles(STYLE_HEADER).ForeColor = Color.Green
         scintilla.Styles(STYLE_HEADER).Bold = True
+        Lock = False
     End Sub
 
     Public Shared Sub StyleNeeded(ByRef scintilla As Scintilla, ByRef range As Range)
@@ -44,18 +44,19 @@ Public Class PwrLexer
         Debug.Print("StyleNeededEventArgs()")
         'we'll get the whole update range at once
         'we also get the maximum editor range, incase a new comment goes to the end of the file
-        'Dim curr As Line = range.StartingLine
-        'While curr.Number <= range.EndingLine.Number
-        '    [end] += curr.Length
-        '    curr = curr.[Next]
-        'End While
-        Dim test As String = range.Text
-        [end] += test.Length
-        StyleSection(scintilla, start, [end], max, test)
+        Dim curr As Line = range.StartingLine
+        While curr.Number <= range.EndingLine.Number
+            [end] += curr.Length
+            curr = curr.[Next]
+        End While
+
+        'Dim test As String = range.Text
+        '[end] += test.Length
+        StyleSection(scintilla, start, [end], max)
 
     End Sub
 
-    Public Shared Sub StyleSection(ByRef scintilla As Scintilla, ByRef start As Integer, ByRef [end] As Integer, ByRef max As Integer, ByRef Txt As String)
+    Public Shared Sub StyleSection(ByRef scintilla As Scintilla, ByRef start As Integer, ByRef [end] As Integer, ByRef max As Integer)
         Dim pos As Integer = start
         Dim i As Integer = 0
         While pos < [end]
@@ -64,9 +65,10 @@ Public Class PwrLexer
 
             'make a couple of direct checks for special handling (comments/string literals) pass the rest to a RegEx handler
             If RegHeader.IsMatch(curr) Then
-                pos += StyleRegExWhole(scintilla, curr, RegHeader, STYLE_HEADER, pos, [end], max)
-                Exit While
+                pos += StyleRegExWhole(scintilla, curr, RegHeader, STYLE_HEADER, pos, [end])
+
             End If
+            Exit While
         End While
     End Sub
 
@@ -103,8 +105,7 @@ Public Class PwrLexer
         Return offset
     End Function
 
-    Public Shared Function StyleRegExWhole(ByRef scintilla As Scintilla, ByRef text As String, ByRef reg As Regex, ByRef style As Integer, ByRef start As Integer, ByRef [end] As Integer, _
-     ByRef max As Integer) As Integer
+    Public Shared Function StyleRegExWhole(ByRef scintilla As Scintilla, ByRef text As String, ByRef reg As Regex, ByRef style As Integer, ByRef start As Integer, ByRef [end] As Integer) As Integer
         'match & style an entire regex
         Dim match As String = reg.Match(text).Value
         DirectCast(scintilla, INativeScintilla).StartStyling(start, &H1F)
