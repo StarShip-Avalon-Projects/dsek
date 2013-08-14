@@ -266,18 +266,27 @@ Public Class MS_Edit
                 Me.Text = frmTitle(TabControl2.SelectedIndex)
                 lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
 
-                Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-                MS_Editor.Text = ""
-                FullFile(TabControl2.SelectedIndex).Clear()
-                Do While reader.Peek <> -1
-                    Dim line As String = reader.ReadLine
-                    FullFile(TabControl2.SelectedIndex).Add(line)
-                Loop
-                MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
-                reader.Close()
+                Dim test As New FileStream(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex), FileMode.Open, FileAccess.Read)
+
+                Dim data As Byte() = New Byte(test.Length - 1) {}
+                test.Read(data, 0, CInt(test.Length))
+                Encoding.Convert(Encoding.ASCII, Encoding.UTF8, data)
+                test.Close()
+                Dim str As String = System.Text.Encoding.UTF8.GetString(data)
+                MS_Editor.RawText = data
+                SaveSections()
+                'Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
+                'MS_Editor.Text = ""
+                'FullFile(TabControl2.SelectedIndex).Clear()
+                'Do While reader.Peek <> -1
+                '    Dim line As String = reader.ReadLine
+                '    FullFile(TabControl2.SelectedIndex).Add(line)
+                'Loop
+                'MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
+                'reader.Close()
                 'MS_Editor.Lexing.Colorize()
 
-                UpdateSegments()
+                'UpdateSegments()
                 UpdateSegmentList()
                 CanOpen(TabControl2.SelectedIndex) = True
                 TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
@@ -297,17 +306,25 @@ Public Class MS_Edit
         Me.Text = frmTitle(TabControl2.SelectedIndex)
         lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
 
-        Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-        MS_Editor.Text = ""
-        Do While reader.Peek <> -1
-            Dim line As String = reader.ReadLine
-            FullFile(TabControl2.SelectedIndex).Add(line)
-        Loop
-        MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
-        reader.Close()
+        Dim test As New FileStream(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex), FileMode.Open, FileAccess.Read)
 
-        UpdateSegments()
+        Dim data As Byte() = New Byte(test.Length - 1) {}
+        test.Read(data, 0, CInt(test.Length))
+        Encoding.Convert(Encoding.ASCII, Encoding.UTF8, data)
+        test.Close()
+        Dim str As String = System.Text.Encoding.UTF8.GetString(data)
+        MS_Editor.RawText = data
+        'Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
+        'MS_Editor.Text = ""
+        'Do While reader.Peek <> -1
+        '    Dim line As String = reader.ReadLine
+        '    FullFile(TabControl2.SelectedIndex).Add(line)
+        'Loop
+        'MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
+        'reader.Close()
 
+        ' UpdateSegments()
+        SaveSections()
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
@@ -955,7 +972,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         'Creates the listview and displays it in the new tab
         Dim lstView As Scintilla = New Scintilla
         lstView.ContextMenuStrip = Me.EditMenu
-        lstView.Encoding = Encoding.ASCII
+        lstView.Encoding = Encoding.UTF8
         lstView.AcceptsTab = True
         lstView.Parent = tp
         lstView.Anchor = AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Bottom + AnchorStyles.Right
@@ -965,6 +982,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         lstView.Margins(1).Width = 20
         lstView.Margins.Margin0.IsClickable = True
         lstView.Margins.Margin1.IsClickable = True
+        lstView.Font = New Font("Courier New", 8.25, FontStyle.Regular, GraphicsUnit.Point)
         lstView.Show()
         lstView.ContextMenuStrip = SectionMenu
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)

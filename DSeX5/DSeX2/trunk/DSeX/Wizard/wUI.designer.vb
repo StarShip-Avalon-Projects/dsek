@@ -47,10 +47,10 @@ Partial Class wUI
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
-
+        Me.Solution = New ScintillaNET.Scintilla()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
-
+        CType(Me.Solution, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'selecter2
@@ -264,12 +264,35 @@ Partial Class wUI
         Me.Button2.Text = ">>"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'Solution
+        '
+        Me.Solution.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Solution.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Solution.Location = New System.Drawing.Point(12, 226)
+        Me.Solution.Margins.Margin0.Width = 30
+        Me.Solution.Name = "Solution"
+        Me.Solution.Size = New System.Drawing.Size(514, 200)
+        Me.Solution.Styles.BraceBad.FontName = "Verdana" & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Solution.Styles.BraceLight.FontName = "Verdana" & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Solution.Styles.CallTip.FontName = "Tahoma" & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Solution.Styles.ControlChar.FontName = "Verdana" & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Solution.Styles.Default.BackColor = System.Drawing.SystemColors.Window
+        Me.Solution.Styles.Default.FontName = "Verdana" & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Solution.Styles.IndentGuide.FontName = "Verdana" & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Solution.Styles.LastPredefined.FontName = "Verdana" & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Solution.Styles.LineNumber.FontName = "Verdana" & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Solution.Styles.Max.FontName = "Verdana" & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0) & Global.Microsoft.VisualBasic.ChrW(0)
+        Me.Solution.TabIndex = 27
+        '
         'wUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLight
         Me.ClientSize = New System.Drawing.Size(538, 457)
+        Me.Controls.Add(Me.Solution)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label1)
@@ -293,6 +316,7 @@ Partial Class wUI
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.Solution, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout
 
@@ -321,5 +345,6 @@ End Sub
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents Solution As ScintillaNET.Scintilla
 
 End Class
