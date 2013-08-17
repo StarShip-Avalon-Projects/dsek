@@ -79,6 +79,7 @@ Public Class MS_Edit
         ds
         ms
     End Enum
+    Public autoCompleteList As New List(Of String)
     Public TabEditStyles As List(Of EditStyles) = New List(Of EditStyles)
     Public CanOpen As List(Of Boolean) = New List(Of Boolean)
     Public SettingsChanged As List(Of Boolean) = New List(Of Boolean)
@@ -356,7 +357,7 @@ Public Class MS_Edit
         Try
 
             'AutocompleteMenu1.Enabled = EditSettings.AutoCompleteEnable
-            Dim autoCompleteList As New List(Of String)
+            AutoCompleteList.Clear()
             Dim KeyCount As Integer = CInt(KeysIni.GetKeyValue("Init-Types", "Count"))
             For i As Integer = 1 To KeyCount
                 Dim DSLines As New List(Of String)
@@ -464,7 +465,8 @@ Public Class MS_Edit
         For i = 0 To CInt(KeysIni.GetKeyValue("MS-General", "InitLineSpaces"))
             str.AppendLine("")
         Next
-        str.Append(KeysIni.GetKeyValue("MS-General", "Footer"))
+        str.AppendLine(KeysIni.GetKeyValue("MS-General", "Footer"))
+        'str.AppendLine("")
         Return str.ToString
     End Function
 
@@ -482,6 +484,7 @@ Public Class MS_Edit
             str.AppendLine("")
         Next
         str.Append(KeysIni.GetKeyValue("DM-Script", "Footer"))
+        str.AppendLine("")
         Return str.ToString
     End Function
 
@@ -996,6 +999,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         AddHandler lstView.CursorChanged, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.MouseClick, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.KeyUp, AddressOf MS_Editor_CursorChanged
+        AddHandler lstView.CharAdded, AddressOf sciDocument_CharAdded
         SetLanguage("dragonspeak")
         'UpdateSegments()
     End Sub
@@ -1089,7 +1093,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Private Sub CloseTab(ByVal i As Integer)
-        If i < 0 Or i > TabControl2.TabCount - 1 Then Exit Sub
+        If i < 0 Or i > TabControl2.TabCount - 1 Or TabControl2.TabCount < 2 Then Exit Sub
         Dim fname As String = WorkFileName(i)
         If fname = "" Then
             fname = New_File_Tag
@@ -1451,10 +1455,26 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         '    ' Reset/set all styles and prepare _scintilla for custom lexing
         '    TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ini
         '    IniLexer.Init(MS_Editor)
-        If "dragonspeak".Equals(language, StringComparison.OrdinalIgnoreCase) Then
+        If "dragonspeak".Equals(language, StringComparison.OrdinalIgnoreCase) _
+            Or "ds".Equals(language, StringComparison.OrdinalIgnoreCase) Then
             ' Reset/set all styles and prepare _scintilla for custom lexing
             TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
             dsLexerInit.Init(MS_Editor)
+            With MS_Editor.AutoComplete
+                .List = autoCompleteList
+                .AutoHide = True
+                .List.Sort(New CatSorter)
+                .AutomaticLengthEntered = True
+                .CancelAtStart = True
+                .DropRestOfWord = True
+                .FillUpCharacters = ""
+                .IsCaseSensitive = False
+                .ListSeparator = vbCrLf
+                .MaxHeight = 5
+                .MaxWidth = 0
+                .SingleLineAccept = True
+                .StopCharacters = ""
+            End With
             'MS_Editor.Lexing.Colorize()
             'Else
             ' Use a built-in lexer and configuration
@@ -1500,4 +1520,25 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         If IsNothing(MS_Editor) Then Exit Sub
         MS_Editor.Markers.DeleteAll(0)
     End Sub
+
+    Private Sub sciDocument_CharAdded(sender As Object, e As CharAddedEventArgs)
+        If CheckForFistAutoComplete(e.Ch) Then
+            showFirstList()
+
+        End If
+    End Sub
+
+    Private Sub showFirstList()
+        'do something and set right list
+        MS_Editor.AutoComplete.Show()
+    End Sub
+    Private Sub showSecondList()
+        'do something and set right list
+        MS_Editor.AutoComplete.Show()
+    End Sub
+
+    Private Function CheckForFistAutoComplete(x As Char) As Boolean
+        'check with your condition
+        Return True
+    End Function
 End Class
