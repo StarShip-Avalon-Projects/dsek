@@ -844,10 +844,10 @@ InputBox("What line within the document do you want to send the cursor to?", _
         Dim str() As String = this.Replace(vbCr, "").Split(Chr(10))
         Dim str2 As String = ""
         If str.Length > 1 Then
-        For i As Integer = 0 To str.Length - 1
+            For i As Integer = 0 To str.Length - 1
                 str2 &= vbCrLf & "*" & str(i)
-        Next
-        MS_Editor.Selection.Text = str2.Substring(1)
+            Next
+            MS_Editor.Selection.Text = str2.Substring(1)
 
         End If
     End Sub
@@ -1461,18 +1461,19 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
             dsLexerInit.Init(MS_Editor)
             With MS_Editor.AutoComplete
+
                 .List = autoCompleteList
                 .AutoHide = True
-                .List.Sort(New CatSorter)
+                '.List.Sort(New CatSorter)
                 .AutomaticLengthEntered = True
-                .CancelAtStart = True
-                .DropRestOfWord = True
+                '.CancelAtStart = True
+                '.DropRestOfWord = False
                 .FillUpCharacters = ""
                 .IsCaseSensitive = False
                 .ListSeparator = vbCrLf
                 .MaxHeight = 5
                 .MaxWidth = 0
-                .SingleLineAccept = True
+                '.SingleLineAccept = True
                 .StopCharacters = ""
             End With
             'MS_Editor.Lexing.Colorize()
@@ -1522,10 +1523,13 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
     End Sub
 
     Private Sub sciDocument_CharAdded(sender As Object, e As CharAddedEventArgs)
-        If CheckForFistAutoComplete(e.Ch) Then
-            showFirstList()
 
-        End If
+        ' Dim test As String = MS_Editor.GetWordFromPosition(MS_Editor.CurrentPos)
+        sender.autocomplete.show()
+        'If CheckForFistAutoComplete(e.Ch) Then
+        '    showFirstList()
+
+        'End If
     End Sub
 
     Private Sub showFirstList()
