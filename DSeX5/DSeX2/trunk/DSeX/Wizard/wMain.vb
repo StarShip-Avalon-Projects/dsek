@@ -72,7 +72,6 @@ Public Class wMain
         wUI.wVariables.Clear()
         wUI.NumericUpDown1.Value = 1
         wUI.wVariables.Clear()
-        dsLexerInit.Init(wUI.Solution)
         wUI.Show()
     End Sub
 

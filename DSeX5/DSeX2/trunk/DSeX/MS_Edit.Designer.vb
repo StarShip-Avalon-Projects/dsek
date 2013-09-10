@@ -64,10 +64,6 @@ Partial Class MS_Edit
         Me.RemoveCommentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ConfigToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BookmakrsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.RemoveAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GotoNextToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GotoPreviousToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DSWizardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -105,7 +101,6 @@ Partial Class MS_Edit
         Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.RenameToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TabControl2 = New DSeX.TabControlEx()
         Me.ToolBox = New System.Windows.Forms.ToolStrip()
         Me.ToolBoxNew = New System.Windows.Forms.ToolStripButton()
         Me.ToolBoxOpen = New System.Windows.Forms.ToolStripButton()
@@ -136,7 +131,11 @@ Partial Class MS_Edit
         Me.Causes = New System.Windows.Forms.TabControl()
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.AutocompleteMenu1 = New AutocompleteMenuNS.AutocompleteMenu()
+        Me.BookmakrsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RemoveAllToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GotoNextToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GotoPreviousToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TabControl2 = New DSeX.TabControlEx()
         Me.EditMenu.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -435,31 +434,6 @@ Partial Class MS_Edit
         Me.ConfigToolStripMenuItem.Name = "ConfigToolStripMenuItem"
         Me.ConfigToolStripMenuItem.Size = New System.Drawing.Size(105, 22)
         Me.ConfigToolStripMenuItem.Text = "Config"
-        '
-        'BookmakrsToolStripMenuItem
-        '
-        Me.BookmakrsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RemoveAllToolStripMenuItem, Me.GotoNextToolStripMenuItem, Me.GotoPreviousToolStripMenuItem})
-        Me.BookmakrsToolStripMenuItem.Name = "BookmakrsToolStripMenuItem"
-        Me.BookmakrsToolStripMenuItem.Size = New System.Drawing.Size(70, 20)
-        Me.BookmakrsToolStripMenuItem.Text = "Bookmakrs"
-        '
-        'RemoveAllToolStripMenuItem
-        '
-        Me.RemoveAllToolStripMenuItem.Name = "RemoveAllToolStripMenuItem"
-        Me.RemoveAllToolStripMenuItem.Size = New System.Drawing.Size(141, 22)
-        Me.RemoveAllToolStripMenuItem.Text = "Remove All"
-        '
-        'GotoNextToolStripMenuItem
-        '
-        Me.GotoNextToolStripMenuItem.Name = "GotoNextToolStripMenuItem"
-        Me.GotoNextToolStripMenuItem.Size = New System.Drawing.Size(141, 22)
-        Me.GotoNextToolStripMenuItem.Text = "Goto Next"
-        '
-        'GotoPreviousToolStripMenuItem
-        '
-        Me.GotoPreviousToolStripMenuItem.Name = "GotoPreviousToolStripMenuItem"
-        Me.GotoPreviousToolStripMenuItem.Size = New System.Drawing.Size(141, 22)
-        Me.GotoPreviousToolStripMenuItem.Text = "Goto Previous"
         '
         'WindowsToolStripMenuItem
         '
@@ -768,15 +742,6 @@ Partial Class MS_Edit
         Me.EditToolStripMenuItem1.Size = New System.Drawing.Size(164, 22)
         Me.EditToolStripMenuItem1.Text = "Edit"
         '
-        'TabControl2
-        '
-        Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl2.Name = "TabControl2"
-        Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(622, 230)
-        Me.TabControl2.TabIndex = 0
-        '
         'ToolBox
         '
         Me.ToolBox.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolBoxNew, Me.ToolBoxOpen, Me.ToolBoxSave, Me.ToolBoxSaveAs, Me.ToolStripSeparator2, Me.ToolBoxCut, Me.ToolBoxyCopy, Me.ToolBoxPaste, Me.ToolStripSeparator4, Me.ToolBoxUndo, Me.ToolBoxRedo, Me.ToolStripSeparator5, Me.ToolBoxFindReplace, Me.ToolStripButton1, Me.seperateor, Me.BtnComment, Me.BtnUncomment, Me.ToolStripSeparator7, Me.lblStatus})
@@ -1006,59 +971,85 @@ Partial Class MS_Edit
         Me.Causes.SelectedIndex = 0
         Me.Causes.Size = New System.Drawing.Size(744, 113)
         Me.Causes.TabIndex = 5
-        '
         'ColumnHeader3
         '
         Me.ColumnHeader3.DisplayIndex = 0
         Me.ColumnHeader3.Text = ""
         Me.ColumnHeader3.Width = 640
         '
-        'AutocompleteMenu1
+        'BookmakrsToolStripMenuItem
         '
-        Me.AutocompleteMenu1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!)
-        Me.AutocompleteMenu1.ImageList = Nothing
-        Me.AutocompleteMenu1.Items = New String(-1) {}
-        Me.AutocompleteMenu1.TargetControlWrapper = Nothing
+        Me.BookmakrsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RemoveAllToolStripMenuItem, Me.GotoNextToolStripMenuItem, Me.GotoPreviousToolStripMenuItem})
+        Me.BookmakrsToolStripMenuItem.Name = "BookmakrsToolStripMenuItem"
+        Me.BookmakrsToolStripMenuItem.Size = New System.Drawing.Size(70, 20)
+        Me.BookmakrsToolStripMenuItem.Text = "Bookmakrs"
+        '
+        'RemoveAllToolStripMenuItem
+        '
+        Me.RemoveAllToolStripMenuItem.Name = "RemoveAllToolStripMenuItem"
+        Me.RemoveAllToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RemoveAllToolStripMenuItem.Text = "Remove All"
+        '
+        'GotoNextToolStripMenuItem
+        '
+        Me.GotoNextToolStripMenuItem.Name = "GotoNextToolStripMenuItem"
+        Me.GotoNextToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.GotoNextToolStripMenuItem.Text = "Goto Next"
+        '
+        'GotoPreviousToolStripMenuItem
+        '
+        Me.GotoPreviousToolStripMenuItem.Name = "GotoPreviousToolStripMenuItem"
+        Me.GotoPreviousToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.GotoPreviousToolStripMenuItem.Text = "Goto Previous"
+        '
+        'TabControl2
+        '
+        Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl2.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl2.Name = "TabControl2"
+        Me.TabControl2.SelectedIndex = 0
+        Me.TabControl2.Size = New System.Drawing.Size(622, 230)
+        Me.TabControl2.TabIndex = 0
         '
         'MS_Edit
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(747, 456)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.MenuStrip1)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Icon = CType(resources.GetObject("$this.Icon"),System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "MS_Edit"
         Me.Text = "Monkey Speak Editor"
-        Me.EditMenu.ResumeLayout(False)
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel1.PerformLayout()
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.PerformLayout()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer1.ResumeLayout(False)
-        Me.SplitContainer2.Panel1.ResumeLayout(False)
-        Me.SplitContainer2.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer2.ResumeLayout(False)
-        Me.TabControl1.ResumeLayout(False)
-        Me.TabPage1.ResumeLayout(False)
-        Me.SectionMenu.ResumeLayout(False)
-        Me.TabPage2.ResumeLayout(False)
-        Me.TemplateMenu.ResumeLayout(False)
-        Me.ToolBox.ResumeLayout(False)
-        Me.ToolBox.PerformLayout()
-        CType(Me.panelCurrentPosition, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.panelCurrentLine, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.panelTotalLines, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.panelTotalCharacters, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.EditMenu.ResumeLayout(false)
+        Me.MenuStrip1.ResumeLayout(false)
+        Me.MenuStrip1.PerformLayout
+        Me.SplitContainer1.Panel1.ResumeLayout(false)
+        Me.SplitContainer1.Panel1.PerformLayout
+        Me.SplitContainer1.Panel2.ResumeLayout(false)
+        Me.SplitContainer1.Panel2.PerformLayout
+        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SplitContainer1.ResumeLayout(false)
+        Me.SplitContainer2.Panel1.ResumeLayout(false)
+        Me.SplitContainer2.Panel2.ResumeLayout(false)
+        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).EndInit
+        Me.SplitContainer2.ResumeLayout(false)
+        Me.TabControl1.ResumeLayout(false)
+        Me.TabPage1.ResumeLayout(false)
+        Me.SectionMenu.ResumeLayout(false)
+        Me.TabPage2.ResumeLayout(false)
+        Me.TemplateMenu.ResumeLayout(false)
+        Me.ToolBox.ResumeLayout(false)
+        Me.ToolBox.PerformLayout
+        CType(Me.panelCurrentPosition,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.panelCurrentLine,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.panelTotalLines,System.ComponentModel.ISupportInitialize).EndInit
+        CType(Me.panelTotalCharacters,System.ComponentModel.ISupportInitialize).EndInit
         Me.ResumeLayout(False)
-        Me.PerformLayout()
+        Me.PerformLayout
 
-    End Sub
+End Sub
     Friend WithEvents MSSaveDialog As System.Windows.Forms.SaveFileDialog
     Friend WithEvents MS_BrosweDialog As System.Windows.Forms.OpenFileDialog
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
@@ -1172,5 +1163,4 @@ Partial Class MS_Edit
     Friend WithEvents RemoveAllToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GotoNextToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GotoPreviousToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents AutocompleteMenu1 As AutocompleteMenuNS.AutocompleteMenu
 End Class

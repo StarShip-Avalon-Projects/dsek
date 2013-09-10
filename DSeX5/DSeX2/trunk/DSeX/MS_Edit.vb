@@ -5,8 +5,7 @@ Imports System.IO
 Imports Furcadia.IO
 Imports DSeX.IniFile
 Imports System.Text
-Imports ScintillaNET
-
+Imports FastColoredTextBoxNS
 Public Class MS_Edit
 
     Class CatSorter
@@ -79,12 +78,14 @@ Public Class MS_Edit
         ds
         ms
     End Enum
-    Public autoCompleteList As New List(Of String)
     Public TabEditStyles As List(Of EditStyles) = New List(Of EditStyles)
     Public CanOpen As List(Of Boolean) = New List(Of Boolean)
     Public SettingsChanged As List(Of Boolean) = New List(Of Boolean)
     Public WorkFileName As List(Of String) = New List(Of String)
     Public WorkPath As List(Of String) = New List(Of String)
+
+    Dim lang As String = "DS"
+    Private Shared DS_HEADER As String = ""
 
     'mPath()
     Dim frmTitle As List(Of String) = New List(Of String)
@@ -124,7 +125,7 @@ Public Class MS_Edit
 
     Public TemplatePaths As List(Of String) = New List(Of String)
 
-
+    Private popupMenu As AutocompleteMenu
 
     Public Function FindControl(parent As Control, ident As String) As Control
         Dim control As Control = New Control
@@ -137,7 +138,7 @@ Public Class MS_Edit
         Return control
     End Function
 
-    Public Function MS_Editor() As Scintilla
+    Public Function MS_Editor() As FastColoredTextBox
         If TabControl2.TabCount = 0 Then Return Nothing
         Return FindControl(TabControl2.TabPages.Item(TabControl2.SelectedIndex), "edit")
     End Function '+ TabControl2.SelectedIndex.ToString
@@ -267,34 +268,24 @@ Public Class MS_Edit
                 Me.Text = frmTitle(TabControl2.SelectedIndex)
                 lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
 
-                Dim test As New FileStream(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex), FileMode.Open, FileAccess.Read)
+                Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
+                MS_Editor.Text = ""
+                FullFile(TabControl2.SelectedIndex).Clear()
+                Do While reader.Peek <> -1
+                    Dim line As String = reader.ReadLine
+                    FullFile(TabControl2.SelectedIndex).Add(line)
+                Loop
+                MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
+                reader.Close()
 
-                Dim data As Byte() = New Byte(test.Length - 1) {}
-                test.Read(data, 0, CInt(test.Length))
-                Encoding.Convert(Encoding.ASCII, Encoding.UTF8, data)
-                test.Close()
-                Dim str As String = System.Text.Encoding.UTF8.GetString(data)
-                MS_Editor.RawText = data
-                SaveSections()
-                'Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-                'MS_Editor.Text = ""
-                'FullFile(TabControl2.SelectedIndex).Clear()
-                'Do While reader.Peek <> -1
-                '    Dim line As String = reader.ReadLine
-                '    FullFile(TabControl2.SelectedIndex).Add(line)
-                'Loop
-                'MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
-                'reader.Close()
-                'MS_Editor.Lexing.Colorize()
-
-                'UpdateSegments()
+                UpdateSegments()
                 UpdateSegmentList()
                 CanOpen(TabControl2.SelectedIndex) = True
                 TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
                 TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
             End If
         End With
-        SetLanguage("dragonspeak")
+
     End Sub
 
     Public Sub OpenMS_File(ByRef filename As String)
@@ -307,41 +298,33 @@ Public Class MS_Edit
         Me.Text = frmTitle(TabControl2.SelectedIndex)
         lblStatus.Text = "Status: opened " & WorkFileName(TabControl2.SelectedIndex)
 
-        Dim test As New FileStream(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex), FileMode.Open, FileAccess.Read)
+        Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
+        MS_Editor.Text = ""
+        Do While reader.Peek <> -1
+            Dim line As String = reader.ReadLine
+            FullFile(TabControl2.SelectedIndex).Add(line)
+        Loop
+        MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
+        reader.Close()
 
-        Dim data As Byte() = New Byte(test.Length - 1) {}
-        test.Read(data, 0, CInt(test.Length))
-        Encoding.Convert(Encoding.ASCII, Encoding.UTF8, data)
-        test.Close()
-        Dim str As String = System.Text.Encoding.UTF8.GetString(data)
-        MS_Editor.RawText = data
-        'Dim reader As New StreamReader(WorkPath(TabControl2.SelectedIndex) + "/" + WorkFileName(TabControl2.SelectedIndex))
-        'MS_Editor.Text = ""
-        'Do While reader.Peek <> -1
-        '    Dim line As String = reader.ReadLine
-        '    FullFile(TabControl2.SelectedIndex).Add(line)
-        'Loop
-        'MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
-        'reader.Close()
+        UpdateSegments()
 
-        ' UpdateSegments()
-        SaveSections()
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
-        SetLanguage("dragonspeak")
+        'SetLanguage("dragonspeak")
     End Sub
 
-    Public Sub Reset()
-        If IsNothing(MS_Editor) Then Exit Sub
-        For i = 0 To SettingsChanged.Count - 1
-            If i <> TabControl2.SelectedIndex Then
-                SettingsChanged(i) = True
-            End If
-        Next
-        MS_Editor.Lexing.Colorize()
+    'Public Sub Reset()
+    '    If IsNothing(MS_Editor) Then Exit Sub
+    '    For i = 0 To SettingsChanged.Count - 1
+    '        If i <> TabControl2.SelectedIndex Then
+    '            SettingsChanged(i) = True
+    '        End If
+    '    Next
+    '    MS_Editor.Lexing.Colorize()
 
-    End Sub
+    'End Sub
 
 
     Private Sub MS_Edit_Load(sender As Object, e As System.EventArgs) Handles Me.Load
@@ -357,7 +340,7 @@ Public Class MS_Edit
         Try
 
             'AutocompleteMenu1.Enabled = EditSettings.AutoCompleteEnable
-            AutoCompleteList.Clear()
+            Dim autoCompleteList As New List(Of String)
             Dim KeyCount As Integer = CInt(KeysIni.GetKeyValue("Init-Types", "Count"))
             For i As Integer = 1 To KeyCount
                 Dim DSLines As New List(Of String)
@@ -380,7 +363,14 @@ Public Class MS_Edit
             splash.UpdateProgress("Finishing up...", (KeyCount + 1) / (KeyCount + 2) * 100)
 
             'AutocompleteMenu1.SetAutocompleteItems(autoCompleteList)
-
+            DS_String_Style = New TextStyle(New SolidBrush(EditSettings.StringColor), Nothing, FontStyle.Regular)
+            DS_Str_Var_Style = New TextStyle(New SolidBrush(EditSettings.StringVariableColor), Nothing, FontStyle.Regular)
+            DS_Num_Var_Style = New TextStyle(New SolidBrush(EditSettings.VariableColor), Nothing, FontStyle.Regular)
+            DS_Comment_Style = New TextStyle(New SolidBrush(EditSettings.CommentColor), Nothing, FontStyle.Regular)
+            DS_Default_Style = New TextStyle(New SolidBrush(Color.Green), Nothing, FontStyle.Regular)
+            DS_Num_Style = New TextStyle(New SolidBrush(EditSettings.NumberColor), Nothing, FontStyle.Regular)
+            DS_Line_ID_Style = New TextStyle(New SolidBrush(EditSettings.IDColor), Nothing, FontStyle.Regular)
+            DS_HEADER = KeysIni.GetKeyValue("MS-General", "Header")
 
         Catch eX As Exception
             Dim logError As New ErrorLogging(eX, Me)
@@ -465,8 +455,7 @@ Public Class MS_Edit
         For i = 0 To CInt(KeysIni.GetKeyValue("MS-General", "InitLineSpaces"))
             str.AppendLine("")
         Next
-        str.AppendLine(KeysIni.GetKeyValue("MS-General", "Footer"))
-        'str.AppendLine("")
+        str.Append(KeysIni.GetKeyValue("MS-General", "Footer"))
         Return str.ToString
     End Function
 
@@ -484,7 +473,6 @@ Public Class MS_Edit
             str.AppendLine("")
         Next
         str.Append(KeysIni.GetKeyValue("DM-Script", "Footer"))
-        str.AppendLine("")
         Return str.ToString
     End Function
 
@@ -569,15 +557,15 @@ Public Class MS_Edit
     End Sub
 
     Private Sub MenuCopy_Click(sender As System.Object, e As System.EventArgs) Handles MenuCopy.Click, EditDropCopy.Click
-        MS_Editor.Clipboard.Copy()
+        MS_Editor.Copy()
     End Sub
 
     Private Sub MenuCut_Click(sender As System.Object, e As System.EventArgs) Handles MenuCut.Click, EditDropCut.Click
-        MS_Editor.Clipboard.Cut()
+        MS_Editor.Cut()
     End Sub
 
     Private Sub PasteToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles PasteToolStripMenuItem.Click, EditDropPaste.Click
-        MS_Editor.Clipboard.Paste()
+        MS_Editor.Paste()
     End Sub
 
     Private Sub MS_Editor_CursorChanged(sender As Object, e As System.EventArgs)
@@ -587,9 +575,12 @@ Public Class MS_Edit
 
 
     Private Sub MS_Editor_TextChanged(sender As Object, e As System.EventArgs)
+        If lang = "DS" Then
+            DS_Highlight(e)
+        End If
         If SectionChange = False Then CanOpen(TabControl2.SelectedIndex) = False
 
-        updateStatusBar()
+        UpdateStatusBar()
         If CanOpen(TabControl2.SelectedIndex) = False Then Me.Text = frmTitle(TabControl2.SelectedIndex) & "*"
         If WorkFileName(TabControl2.SelectedIndex) = "" And CanOpen(TabControl2.SelectedIndex) = False Then
             TabControl2.SelectedTab.Text = New_File_Tag + "*"
@@ -603,8 +594,8 @@ Public Class MS_Edit
     End Sub
 
     Private Sub UpdateStatusBar()
-        sb.Panels.Item(0).Text = "Cursor Position: " & MS_Editor.Selection.Start.ToString
-        sb.Panels.Item(1).Text = "Current Line: " & MS_Editor.Caret.LineNumber.ToString
+        sb.Panels.Item(0).Text = "Cursor Position: " & MS_Editor.SelectionStart.ToString
+        'sb.Panels.Item(1).Text = "Current Line: " & MS_Editor.GetLineFromCharIndex(MS_Editor.SelectionStart) + 1)
         sb.Panels.Item(2).Text = "Total Lines: " & MS_Editor.Lines.Count.ToString
         sb.Panels.Item(3).Text = "Total Characters: " & MS_Editor.Text.Length.ToString
     End Sub
@@ -624,17 +615,17 @@ Public Class MS_Edit
     End Sub
 
     Private Sub ToolBoxFindReplace_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxFindReplace.Click
-        Try
+        'Try
 
-            Dim frm As Form = New frmSearch
+        '    Dim frm As Form = New frmSearch
 
-            frm.Show() 'Dialog()
+        '    frm.Show() 'Dialog()
 
-        Catch exc As Exception
+        'Catch exc As Exception
 
-            MessageBox.Show(exc.Message, exc.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '    MessageBox.Show(exc.Message, exc.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)
 
-        End Try
+        'End Try
     End Sub
 
     Private Sub FindReplaceToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles FindReplaceToolStripMenuItem.Click
@@ -642,68 +633,68 @@ Public Class MS_Edit
     End Sub
 
     Private Sub FindReplace()
-        If IsNothing(MS_Editor) Then Exit Sub
-        Try
+        'If IsNothing(MS_Editor) Then Exit Sub
+        'Try
 
-            Dim frm As Form = New frmSearch
+        '    Dim frm As Form = New frmSearch
 
-            frm.Show() 'Dialog()
+        '    frm.Show() 'Dialog()
 
-        Catch exc As Exception
+        'Catch exc As Exception
 
-            MessageBox.Show(exc.Message, exc.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        '    MessageBox.Show(exc.Message, exc.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)
 
-        End Try
+        'End Try
     End Sub
 
     Private Sub ToolBoxCut_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxCut.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        MS_Editor.Clipboard.Cut()
+        MS_Editor.Cut()
     End Sub
 
     Private Sub ToolBoxyCopy_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxyCopy.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        MS_Editor.Clipboard.Copy()
+        MS_Editor.Copy()
     End Sub
 
     Private Sub ToolBoxPaste_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxPaste.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        MS_Editor.Clipboard.Paste()
+        MS_Editor.Paste()
     End Sub
 
     Private Sub ToolBoxUndo_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxUndo.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        MS_Editor.UndoRedo.Undo()
+        MS_Editor.Undo()
     End Sub
 
     Private Sub ToolBoxRedo_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxRedo.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        MS_Editor.UndoRedo.Redo()
+        MS_Editor.Redo()
     End Sub
 
     Private Sub GotoToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoToolStripMenuItem.Click, ToolStripButton1.Click
-        If IsNothing(MS_Editor) Then Exit Sub
-        Dim i As String = _
-InputBox("What line within the document do you want to send the cursor to?", _
-" Location to send the Cursor?", "0")
-        If String.IsNullOrEmpty(i) Then Exit Sub
-        If IsInteger(i) And i.ToInteger > 0 Then
-            If i > MS_Editor.Lines.Count - 1 Then i = MS_Editor.Lines.Count - 1
-            MS_Editor.GoTo.Line(i.ToInteger)
+        '        If IsNothing(MS_Editor) Then Exit Sub
+        '        Dim i As String = _
+        'InputBox("What line within the document do you want to send the cursor to?", _
+        '" Location to send the Cursor?", "0")
+        '        If String.IsNullOrEmpty(i) Then Exit Sub
+        '        If IsInteger(i) And i.ToInteger > 0 Then
+        '            If i > MS_Editor.Lines.Count - 1 Then i = MS_Editor.Lines.Count - 1
+        '            MS_Editor.GoTo.Line(i.ToInteger)
 
-            UpdateStatusBar()
+        '            UpdateStatusBar()
 
-        End If
+        '        End If
     End Sub
 
     Private Sub UndoToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles UndoToolStripMenuItem.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        MS_Editor.UndoRedo.Undo()
+        MS_Editor.Undo()
     End Sub
 
     Private Sub RedoToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RedoToolStripMenuItem.Click
         If IsNothing(MS_Editor) Then Exit Sub
-        MS_Editor.UndoRedo.Redo()
+        MS_Editor.Redo()
     End Sub
 
     Private Sub SaveAsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SaveAsToolStripMenuItem.Click, ToolBoxSaveAs.Click
@@ -729,14 +720,14 @@ InputBox("What line within the document do you want to send the cursor to?", _
         FullFile(TabControl2.SelectedIndex).Clear()
         Me.Text = frmTitle(TabControl2.SelectedIndex)
         For i = 0 To MS_Editor.Lines.Count - 1
-            FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines.Item(i).Text.Trim(charsToTrim))
+            FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines.Item(i).Trim(charsToTrim))
         Next
         TabControl2.SelectedTab.Text = New_File_Tag
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
         UpdateSegments()
         UpdateSegmentList()
-        MS_Editor.Lexing.Colorize()
+        'MS_Editor.Lexing.Colorize()
     End Sub
     Public Sub NewScript()
         If Not CanOpen(TabControl2.SelectedIndex) Then
@@ -757,7 +748,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         FullFile(TabControl2.SelectedIndex).Clear()
         Me.Text = frmTitle(TabControl2.SelectedIndex)
         For i = 0 To MS_Editor.Lines.Count - 1
-            FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines.Item(i).Text)
+            FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines.Item(i))
         Next
         TabControl2.SelectedTab.Text = New_File_Tag
         CanOpen(TabControl2.SelectedIndex) = True
@@ -789,7 +780,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             pattern(I - 1) = "(" + s
             pat(I - 1) = u.ToInteger
         Next
-        Dim insertPos As Integer = MS_Editor.Selection.Start
+        Dim insertPos As Integer = MS_Editor.SelectionStart
         For I As Integer = 0 To StrArray.Length - 1
             str = StrArray(I).Trim
 
@@ -804,7 +795,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
         MS_Editor.Text = String.Join(vbCrLf, StrArray)
 
-        MS_Editor.Selection.Start = insertPos
+        MS_Editor.SelectionStart = insertPos
     End Sub
 
     Private Sub BtnComment_Click(sender As System.Object, e As System.EventArgs) Handles BtnComment.Click, ApplyCommentToolStripMenuItem.Click, AutocommentOnToolStripMenuItem.Click
@@ -844,10 +835,10 @@ InputBox("What line within the document do you want to send the cursor to?", _
         Dim str() As String = this.Replace(vbCr, "").Split(Chr(10))
         Dim str2 As String = ""
         If str.Length > 1 Then
-            For i As Integer = 0 To str.Length - 1
+        For i As Integer = 0 To str.Length - 1
                 str2 &= vbCrLf & "*" & str(i)
-            Next
-            MS_Editor.Selection.Text = str2.Substring(1)
+        Next
+            MS_Editor.SelectedText = str2.Substring(1)
 
         End If
     End Sub
@@ -861,7 +852,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             For i As Integer = 0 To str.Length - 1
                 If str(i).StartsWith("*") Then str(i) = str(i).Remove(0, 1)
             Next
-            MS_Editor.Selection.Text = String.Join(vbCrLf, str)
+            MS_Editor.SelectedText = String.Join(vbCrLf, str)
 
         End If
     End Sub
@@ -973,49 +964,30 @@ InputBox("What line within the document do you want to send the cursor to?", _
         TabSections.Add(segs)
 
         'Creates the listview and displays it in the new tab
-        Dim lstView As Scintilla = New Scintilla
+        Dim lstView As FastColoredTextBox = New FastColoredTextBox()
         lstView.ContextMenuStrip = Me.EditMenu
-        lstView.Encoding = Encoding.UTF8
         lstView.AcceptsTab = True
         lstView.Parent = tp
         lstView.Anchor = AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Bottom + AnchorStyles.Right
         lstView.Name = "edit" + n
         lstView.Dock = DockStyle.Fill
-        lstView.Margins(0).Width = 40
-        lstView.Margins(1).Width = 20
-        lstView.Margins.Margin0.IsClickable = True
-        lstView.Margins.Margin1.IsClickable = True
-        lstView.Font = New Font("Courier New", 8.25, FontStyle.Regular, GraphicsUnit.Point)
+        lstView.CommentPrefix = "*"
+        lstView.Language = Language.Custom
         lstView.Show()
         lstView.ContextMenuStrip = SectionMenu
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)
-        'lstView.Lexing.LexerName = "dragonspeak"
-        'lstView.ConfigurationManager.Language = "dragonspeak"
-        'lstView.ConfigurationManager.CustomLocation = "hilighter"
-        AddHandler lstView.MarginClick, AddressOf Margin_Click
+
+
         AddHandler lstView.TextChanged, AddressOf MS_Editor_TextChanged
-        'AddHandler lstView.StyleNeeded, AddressOf Scintilla_StyleNeeded
         AddHandler lstView.MouseUp, AddressOf MS_EditRightClick
         AddHandler lstView.CursorChanged, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.MouseClick, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.KeyUp, AddressOf MS_Editor_CursorChanged
-        AddHandler lstView.CharAdded, AddressOf sciDocument_CharAdded
-        SetLanguage("dragonspeak")
+
         'UpdateSegments()
     End Sub
 
-    Private Sub Margin_Click(sender As Object, e As MarginClickEventArgs)
 
-        Dim currentLine As Line = e.Line
-        If (sender.Markers.GetMarkerMask(currentLine) = 0) Then
-
-            currentLine.AddMarker(0)
-
-        Else
-
-            currentLine.DeleteMarker(0)
-        End If
-    End Sub
     Private Sub MS_EditRightClick(sender As System.Object, e As System.Windows.Forms.MouseEventArgs)
         If e.Button = Windows.Forms.MouseButtons.Right Then
             Me.EditMenu.Show(MS_Editor, New Point(e.X, e.Y))
@@ -1093,7 +1065,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Private Sub CloseTab(ByVal i As Integer)
-        If i < 0 Or i > TabControl2.TabCount - 1 Or TabControl2.TabCount < 2 Then Exit Sub
+        If i < 0 Or i > TabControl2.TabCount - 1 Then Exit Sub
         Dim fname As String = WorkFileName(i)
         If fname = "" Then
             fname = New_File_Tag
@@ -1137,9 +1109,9 @@ InputBox("What line within the document do you want to send the cursor to?", _
             str += reader.ReadLine + vbLf
         Loop
         reader.Close()
-        Dim pos As Integer = MS_Editor.Selection.Start
+        Dim pos As Integer = MS_Editor.SelectionStart
         MS_Editor.InsertText(str)
-        MS_Editor.Selection.Start = pos + str.Length
+        MS_Editor.SelectionStart = pos + str.Length
 
     End Sub
 
@@ -1297,7 +1269,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             Debug.Print("SectionIdx(" + TabControl2.SelectedIndex.ToString + ")")
             FullFile(TabControl2.SelectedIndex).Clear()
             For i = 0 To MS_Editor.Lines.Count - 1
-                FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines.Item(i).Text.TrimEnd(charsToTrim))
+                FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines.Item(i).TrimEnd(charsToTrim))
             Next
             UpdateSegments()
         End If
@@ -1305,7 +1277,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(SectionIdx(TabControl2.SelectedIndex) - 1)
             section.lines.Clear()
             For i = 0 To MS_Editor.Lines.Count - 1
-                section.lines.Add(MS_Editor.Lines.Item(i).Text.TrimEnd(charsToTrim))
+                section.lines.Add(MS_Editor.Lines.Item(i).TrimEnd(charsToTrim))
             Next
             TabSections(TabControl2.SelectedIndex)(SectionIdx(TabControl2.SelectedIndex) - 1) = section
         End If
@@ -1320,7 +1292,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             'Rebuild FullFile list first
             RebuildFullFile()
             MS_Editor.Text = ""
-            MS_Editor.UndoRedo.EmptyUndoBuffer()
+            MS_Editor.ClearUndo()
             MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
             UpdateSegments()
         Else
@@ -1449,62 +1421,13 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         ToolTip1.SetToolTip(sender, sender.SelectedItem.ToString)
     End Sub
 
-
-    Private Sub SetLanguage(language As String)
-        'If "ini".Equals(language, StringComparison.OrdinalIgnoreCase) Then
-        '    ' Reset/set all styles and prepare _scintilla for custom lexing
-        '    TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ini
-        '    IniLexer.Init(MS_Editor)
-        If "dragonspeak".Equals(language, StringComparison.OrdinalIgnoreCase) _
-            Or "ds".Equals(language, StringComparison.OrdinalIgnoreCase) Then
-            ' Reset/set all styles and prepare _scintilla for custom lexing
-            TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds
-            dsLexerInit.Init(MS_Editor)
-            With MS_Editor.AutoComplete
-
-                .List = autoCompleteList
-                .AutoHide = True
-                '.List.Sort(New CatSorter)
-                .AutomaticLengthEntered = True
-                '.CancelAtStart = True
-                '.DropRestOfWord = False
-                .FillUpCharacters = ""
-                .IsCaseSensitive = False
-                .ListSeparator = vbCrLf
-                .MaxHeight = 5
-                .MaxWidth = 0
-                '.SingleLineAccept = True
-                .StopCharacters = ""
-            End With
-            'MS_Editor.Lexing.Colorize()
-            'Else
-            ' Use a built-in lexer and configuration
-            'Me.IniLexer = False
-            'MS_Editor.ConfigurationManager.Language = language
-
-        End If
-    End Sub
-
-    Private Sub Scintilla_StyleNeeded(sender As Object, e As ScintillaNET.StyleNeededEventArgs)
-        Select Case TabEditStyles(TabControl2.SelectedIndex)
-            Case EditStyles.ini
-                ' IniLexer.StyleNeeded(sender, e.Range)
-            Case EditStyles.ds
-                dsLexerInit.StyleNeeded(sender, e.Range)
-        End Select
-
-    End Sub
-
-
-
-
     Private Sub GotoNextToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoNextToolStripMenuItem.Click
         GotoBookMark()
     End Sub
     Private Sub GotoBookMark()
-        If IsNothing(MS_Editor) Then Exit Sub
-        Dim l As Line = MS_Editor.Lines.Current.FindNextMarker(1)
-        If Not IsNothing(l) Then l.Goto()
+        'If IsNothing(MS_Editor) Then Exit Sub
+        'Dim l As Line = MS_Editor.Lines.Current.FindNextMarker(1)
+        'If Not IsNothing(l) Then l.Goto()
     End Sub
 
     Private Sub GotoPreviousToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoPreviousToolStripMenuItem.Click
@@ -1512,37 +1435,47 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
     End Sub
 
     Private Sub GotoBookPrevMark()
-        If IsNothing(MS_Editor) Then Exit Sub
-        Dim l As Line = MS_Editor.Lines.Current.FindPreviousMarker(1)
-        If Not IsNothing(l) Then l.Goto()
+        'If IsNothing(MS_Editor) Then Exit Sub
+        'Dim l As Line = MS_Editor.Lines.Current.FindPreviousMarker(1)
+        'If Not IsNothing(l) Then l.Goto()
     End Sub
 
     Private Sub RemoveAllToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RemoveAllToolStripMenuItem.Click
-        If IsNothing(MS_Editor) Then Exit Sub
-        MS_Editor.Markers.DeleteAll(0)
+        'If IsNothing(MS_Editor) Then Exit Sub
+        'MS_Editor.Markers.DeleteAll(0)
     End Sub
 
-    Private Sub sciDocument_CharAdded(sender As Object, e As CharAddedEventArgs)
 
-        ' Dim test As String = MS_Editor.GetWordFromPosition(MS_Editor.CurrentPos)
-        sender.autocomplete.show()
-        'If CheckForFistAutoComplete(e.Ch) Then
-        '    showFirstList()
 
-        'End If
+    Private Sub DS_Highlight(ByVal e As TextChangedEventArgs)
+        MS_Editor.LeftBracket = "{"
+        MS_Editor.RightBracket = "}"
+        MS_Editor.LeftBracket = "("
+        MS_Editor.RightBracket = ")"
+        MS_Editor.CommentPrefix = "*"
+        'clear style of changed range
+        e.ChangedRange.ClearStyle(DS_String_Style, DS_Str_Var_Style, DS_Num_Var_Style, DS_Comment_Style, _
+                                  DS_Default_Style, DS_Num_Style, DS_Line_ID_Style)
+        'Header
+        e.ChangedRange.SetStyle(DS_Header_Style, "(" + DS_HEADER + ")", RegexOptions.IgnoreCase)
+
+        'comment highlighting
+        e.ChangedRange.SetStyle(DS_Comment_Style, "\*(.*)")
+        'string highlighting
+        e.ChangedRange.SetStyle(DS_String_Style, "\{.*?\}")
+
+        'number highlighting
+        e.ChangedRange.SetStyle(DS_Num_Style, "([0-9#]+)")
+        'e.ChangedRange.SetStyle(DS_Num_Style, "\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b")
+
+        'number Variable highlighting
+        e.ChangedRange.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
+
+        ''clear folding markers
+        'e.ChangedRange.ClearFoldingMarkers()
+        ''set folding markers
+        'e.ChangedRange.SetFoldingMarkers("{", "}") 'allow to collapse brackets block
+        'e.ChangedRange.SetFoldingMarkers("#region\b", "#endregion\b") 'allow to collapse #region blocks
+        'e.ChangedRange.SetFoldingMarkers("/\*", "\*/") 'allow to collapse comment block
     End Sub
-
-    Private Sub showFirstList()
-        'do something and set right list
-        MS_Editor.AutoComplete.Show()
-    End Sub
-    Private Sub showSecondList()
-        'do something and set right list
-        MS_Editor.AutoComplete.Show()
-    End Sub
-
-    Private Function CheckForFistAutoComplete(x As Char) As Boolean
-        'check with your condition
-        Return True
-    End Function
 End Class
