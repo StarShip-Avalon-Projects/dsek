@@ -103,9 +103,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="advanceSearch.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="advanceSearch.vb" />
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Config.designer.vb">
       <DependentUpon>Config.vb</DependentUpon>
@@ -135,7 +133,6 @@
     <Compile Include="Controls\TabControlEx.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="dsLexer.vb" />
     <Compile Include="Helper Classes\ErrorLogging.vb" />
     <Compile Include="Helper Classes\IniFile.vb" />
     <Compile Include="MainModule.vb" />
@@ -160,7 +157,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="dsLexerInit.vb" />
     <Compile Include="SplashScreen1.Designer.vb">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
     </Compile>
@@ -378,12 +374,6 @@
     <Content Include="help.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="hilighter\default.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="hilighter\dragonspeak.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="MapSearch.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -446,12 +436,6 @@
     <None Include="Resources\dm128x128.ico" />
     <None Include="Resources\upArrow.png" />
     <None Include="Resources\uparrow.bmp" />
-    <Content Include="SciLexer.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SciLexer64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Scripts\readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -462,13 +446,9 @@
       <Project>{156C2AF0-3DA8-4D8C-A525-5400185579B3}</Project>
       <Name>FurcadiaLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AutocompleteMenu\AutocompleteMenu.csproj">
-      <Project>{43CBC9AA-6A8E-463F-83A9-AFF3124AFDB6}</Project>
-      <Name>AutocompleteMenu</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ScintillaNET\ScintillaNET.csproj">
-      <Project>{83D76C56-C7BE-4720-8FC3-3C494740E99A}</Project>
-      <Name>ScintillaNET</Name>
+    <ProjectReference Include="..\FastColoredTextBox\FastColoredTextBox.csproj">
+      <Project>{6DD14A85-CCFC-4774-BD26-0F5772512319}</Project>
+      <Name>FastColoredTextBox</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -500,9 +480,9 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>rem cd $(TargetPath)
+    <PostBuildEvent>
 del "*setup*.*"
-call "C:\Users\Gerolkae\bin\vbver.bat" DSeX.nsi
+call "C:\Users\Gerolkae\bin\vbver.bat" DSeX.nsi 
 7za a -t7z DSeX_Setup(x86).7z DSeX_setup(x86)*.exe
 REM DEL old files
 del "$(TargetDir)$(TargetName)_$(PlatformName)_Src.rar"
