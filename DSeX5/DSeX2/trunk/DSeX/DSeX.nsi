@@ -105,7 +105,7 @@ Section -MainProgram
 ${INSTALL_TYPE}
 SetOverwrite on
 SetOutPath "$INSTDIR"
-!insertmacro CheckNetFramework "40Full"
+!insertmacro CheckNetFramework "35"
 ExecWait '"$INSTDIR\uninstall.exe" /S _?=$INSTDIR'
 
 File "${Bin_Directory}\*.dll"

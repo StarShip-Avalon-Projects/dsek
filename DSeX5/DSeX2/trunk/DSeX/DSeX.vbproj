@@ -13,7 +13,7 @@
     <AssemblyName>DSeX</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -187,15 +187,18 @@
   <ItemGroup>
     <EmbeddedResource Include="advanceSearch.resx">
       <DependentUpon>advanceSearch.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Config.resx">
       <DependentUpon>Config.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\InputBoxFrm.resx">
       <DependentUpon>InputBoxFrm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProgressFrm.resx">
       <DependentUpon>ProgressFrm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MS_Edit.resx">
       <DependentUpon>MS_Edit.vb</DependentUpon>
@@ -208,15 +211,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SplashScreen1.resx">
       <DependentUpon>SplashScreen1.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Wizard\AboutBox1.resx">
       <DependentUpon>AboutBox1.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Wizard\wMain.resx">
       <DependentUpon>wMain.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Wizard\wUI.resx">
       <DependentUpon>wUI.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
