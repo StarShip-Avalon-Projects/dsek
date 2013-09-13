@@ -71,6 +71,34 @@ Public Class MS_Edit
         End Function
 
     End Class
+
+    Public autoCompleteList As New List(Of AutocompleteItem)
+    Private Class DA_AUtoCompleteMenu
+        Inherits AutocompleteItem
+
+        Public Sub New(snippet As String)
+            MyBase.New(snippet)
+        End Sub
+
+        Public Shared RegexSpecSymbolsPattern As String = "[ \.\(\)]"
+        '[\ \^\$\\(\)\.\\\*\+\|\?]
+        ''' <summary>
+        ''' Compares fragment text with this item
+        ''' </summary>
+        Public Overrides Function Compare(fragmentText As String) As CompareResult
+            Dim pattern = Regex.Replace(fragmentText, RegexSpecSymbolsPattern, "$0")
+            If Regex.IsMatch(Text, pattern, RegexOptions.IgnoreCase) Then
+                If Regex.IsMatch(Text, "\{" & fragmentText & "\}?", RegexOptions.IgnoreCase) Then
+                    Return CompareResult.Hidden
+                End If
+                Return CompareResult.Visible
+            End If
+            Return CompareResult.Hidden
+        End Function
+
+       
+    End Class
+
 #Region "Properties"
     Public Enum EditStyles
         none = 0
@@ -125,7 +153,7 @@ Public Class MS_Edit
 
     Public TemplatePaths As List(Of String) = New List(Of String)
 
-    Private popupMenu As AutocompleteMenu
+    Private AutoCompleteMenu1 As AutocompleteMenu
 
     Public Function FindControl(parent As Control, ident As String) As Control
         Dim control As Control = New Control
@@ -339,8 +367,8 @@ Public Class MS_Edit
 
         Try
 
-            'AutocompleteMenu1.Enabled = EditSettings.AutoCompleteEnable
-            Dim autoCompleteList As New List(Of String)
+
+            Dim items As List(Of AutocompleteItem) = New List(Of AutocompleteItem)()
             Dim KeyCount As Integer = CInt(KeysIni.GetKeyValue("Init-Types", "Count"))
             For i As Integer = 1 To KeyCount
                 Dim DSLines As New List(Of String)
@@ -353,16 +381,17 @@ Public Class MS_Edit
                     Dim fields As ArrayList = SplitCSV(K.Value)
                     DSLines.Add(fields(2))
                     DSLines2.Add(fields(2))
+                    items.Add(New DA_AUtoCompleteMenu(fields(2)))
                 Next
 
                 AddNewTab(key, i.ToString, DSLines2)
-                autoCompleteList.AddRange(DSLines)
+                autoCompleteList.AddRange(items)
 
             Next
 
             splash.UpdateProgress("Finishing up...", (KeyCount + 1) / (KeyCount + 2) * 100)
 
-            'AutocompleteMenu1.SetAutocompleteItems(autoCompleteList)
+            'AutoCompleteMenu1.Items.SetAutocompleteItems(autoCompleteList)
             DS_String_Style = New TextStyle(New SolidBrush(EditSettings.StringColor), Nothing, FontStyle.Regular)
             DS_Str_Var_Style = New TextStyle(New SolidBrush(EditSettings.StringVariableColor), Nothing, FontStyle.Regular)
             DS_Num_Var_Style = New TextStyle(New SolidBrush(EditSettings.VariableColor), Nothing, FontStyle.Regular)
@@ -835,9 +864,9 @@ Public Class MS_Edit
         Dim str() As String = this.Replace(vbCr, "").Split(Chr(10))
         Dim str2 As String = ""
         If str.Length > 1 Then
-        For i As Integer = 0 To str.Length - 1
+            For i As Integer = 0 To str.Length - 1
                 str2 &= vbCrLf & "*" & str(i)
-        Next
+            Next
             MS_Editor.SelectedText = str2.Substring(1)
 
         End If
@@ -940,6 +969,7 @@ Public Class MS_Edit
         AboutBox1.Activate()
     End Sub
 
+    Private popupMenu As AutocompleteMenu
     Public Sub AddNewEditorTab(ByRef FileName As String, FilePath As String, ByRef n As String)
 
         Dim tp As New TabPage
@@ -976,8 +1006,13 @@ Public Class MS_Edit
         lstView.Show()
         lstView.ContextMenuStrip = SectionMenu
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)
-
-
+        popupMenu = New AutocompleteMenu(lstView)
+        popupMenu.Enabled = True
+        autoCompleteList.Sort(New CatSorter)
+        popupMenu.SearchPattern = "[ \w\.:=!<>\{\}]"
+        popupMenu.Items.MaximumSize = New System.Drawing.Size(600, 300)
+        popupMenu.Items.Width = 600
+        popupMenu.Items.SetAutocompleteItems(autoCompleteList)
         AddHandler lstView.TextChanged, AddressOf MS_Editor_TextChanged
         AddHandler lstView.MouseUp, AddressOf MS_EditRightClick
         AddHandler lstView.CursorChanged, AddressOf MS_Editor_CursorChanged
@@ -1470,6 +1505,9 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
 
         'number Variable highlighting
         e.ChangedRange.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
+
+        'number Variable highlighting
+        e.ChangedRange.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
 
         ''clear folding markers
         'e.ChangedRange.ClearFoldingMarkers()

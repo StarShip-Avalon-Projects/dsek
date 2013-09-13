@@ -138,11 +138,11 @@ Partial Class MS_Edit
         Me.TabControl2 = New DSeX.TabControlEx()
         Me.EditMenu.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        
         Me.SplitContainer2.Panel1.SuspendLayout()
         Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
@@ -152,10 +152,7 @@ Partial Class MS_Edit
         Me.TabPage2.SuspendLayout()
         Me.TemplateMenu.SuspendLayout()
         Me.ToolBox.SuspendLayout()
-        CType(Me.panelCurrentPosition, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.panelCurrentLine, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.panelTotalLines, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.panelTotalCharacters, System.ComponentModel.ISupportInitialize).BeginInit()
+
         Me.SuspendLayout()
         '
         'MSSaveDialog
@@ -1029,11 +1026,11 @@ Partial Class MS_Edit
         Me.SplitContainer1.Panel1.PerformLayout
         Me.SplitContainer1.Panel2.ResumeLayout(false)
         Me.SplitContainer1.Panel2.PerformLayout
-        CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
+
         Me.SplitContainer1.ResumeLayout(false)
         Me.SplitContainer2.Panel1.ResumeLayout(false)
         Me.SplitContainer2.Panel2.ResumeLayout(false)
-        CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).EndInit
+
         Me.SplitContainer2.ResumeLayout(false)
         Me.TabControl1.ResumeLayout(false)
         Me.TabPage1.ResumeLayout(false)
@@ -1042,10 +1039,7 @@ Partial Class MS_Edit
         Me.TemplateMenu.ResumeLayout(false)
         Me.ToolBox.ResumeLayout(false)
         Me.ToolBox.PerformLayout
-        CType(Me.panelCurrentPosition,System.ComponentModel.ISupportInitialize).EndInit
-        CType(Me.panelCurrentLine,System.ComponentModel.ISupportInitialize).EndInit
-        CType(Me.panelTotalLines,System.ComponentModel.ISupportInitialize).EndInit
-        CType(Me.panelTotalCharacters,System.ComponentModel.ISupportInitialize).EndInit
+
         Me.ResumeLayout(False)
         Me.PerformLayout
 
