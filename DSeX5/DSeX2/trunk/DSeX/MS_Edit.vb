@@ -108,7 +108,7 @@ Public Class MS_Edit
     End Enum
     Public TabEditStyles As List(Of EditStyles) = New List(Of EditStyles)
     Public CanOpen As List(Of Boolean) = New List(Of Boolean)
-    Public SettingsChanged As List(Of Boolean) = New List(Of Boolean)
+    ' Public SettingsChanged As List(Of Boolean) = New List(Of Boolean)
     Public WorkFileName As List(Of String) = New List(Of String)
     Public WorkPath As List(Of String) = New List(Of String)
 
@@ -168,7 +168,12 @@ Public Class MS_Edit
 
     Public Function MS_Editor() As FastColoredTextBox
         If TabControl2.TabCount = 0 Then Return Nothing
-        Return FindControl(TabControl2.TabPages.Item(TabControl2.SelectedIndex), "edit")
+        Return MS_Editor(TabControl2.SelectedIndex)
+    End Function
+
+    Public Function MS_Editor(i As Integer) As FastColoredTextBox
+        If TabControl2.TabCount < i Then Return Nothing
+        Return FindControl(TabControl2.TabPages.Item(i), "edit")
     End Function '+ TabControl2.SelectedIndex.ToString
 
 
@@ -347,17 +352,7 @@ Public Class MS_Edit
 
     End Sub
 
-    Public Sub Reset()
-        If IsNothing(MS_Editor) Then Exit Sub
-        SetDSHilighter()
-        For i = 0 To SettingsChanged.Count - 1
-            If i <> TabControl2.SelectedIndex Then
-                SettingsChanged(i) = True
-            End If
-        Next
 
-
-    End Sub
 
 
     Private Sub MS_Edit_Load(sender As Object, e As System.EventArgs) Handles Me.Load
@@ -396,14 +391,15 @@ Public Class MS_Edit
 
             splash.UpdateProgress("Finishing up...", (KeyCount + 1) / (KeyCount + 2) * 100)
 
-            SetDSHilighter()
-            DS_HEADER = KeysIni.GetKeyValue("MS-General", "Header")
+
+
 
         Catch eX As Exception
             Dim logError As New ErrorLogging(eX, Me)
         End Try
 
         AddNewEditorTab("", mPath, 0)
+        SetDSHilighter()
         CanOpen(0) = True
         If (My.Application.CommandLineArgs.Count > 0) Then
             OpenMS_File(My.Application.CommandLineArgs(0))
@@ -430,8 +426,18 @@ Public Class MS_Edit
         Return str
     End Function
 
-    Private Sub SetDSHilighter()
-        'AutoCompleteMenu1.Items.SetAutocompleteItems(autoCompleteList)
+    Public Sub Reset()
+        If IsNothing(MS_Editor) Then Exit Sub
+        'SetDSHilighter()
+        For i = 0 To TabControl2.TabPages.Count - 1
+            If TabEditStyles(i) = EditStyles.ds Then
+                MS_Editor(i).Range.ClearStyle(DS_String_Style, DS_String_Style, DS_Str_Var_Style, _
+                           DS_Num_Var_Style, DS_Comment_Style, DS_Default_Style, DS_Line_ID_Style)
+
+            Else
+
+            End If
+        Next
         DS_String_Style = New TextStyle(New SolidBrush(EditSettings.StringColor), Nothing, FontStyle.Regular)
         DS_Str_Var_Style = New TextStyle(New SolidBrush(EditSettings.StringVariableColor), Nothing, FontStyle.Regular)
         DS_Num_Var_Style = New TextStyle(New SolidBrush(EditSettings.VariableColor), Nothing, FontStyle.Regular)
@@ -439,7 +445,55 @@ Public Class MS_Edit
         DS_Default_Style = New TextStyle(New SolidBrush(Color.Green), Nothing, FontStyle.Regular)
         DS_Num_Style = New TextStyle(New SolidBrush(EditSettings.NumberColor), Nothing, FontStyle.Regular)
         DS_Line_ID_Style = New TextStyle(New SolidBrush(EditSettings.IDColor), Nothing, FontStyle.Regular)
+        DS_HEADER = KeysIni.GetKeyValue("MS-General", "Header")
+        For i = 0 To TabControl2.TabPages.Count - 1
+            If TabEditStyles(i) = EditStyles.ds Then
+                'Header
+                MS_Editor(i).Range.SetStyle(DS_Header_Style, "(" + DS_HEADER + ")", RegexOptions.IgnoreCase)
+                'comment highlighting
+                MS_Editor(i).Range.SetStyle(DS_Comment_Style, "\*(.*)")
+                'string highlighting
+                MS_Editor(i).Range.SetStyle(DS_String_Style, "\{.*?\}")
+                'number highlighting
+                MS_Editor(i).Range.SetStyle(DS_Num_Style, "([0-9#]+)")
+                'sender.Range.SetStyle(DS_Num_Style, "\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b")
+                'number Variable highlighting
+                MS_Editor(i).Range.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
+                'number Variable highlighting
+                MS_Editor(i).Range.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
+                MS_Editor(i).Invalidate()
+            Else
 
+            End If
+        Next
+
+        ' MS_Editor.OnTextChanged()
+    End Sub
+
+    Private Sub SetDSHilighter()
+        DS_String_Style = New TextStyle(New SolidBrush(EditSettings.StringColor), Nothing, FontStyle.Regular)
+        DS_Str_Var_Style = New TextStyle(New SolidBrush(EditSettings.StringVariableColor), Nothing, FontStyle.Regular)
+        DS_Num_Var_Style = New TextStyle(New SolidBrush(EditSettings.VariableColor), Nothing, FontStyle.Regular)
+        DS_Comment_Style = New TextStyle(New SolidBrush(EditSettings.CommentColor), Nothing, FontStyle.Regular)
+        DS_Default_Style = New TextStyle(New SolidBrush(Color.Green), Nothing, FontStyle.Regular)
+        DS_Num_Style = New TextStyle(New SolidBrush(EditSettings.NumberColor), Nothing, FontStyle.Regular)
+        DS_Line_ID_Style = New TextStyle(New SolidBrush(EditSettings.IDColor), Nothing, FontStyle.Regular)
+        DS_HEADER = KeysIni.GetKeyValue("MS-General", "Header")
+
+        MS_Editor.Range.SetStyle(DS_Header_Style, "(" + DS_HEADER + ")", RegexOptions.IgnoreCase)
+        'comment highlighting
+        MS_Editor.Range.SetStyle(DS_Comment_Style, "\*(.*)")
+        'string highlighting
+        MS_Editor.Range.SetStyle(DS_String_Style, "\{.*?\}")
+        'number highlighting
+        MS_Editor.Range.SetStyle(DS_Num_Style, "([0-9#]+)")
+        'sender.Range.SetStyle(DS_Num_Style, "\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b")
+        'number Variable highlighting
+        MS_Editor.Range.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
+        'number Variable highlighting
+        MS_Editor.Range.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
+
+        MS_Editor.Invalidate()
     End Sub
 
 
@@ -612,11 +666,69 @@ Public Class MS_Edit
 
     End Sub
 
+    Private Sub MS_Editor_TextChangedDelayed(sender As Object, e As TextChangedEventArgs)
+        If lang = "DS" Then
+            sender.CommentPrefix = "*"
+            'clear style of changed range
+            e.ChangedRange.ClearStyle(DS_String_Style, DS_Str_Var_Style, DS_Num_Var_Style, DS_Comment_Style, _
+                                      DS_Default_Style, DS_Num_Style, DS_Line_ID_Style)
+
+            'Header
+            e.ChangedRange.SetStyle(DS_Header_Style, "(" + DS_HEADER + ")", RegexOptions.IgnoreCase)
+
+            'comment highlighting
+            e.ChangedRange.SetStyle(DS_Comment_Style, "\*(.*)")
+            'string highlighting
+
+            e.ChangedRange.SetStyle(DS_String_Style, "\{.*?\}")
+
+            'number highlighting
+            e.ChangedRange.SetStyle(DS_Num_Style, "([0-9#]+)")
+            'sender.Range.SetStyle(DS_Num_Style, "\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b")
+
+            'number Variable highlighting
+            e.ChangedRange.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
+
+            'number Variable highlighting
+            e.ChangedRange.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
+
+            'clear folding markers
+            ' sender.Range.ClearFoldingMarkers()
+
+
+            'Section Folding Experimental.. Not sure how to do this -Gero
+
+            'sender.Range.ClearFoldingMarkers()
+            'Dim currentIndent = 0
+            'Dim lastNonEmptyLine = 0
+
+            'For i As Integer = 0 To sender.LinesCount - 1
+            '    Dim line = sender(i)
+            '    Dim spacesCount = line.StartSpacesCount
+            '    If spacesCount = line.Count Then
+            '        'empty line
+            '        Continue For
+            '    End If
+
+            '    If line.Text.StartsWith(RES_SEC_Marker) Then
+            '        'append start folding marker
+            '        sender(lastNonEmptyLine + 1).FoldingStartMarker = line.Text
+            '    ElseIf currentIndent > spacesCount Then
+            '        'append end folding marker
+
+            '    End If
+
+            '    currentIndent = spacesCount
+            '    lastNonEmptyLine = i
+            'Next
+
+        End If
+    End Sub
+
+
 
     Private Sub MS_Editor_TextChanged(sender As Object, e As System.EventArgs)
-        If lang = "DS" Then
-            DS_Highlight(e)
-        End If
+
         If SectionChange = False Then CanOpen(TabControl2.SelectedIndex) = False
 
         UpdateStatusBar()
@@ -633,8 +745,8 @@ Public Class MS_Edit
     End Sub
 
     Private Sub UpdateStatusBar()
-        sb.Panels.Item(0).Text = "Cursor Position: " & MS_Editor.SelectionStart.ToString
-        'sb.Panels.Item(1).Text = "Current Line: " & MS_Editor.GetLineFromCharIndex(MS_Editor.SelectionStart) + 1)
+        sb.Panels.Item(0).Text = "Cursor Position: " & MS_Editor.Selection.Start.iChar.ToString
+        sb.Panels.Item(1).Text = "Current Line: " & MS_Editor.Selection.Start.iLine.ToString
         sb.Panels.Item(2).Text = "Total Lines: " & MS_Editor.Lines.Count.ToString
         sb.Panels.Item(3).Text = "Total Characters: " & MS_Editor.Text.Length.ToString
     End Sub
@@ -990,7 +1102,7 @@ Public Class MS_Edit
         tp.Name = "tbpageBrowser" & intLastTabIndex.ToString
         'Adds a new tab to your tab control
         CanOpen.Add(True)
-        SettingsChanged.Add(False)
+        'SettingsChanged.Add(False)
         WorkFileName.Add(FileName)
         WorkPath.Add(FilePath)
         frmTitle.Add("DSeX - New DragonSpeak File")
@@ -1023,6 +1135,7 @@ Public Class MS_Edit
         popupMenu.Items.MaximumSize = New System.Drawing.Size(600, 300)
         popupMenu.Items.Width = 600
         popupMenu.Items.SetAutocompleteItems(autoCompleteList)
+        AddHandler lstView.TextChangedDelayed, AddressOf MS_Editor_TextChangedDelayed
         AddHandler lstView.TextChanged, AddressOf MS_Editor_TextChanged
         AddHandler lstView.MouseUp, AddressOf MS_EditRightClick
         AddHandler lstView.CursorChanged, AddressOf MS_Editor_CursorChanged
@@ -1050,10 +1163,11 @@ Public Class MS_Edit
         End If
         UpdateSegmentList()
         If SectionIdx(TabControl2.SelectedIndex) <> ListBox1.SelectedIndex Then ListBox1.SelectedIndex = SectionIdx(TabControl2.SelectedIndex)
-        'lastTab = TabControl2.SelectedIndex
-        If SettingsChanged(TabControl2.SelectedIndex) Then
-            SettingsChanged(TabControl2.SelectedIndex) = False
-        End If
+
+        'If SettingsChanged(TabControl2.SelectedIndex) Then
+        '    SetDSHilighter()
+        '    SettingsChanged(TabControl2.SelectedIndex) = False
+        'End If
     End Sub
 
     Private Sub TabControl2_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TabControl2.MouseDown
@@ -1493,61 +1607,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
 
 
 
-    Private Sub DS_Highlight(ByVal e As TextChangedEventArgs)
-        MS_Editor.CommentPrefix = "*"
-        'clear style of changed range
-        e.ChangedRange.ClearStyle(DS_String_Style, DS_Str_Var_Style, DS_Num_Var_Style, DS_Comment_Style, _
-                                  DS_Default_Style, DS_Num_Style, DS_Line_ID_Style)
 
-        'Header
-        e.ChangedRange.SetStyle(DS_Header_Style, "(" + DS_HEADER + ")", RegexOptions.IgnoreCase)
-
-        'comment highlighting
-        e.ChangedRange.SetStyle(DS_Comment_Style, "\*(.*)")
-        'string highlighting
-
-        e.ChangedRange.SetStyle(DS_String_Style, "\{.*?\}")
-
-        'number highlighting
-        e.ChangedRange.SetStyle(DS_Num_Style, "([0-9#]+)")
-        'e.ChangedRange.SetStyle(DS_Num_Style, "\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b")
-
-        'number Variable highlighting
-        e.ChangedRange.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
-
-        'number Variable highlighting
-        e.ChangedRange.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
-
-        'clear folding markers
-        ' e.ChangedRange.ClearFoldingMarkers()
-
-
-        'Section Folding Experimental.. Not sure how to do this -Gero
-        'MS_Editor.Range.ClearFoldingMarkers()
-        'Dim currentIndent = 0
-        'Dim lastNonEmptyLine = 0
-
-        'For i As Integer = 0 To MS_Editor.LinesCount - 1
-        '    Dim line = MS_Editor(i)
-        '    Dim spacesCount = line.StartSpacesCount
-        '    If spacesCount = line.Count Then
-        '        'empty line
-        '        Continue For
-        '    End If
-
-        '    If line.Text.StartsWith(RES_SEC_Marker) Then
-        '        'append start folding marker
-        '        MS_Editor(lastNonEmptyLine + 1).FoldingStartMarker = line.Text
-        '    ElseIf currentIndent > spacesCount Then
-        '        'append end folding marker
-
-        '    End If
-
-        '    currentIndent = spacesCount
-        '    lastNonEmptyLine = i
-        'Next
-
-    End Sub
     Private Sub MS_Editor_MouseDoubleClick(sender As Object, e As MouseEventArgs)
         If e.X < MS_Editor.LeftIndent Then
             Dim place = MS_Editor.PointToPlace(e.Location)
