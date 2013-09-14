@@ -96,7 +96,7 @@ Public Class MS_Edit
             Return CompareResult.Hidden
         End Function
 
-       
+
     End Class
 
 #Region "Properties"
@@ -276,6 +276,10 @@ Public Class MS_Edit
             ' SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
         ElseIf (e.KeyCode = Keys.F1) Then
 
+        ElseIf e.KeyCode = Keys.F5 Then
+            GotoBookPrevMark()
+        ElseIf e.KeyCode = Keys.F5 Then
+            GotoBookMark()
         ElseIf (e.KeyCode = Keys.F AndAlso e.Modifiers = Keys.Control) Then
             FindReplace()
         End If
@@ -340,19 +344,20 @@ Public Class MS_Edit
         CanOpen(TabControl2.SelectedIndex) = True
         TabControl2.SelectedTab.Text = WorkFileName(TabControl2.SelectedIndex)
         TabControl2.RePositionCloseButtons(TabControl2.SelectedTab)
-        'SetLanguage("dragonspeak")
+
     End Sub
 
-    'Public Sub Reset()
-    '    If IsNothing(MS_Editor) Then Exit Sub
-    '    For i = 0 To SettingsChanged.Count - 1
-    '        If i <> TabControl2.SelectedIndex Then
-    '            SettingsChanged(i) = True
-    '        End If
-    '    Next
-    '    MS_Editor.Lexing.Colorize()
+    Public Sub Reset()
+        If IsNothing(MS_Editor) Then Exit Sub
+        SetDSHilighter()
+        For i = 0 To SettingsChanged.Count - 1
+            If i <> TabControl2.SelectedIndex Then
+                SettingsChanged(i) = True
+            End If
+        Next
 
-    'End Sub
+
+    End Sub
 
 
     Private Sub MS_Edit_Load(sender As Object, e As System.EventArgs) Handles Me.Load
@@ -391,14 +396,7 @@ Public Class MS_Edit
 
             splash.UpdateProgress("Finishing up...", (KeyCount + 1) / (KeyCount + 2) * 100)
 
-            'AutoCompleteMenu1.Items.SetAutocompleteItems(autoCompleteList)
-            DS_String_Style = New TextStyle(New SolidBrush(EditSettings.StringColor), Nothing, FontStyle.Regular)
-            DS_Str_Var_Style = New TextStyle(New SolidBrush(EditSettings.StringVariableColor), Nothing, FontStyle.Regular)
-            DS_Num_Var_Style = New TextStyle(New SolidBrush(EditSettings.VariableColor), Nothing, FontStyle.Regular)
-            DS_Comment_Style = New TextStyle(New SolidBrush(EditSettings.CommentColor), Nothing, FontStyle.Regular)
-            DS_Default_Style = New TextStyle(New SolidBrush(Color.Green), Nothing, FontStyle.Regular)
-            DS_Num_Style = New TextStyle(New SolidBrush(EditSettings.NumberColor), Nothing, FontStyle.Regular)
-            DS_Line_ID_Style = New TextStyle(New SolidBrush(EditSettings.IDColor), Nothing, FontStyle.Regular)
+            SetDSHilighter()
             DS_HEADER = KeysIni.GetKeyValue("MS-General", "Header")
 
         Catch eX As Exception
@@ -431,6 +429,18 @@ Public Class MS_Edit
 
         Return str
     End Function
+
+    Private Sub SetDSHilighter()
+        'AutoCompleteMenu1.Items.SetAutocompleteItems(autoCompleteList)
+        DS_String_Style = New TextStyle(New SolidBrush(EditSettings.StringColor), Nothing, FontStyle.Regular)
+        DS_Str_Var_Style = New TextStyle(New SolidBrush(EditSettings.StringVariableColor), Nothing, FontStyle.Regular)
+        DS_Num_Var_Style = New TextStyle(New SolidBrush(EditSettings.VariableColor), Nothing, FontStyle.Regular)
+        DS_Comment_Style = New TextStyle(New SolidBrush(EditSettings.CommentColor), Nothing, FontStyle.Regular)
+        DS_Default_Style = New TextStyle(New SolidBrush(Color.Green), Nothing, FontStyle.Regular)
+        DS_Num_Style = New TextStyle(New SolidBrush(EditSettings.NumberColor), Nothing, FontStyle.Regular)
+        DS_Line_ID_Style = New TextStyle(New SolidBrush(EditSettings.IDColor), Nothing, FontStyle.Regular)
+
+    End Sub
 
 
     Private Sub AddNewTab(ByRef n As String, ByRef VL_Name As String, ByRef lst As ArrayList)
@@ -513,7 +523,7 @@ Public Class MS_Edit
         Dim insertText = StrDup(Spaces, ch) & LB.SelectedItems(0).Text
 
         MS_Editor.InsertText(insertText + vbCrLf)
-        updateStatusBar()
+        UpdateStatusBar()
     End Sub
 
 
@@ -598,7 +608,7 @@ Public Class MS_Edit
     End Sub
 
     Private Sub MS_Editor_CursorChanged(sender As Object, e As System.EventArgs)
-        updateStatusBar()
+        UpdateStatusBar()
 
     End Sub
 
@@ -1008,7 +1018,7 @@ Public Class MS_Edit
         TabControl2.SelectedTab = TabControl2.TabPages(intLastTabIndex)
         popupMenu = New AutocompleteMenu(lstView)
         popupMenu.Enabled = True
-        autoCompleteList.Sort(New CatSorter)
+
         popupMenu.SearchPattern = "[ \w\.:=!<>\{\}]"
         popupMenu.Items.MaximumSize = New System.Drawing.Size(600, 300)
         popupMenu.Items.Width = 600
@@ -1018,7 +1028,7 @@ Public Class MS_Edit
         AddHandler lstView.CursorChanged, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.MouseClick, AddressOf MS_Editor_CursorChanged
         AddHandler lstView.KeyUp, AddressOf MS_Editor_CursorChanged
-
+        AddHandler lstView.MouseClick, AddressOf MS_Editor_MouseDoubleClick
         'UpdateSegments()
     End Sub
 
@@ -1460,19 +1470,20 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         GotoBookMark()
     End Sub
     Private Sub GotoBookMark()
-        'If IsNothing(MS_Editor) Then Exit Sub
-        'Dim l As Line = MS_Editor.Lines.Current.FindNextMarker(1)
-        'If Not IsNothing(l) Then l.Goto()
+        If IsNothing(MS_Editor) Then Exit Sub
+        Dim l As Integer = MS_Editor.Selection.Start.iLine
+        MS_Editor.GotoNextBookmark(l)
     End Sub
 
     Private Sub GotoPreviousToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoPreviousToolStripMenuItem.Click
-
+        GotoBookPrevMark()
     End Sub
 
     Private Sub GotoBookPrevMark()
-        'If IsNothing(MS_Editor) Then Exit Sub
-        'Dim l As Line = MS_Editor.Lines.Current.FindPreviousMarker(1)
-        'If Not IsNothing(l) Then l.Goto()
+        If IsNothing(MS_Editor) Then Exit Sub
+        Dim l As Integer = MS_Editor.Selection.Start.iLine
+        MS_Editor.GotoPrevBookmark(l)
+
     End Sub
 
     Private Sub RemoveAllToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RemoveAllToolStripMenuItem.Click
@@ -1483,20 +1494,18 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
 
 
     Private Sub DS_Highlight(ByVal e As TextChangedEventArgs)
-        MS_Editor.LeftBracket = "{"
-        MS_Editor.RightBracket = "}"
-        MS_Editor.LeftBracket = "("
-        MS_Editor.RightBracket = ")"
         MS_Editor.CommentPrefix = "*"
         'clear style of changed range
         e.ChangedRange.ClearStyle(DS_String_Style, DS_Str_Var_Style, DS_Num_Var_Style, DS_Comment_Style, _
                                   DS_Default_Style, DS_Num_Style, DS_Line_ID_Style)
+
         'Header
         e.ChangedRange.SetStyle(DS_Header_Style, "(" + DS_HEADER + ")", RegexOptions.IgnoreCase)
 
         'comment highlighting
         e.ChangedRange.SetStyle(DS_Comment_Style, "\*(.*)")
         'string highlighting
+
         e.ChangedRange.SetStyle(DS_String_Style, "\{.*?\}")
 
         'number highlighting
@@ -1509,11 +1518,45 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         'number Variable highlighting
         e.ChangedRange.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
 
-        ''clear folding markers
-        'e.ChangedRange.ClearFoldingMarkers()
-        ''set folding markers
-        'e.ChangedRange.SetFoldingMarkers("{", "}") 'allow to collapse brackets block
-        'e.ChangedRange.SetFoldingMarkers("#region\b", "#endregion\b") 'allow to collapse #region blocks
-        'e.ChangedRange.SetFoldingMarkers("/\*", "\*/") 'allow to collapse comment block
+        'clear folding markers
+        ' e.ChangedRange.ClearFoldingMarkers()
+
+
+        'Section Folding Experimental.. Not sure how to do this -Gero
+        'MS_Editor.Range.ClearFoldingMarkers()
+        'Dim currentIndent = 0
+        'Dim lastNonEmptyLine = 0
+
+        'For i As Integer = 0 To MS_Editor.LinesCount - 1
+        '    Dim line = MS_Editor(i)
+        '    Dim spacesCount = line.StartSpacesCount
+        '    If spacesCount = line.Count Then
+        '        'empty line
+        '        Continue For
+        '    End If
+
+        '    If line.Text.StartsWith(RES_SEC_Marker) Then
+        '        'append start folding marker
+        '        MS_Editor(lastNonEmptyLine + 1).FoldingStartMarker = line.Text
+        '    ElseIf currentIndent > spacesCount Then
+        '        'append end folding marker
+
+        '    End If
+
+        '    currentIndent = spacesCount
+        '    lastNonEmptyLine = i
+        'Next
+
     End Sub
+    Private Sub MS_Editor_MouseDoubleClick(sender As Object, e As MouseEventArgs)
+        If e.X < MS_Editor.LeftIndent Then
+            Dim place = MS_Editor.PointToPlace(e.Location)
+            If MS_Editor.Bookmarks.Contains(place.iLine) Then
+                MS_Editor.Bookmarks.Remove(place.iLine)
+            Else
+                MS_Editor.Bookmarks.Add(place.iLine)
+            End If
+        End If
+    End Sub
+
 End Class
