@@ -22,7 +22,7 @@ namespace FastColoredTextBoxNS
         /// Styles
         /// Maximum style count is 16
         /// </summary>
-        public readonly Style[] Styles = new Style[sizeof(ushort) * 8];
+        public readonly Style[] Styles = new Style[sizeof(ushort) * 16];
         /// <summary>
         /// Occurs when line was inserted/added
         /// </summary>
