@@ -41,9 +41,9 @@ Public Class Config
         'Save the settings to the ini file
         EditSettings.SaveEditorSettings()
 
-        'If MS_Edit.Visible Then
-        '    MS_Edit.Reset()
-        'End If
+        If MS_Edit.Visible Then
+            MS_Edit.Reset()
+        End If
 
 
 

@@ -10,8 +10,8 @@ Imports System.Diagnostics
 ' IniFile class used to read and write ini files by loading the file into memory
 Public Class IniFile
     ' List of IniSection objects keeps track of all the sections in the INI file
-    Private m_sections As Hashtable
-    Private _code As String
+    Private m_sections As New Hashtable
+    Private _code As String = ""
     Public ReadOnly Property Code
         Get
             Return _code
