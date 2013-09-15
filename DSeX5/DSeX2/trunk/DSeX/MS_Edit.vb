@@ -114,7 +114,7 @@ Public Class MS_Edit
 
     Dim lang As String = "DS"
     Private Shared DS_HEADER As String = ""
-
+    Private Shared DS_FOOTER As String = ""
     'mPath()
     Dim frmTitle As List(Of String) = New List(Of String)
     'Dim lastTab As Integer = 0
@@ -427,75 +427,55 @@ Public Class MS_Edit
     End Function
 
     Public Sub Reset()
-        If IsNothing(MS_Editor) Then Exit Sub
-        'SetDSHilighter()
-        For i = 0 To TabControl2.TabPages.Count - 1
-            If TabEditStyles(i) = EditStyles.ds Then
-                MS_Editor(i).Range.ClearStyle(DS_String_Style, DS_String_Style, DS_Str_Var_Style, _
-                           DS_Num_Var_Style, DS_Comment_Style, DS_Default_Style, DS_Line_ID_Style)
+        If TabControl2.TabPages.Count = 0 Then Exit Sub
 
-            Else
-
-            End If
-        Next
-        DS_String_Style = New TextStyle(New SolidBrush(EditSettings.StringColor), Nothing, FontStyle.Regular)
-        DS_Str_Var_Style = New TextStyle(New SolidBrush(EditSettings.StringVariableColor), Nothing, FontStyle.Regular)
-        DS_Num_Var_Style = New TextStyle(New SolidBrush(EditSettings.VariableColor), Nothing, FontStyle.Regular)
-        DS_Comment_Style = New TextStyle(New SolidBrush(EditSettings.CommentColor), Nothing, FontStyle.Regular)
-        DS_Default_Style = New TextStyle(New SolidBrush(Color.Green), Nothing, FontStyle.Regular)
-        DS_Num_Style = New TextStyle(New SolidBrush(EditSettings.NumberColor), Nothing, FontStyle.Regular)
-        DS_Line_ID_Style = New TextStyle(New SolidBrush(EditSettings.IDColor), Nothing, FontStyle.Regular)
+        DS_String_Style.ForeBrush = New SolidBrush(EditSettings.StringVariableColor)
+        DS_Str_Var_Style.ForeBrush = New SolidBrush(EditSettings.StringVariableColor)
+        DS_Num_Var_Style.ForeBrush = New SolidBrush(EditSettings.VariableColor)
+        DS_Comment_Style.ForeBrush = New SolidBrush(EditSettings.CommentColor)
+        DS_Default_Style.ForeBrush = New SolidBrush(Color.Green)
+        DS_Num_Style.ForeBrush = New SolidBrush(EditSettings.NumberColor)
+        DS_Line_ID_Style.ForeBrush = New SolidBrush(EditSettings.IDColor)
         DS_HEADER = KeysIni.GetKeyValue("MS-General", "Header")
-        For i = 0 To TabControl2.TabPages.Count - 1
-            If TabEditStyles(i) = EditStyles.ds Then
-                'Header
-                MS_Editor(i).Range.SetStyle(DS_Header_Style, "(" + DS_HEADER + ")", RegexOptions.IgnoreCase)
-                'comment highlighting
-                MS_Editor(i).Range.SetStyle(DS_Comment_Style, "\*(.*)")
-                'string highlighting
-                MS_Editor(i).Range.SetStyle(DS_String_Style, "\{.*?\}")
-                'number highlighting
-                MS_Editor(i).Range.SetStyle(DS_Num_Style, "([0-9#]+)")
-                'sender.Range.SetStyle(DS_Num_Style, "\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b")
-                'number Variable highlighting
-                MS_Editor(i).Range.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
-                'number Variable highlighting
-                MS_Editor(i).Range.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
-                MS_Editor(i).Invalidate()
-            Else
+        DS_FOOTER = KeysIni.GetKeyValue("MS-General", "Footer")
 
-            End If
+        For i = 0 To TabControl2.TabPages.Count - 1
+            MS_Editor(i).Invalidate()
         Next
 
-        ' MS_Editor.OnTextChanged()
     End Sub
 
     Private Sub SetDSHilighter()
-        DS_String_Style = New TextStyle(New SolidBrush(EditSettings.StringColor), Nothing, FontStyle.Regular)
-        DS_Str_Var_Style = New TextStyle(New SolidBrush(EditSettings.StringVariableColor), Nothing, FontStyle.Regular)
-        DS_Num_Var_Style = New TextStyle(New SolidBrush(EditSettings.VariableColor), Nothing, FontStyle.Regular)
-        DS_Comment_Style = New TextStyle(New SolidBrush(EditSettings.CommentColor), Nothing, FontStyle.Regular)
-        DS_Default_Style = New TextStyle(New SolidBrush(Color.Green), Nothing, FontStyle.Regular)
-        DS_Num_Style = New TextStyle(New SolidBrush(EditSettings.NumberColor), Nothing, FontStyle.Regular)
-        DS_Line_ID_Style = New TextStyle(New SolidBrush(EditSettings.IDColor), Nothing, FontStyle.Regular)
+        DS_String_Style.ForeBrush = New SolidBrush(EditSettings.StringVariableColor)
+        DS_Str_Var_Style.ForeBrush = New SolidBrush(EditSettings.StringVariableColor)
+        DS_Num_Var_Style.ForeBrush = New SolidBrush(EditSettings.VariableColor)
+        DS_Comment_Style.ForeBrush = New SolidBrush(EditSettings.CommentColor)
+        DS_Num_Style.ForeBrush = New SolidBrush(EditSettings.NumberColor)
+        DS_Line_ID_Style.ForeBrush = New SolidBrush(EditSettings.IDColor)
         DS_HEADER = KeysIni.GetKeyValue("MS-General", "Header")
+        DS_FOOTER = KeysIni.GetKeyValue("MS-General", "Footer")
 
-        MS_Editor.Range.SetStyle(DS_Header_Style, "(" + DS_HEADER + ")", RegexOptions.IgnoreCase)
-        'comment highlighting
-        MS_Editor.Range.SetStyle(DS_Comment_Style, "\*(.*)")
-        'string highlighting
-        MS_Editor.Range.SetStyle(DS_String_Style, "\{.*?\}")
-        'number highlighting
-        MS_Editor.Range.SetStyle(DS_Num_Style, "([0-9#]+)")
-        'sender.Range.SetStyle(DS_Num_Style, "\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b")
-        'number Variable highlighting
-        MS_Editor.Range.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
-        'number Variable highlighting
-        MS_Editor.Range.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
-
-        MS_Editor.Invalidate()
     End Sub
 
+
+    Public Function RegExEscapedSring(ByVal text As String) As String
+        text = text.Replace("\", "\\")
+        text = text.Replace(".", "\.")
+        text = text.Replace("$", "\$")
+        text = text.Replace("^", "\^")
+        text = text.Replace("{", "\{")
+        text = text.Replace("[", "\[")
+        text = text.Replace("(", "\(")
+        text = text.Replace("|", "\|")
+        text = text.Replace("}", "\}")
+        text = text.Replace(")", "\)")
+        text = text.Replace("]", "\]")
+        text = text.Replace("*", "\*")
+        text = text.Replace("+", "\+")
+        text = text.Replace("?", "\?")
+        Return text
+
+    End Function
 
     Private Sub AddNewTab(ByRef n As String, ByRef VL_Name As String, ByRef lst As ArrayList)
         Causes.TabPages.Add(n)
@@ -663,35 +643,34 @@ Public Class MS_Edit
 
     Private Sub MS_Editor_CursorChanged(sender As Object, e As System.EventArgs)
         UpdateStatusBar()
-
     End Sub
 
     Private Sub MS_Editor_TextChangedDelayed(sender As Object, e As TextChangedEventArgs)
-        If lang = "DS" Then
+        If TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ds Then
             sender.CommentPrefix = "*"
             'clear style of changed range
-            e.ChangedRange.ClearStyle(DS_String_Style, DS_Str_Var_Style, DS_Num_Var_Style, DS_Comment_Style, _
-                                      DS_Default_Style, DS_Num_Style, DS_Line_ID_Style)
+            e.ChangedRange.ClearStyle(StyleIndex.All)
 
             'Header
-            e.ChangedRange.SetStyle(DS_Header_Style, "(" + DS_HEADER + ")", RegexOptions.IgnoreCase)
+            e.ChangedRange.SetStyle(DS_Header_Style, "(" + RegExEscapedSring(DS_HEADER) + ")", RegexOptions.IgnoreCase)
 
+            'Footer
+            e.ChangedRange.SetStyle(DS_Footer_Style, "(" + RegExEscapedSring(DS_FOOTER) + ")", RegexOptions.IgnoreCase)
             'comment highlighting
-            e.ChangedRange.SetStyle(DS_Comment_Style, "\*(.*)")
-            'string highlighting
+            'e.ChangedRange.SetStyle(DS_Comment_Style, "^\*([^\n]*)")
+            e.ChangedRange.SetStyle(DS_Comment_Style, "^\*(.*)$", RegexOptions.Multiline)
 
-            e.ChangedRange.SetStyle(DS_String_Style, "\{.*?\}")
-
-            'number highlighting
-            e.ChangedRange.SetStyle(DS_Num_Style, "([0-9#]+)")
-            'sender.Range.SetStyle(DS_Num_Style, "\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b")
-
+            'Line ID highlighting
+            e.ChangedRange.SetStyle(DS_Line_ID_Style, "(\([0-9#]+):[0-9]+\)")
             'number Variable highlighting
             e.ChangedRange.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
-
             'number Variable highlighting
             e.ChangedRange.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
 
+            'string highlighting
+            e.ChangedRange.SetStyle(DS_String_Style, "\{.*?\}")
+            'number highlighting
+            e.ChangedRange.SetStyle(DS_Num_Style, "([0-9#]+)")
             'clear folding markers
             ' sender.Range.ClearFoldingMarkers()
 
@@ -721,6 +700,7 @@ Public Class MS_Edit
             '    currentIndent = spacesCount
             '    lastNonEmptyLine = i
             'Next
+        ElseIf TabEditStyles(TabControl2.SelectedIndex) = EditStyles.ms Then
 
         End If
     End Sub
@@ -1224,7 +1204,7 @@ Public Class MS_Edit
     End Sub
 
     Private Sub CloseTab(ByVal i As Integer)
-        If i < 0 Or i > TabControl2.TabCount - 1 Then Exit Sub
+        If i > TabControl2.TabCount - 1 Then Exit Sub
         Dim fname As String = WorkFileName(i)
         If fname = "" Then
             fname = New_File_Tag
@@ -1250,6 +1230,11 @@ Public Class MS_Edit
         FullFile.RemoveAt(i)
         TabSections.RemoveAt(i)
         TabEditStyles.RemoveAt(i)
+        If TabControl2.TabPages.Count = 0 And Me.Disposing = False Then
+            AddNewEditorTab("", "", "")
+            NewFile()
+        End If
+
     End Sub
 
 
