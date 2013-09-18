@@ -6,8 +6,10 @@ Imports Furcadia.IO
 Imports DSeX.IniFile
 Imports System.Text
 Imports FastColoredTextBoxNS
-Public Class MS_Edit
+Imports System.Runtime.InteropServices
 
+Public Class MS_Edit
+#Region "Sorters"
     Class CatSorter
         Implements IComparer(Of String)
 
@@ -71,7 +73,7 @@ Public Class MS_Edit
         End Function
 
     End Class
-
+#End Region
     Public autoCompleteList As New List(Of AutocompleteItem)
     Private Class DA_AUtoCompleteMenu
         Inherits AutocompleteItem
@@ -111,8 +113,10 @@ Public Class MS_Edit
     ' Public SettingsChanged As List(Of Boolean) = New List(Of Boolean)
     Public WorkFileName As List(Of String) = New List(Of String)
     Public WorkPath As List(Of String) = New List(Of String)
+    Public BotName As List(Of String) = New List(Of String)
 
-    Dim lang As String = "DS"
+    Private objMutex As System.Threading.Mutex
+
     Private Shared DS_HEADER As String = ""
     Private Shared DS_FOOTER As String = ""
     'mPath()
@@ -175,6 +179,144 @@ Public Class MS_Edit
         If TabControl2.TabCount < i Then Return Nothing
         Return FindControl(TabControl2.TabPages.Item(i), "edit")
     End Function '+ TabControl2.SelectedIndex.ToString
+
+
+#End Region
+
+#Region "WmCpyDta"
+#If DEBUG Then
+    Const WmCpyDta As String = "WmCpyDta_d.dll"
+#Else
+    Const WmCpyDta As String = "WmCpyDta.dll"
+#End If
+
+
+    Const WM_COPYDATA As Integer = &H4A
+    <DllImport(WmCpyDta, EntryPoint:="WmCpyDta_MaxNameLen")> _
+    Private Shared Function WmCpyDta_MaxNameLen() As Integer
+    End Function
+    <DllImport(WmCpyDta, EntryPoint:="WmCpyDta_MaxTagLen")> _
+    Private Shared Function WmCpyDta_MaxTagLen() As Integer
+    End Function
+
+    <DllImport(WmCpyDta, EntryPoint:="WmCpyDta_MaxDataLen")> _
+    Private Shared Function WmCpyDta_MaxDataLen() As Integer
+    End Function
+
+    <DllImport(WmCpyDta, EntryPoint:="WmCpyDta_GetMessage_sTagData")> _
+    Private Shared Function WmCpyDta_GetMessage_sTagData(hReceiver As Integer, hSender As Integer, lParam As Integer, lpName As StringBuilder, lpFID As UInteger, lpTag As StringBuilder, lpData As StringBuilder) As Boolean
+    End Function
+
+    <DllImport(WmCpyDta, EntryPoint:="WmCpyDta_SetEncrypt")> _
+    Private Shared Sub WmCpyDta_SetEncrypt(c As Char)
+    End Sub
+
+    <DllImport(WmCpyDta, EntryPoint:="WmCpyDta_BaseDefaultMsgId")> _
+    Private Shared Function WmCpyDta_BaseDefaultMsgId() As Integer
+    End Function
+
+    <DllImport(WmCpyDta, EntryPoint:="WmCpyDta_SetMessageId")> _
+    Private Shared Sub WmCpyDta_SetMessageId(iMsgId As Integer)
+    End Sub
+
+    <DllImport("user32.dll", EntryPoint:="FindWindow")> _
+    Private Shared Function FindWindow(_ClassName As String, _WindowName As String) As Integer
+    End Function
+    Public Declare Function SetFocusAPI Lib "user32.dll" Alias "SetFocus" (ByVal hWnd As Long) As Long
+    Private Declare Function SetForegroundWindow Lib "user32" (ByVal hWnd As Long) As Long
+
+
+
+    <DllImport(WmCpyDta, EntryPoint:="WmCpyDta_GetMessageId")> _
+    Private Shared Function WmCpyDta_GetMessageId() As Integer
+    End Function
+
+    <DllImport(WmCpyDta, EntryPoint:="WmCpyDta_SendMessage_sTagData")> _
+    Private Shared Function WmCpyDta_SendMessage_sTagData(hReceiver As Integer, hSender As Integer, _strName As String, _intFID As UInteger, _strTag As String, _strData As String) As Integer
+    End Function
+
+    Public Function FindProcessByName(strProcessName As String) As IntPtr
+        Dim HandleOfToProcess As IntPtr = IntPtr.Zero
+        Dim MyProcess As Process = Process.GetCurrentProcess()
+        Dim p As Process() = Process.GetProcessesByName("DSeX")
+        For Each p1 As Process In p
+            Debug.WriteLine(p1.ProcessName.ToUpper())
+            If p1.ProcessName.ToUpper() = strProcessName.ToUpper() And p1.Id <> MyProcess.Id Then
+                HandleOfToProcess = p1.MainWindowHandle
+                Exit For
+            End If
+        Next
+        Return HandleOfToProcess
+    End Function
+
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        If m.Msg = WM_COPYDATA Then
+            Dim bOurMessage As Boolean = False
+
+            'Option 1 - Encryption
+            'To make a message a little more difficult to hack we can make it look like a bad piece of memory.
+            'The sender must also set the same value.
+            WmCpyDta_SetEncrypt("d"c)
+            ' 'd' is a bitwise seed value. I like to use d because it
+            'makes the message look like bad memory
+            'Option 2
+            '				//If your receiver wants to conditional handle the received message
+            '				//then define new ids based on the default.
+            '				//This example does not need this so we will define a few but not use them.
+            '				//Look for more comments on wCustomMsgId_1, and wCustomMsgId_2 below.
+            '				WPARAM wCustomMsgId_1 = WmCpyDta_BaseDefaultMsgId() + 1;
+            '				WPARAM wCustomMsgId_2 = WmCpyDta_BaseDefaultMsgId() + 2;
+            '					If some condition then
+            '					WmCpyDta_SetMessageId(wCustomMsgId_1);
+            '					else some other conditin WmCpyDta_SetMessageId(wCustomMsgId_2);
+            '				
+
+
+            WmCpyDta_SetMessageId(WmCpyDta_BaseDefaultMsgId())
+            'define for default behavior
+
+
+            Dim sName As New StringBuilder(WmCpyDta_MaxNameLen())
+            Dim sFID As UInteger = 0
+            Dim sTag As New StringBuilder(WmCpyDta_MaxTagLen())
+            Dim sData As New StringBuilder(WmCpyDta_MaxDataLen())
+
+            'Sample Data
+
+            'sName = ~DSEX~
+            'sFID = 0 "n/a"
+            'sTag = -b=BotName
+            'sData = "path/Filename.ms"
+
+            'sName = ~DSEX~
+            'sFID = 0 "n/a"
+            'sTag = 
+            'sData = "path/Filename.ms"
+
+            bOurMessage = WmCpyDta_GetMessage_sTagData(0, 0, m.LParam.ToInt32(), sName, sFID, sTag, sData)
+            If bOurMessage Then
+
+                Dim bName As String = "none"
+                If sTag.ToString.StartsWith("-b=") Then
+                    bName = sTag.ToString.Substring(3)
+                    'store Botname to List at NewTab index
+                End If
+
+                AddNewEditorTab("", "", "")
+                OpenMS_File(sData.ToString, bName)
+
+            End If
+
+            If bOurMessage = True Then
+                Return
+            End If
+        End If
+
+
+        MyBase.WndProc(m)
+
+    End Sub
+
 
 
 #End Region
@@ -272,6 +414,10 @@ Public Class MS_Edit
         Me.Dispose()
     End Sub
 
+    Private Sub MS_Edit_HandleCreated(sender As Object, e As System.EventArgs) Handles Me.HandleCreated
+
+    End Sub
+
     Private Sub MS_Edit_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyDown
         If (e.KeyCode = Keys.O AndAlso e.Modifiers = Keys.Control) Then
             OpenMS_File()
@@ -325,11 +471,12 @@ Public Class MS_Edit
 
     End Sub
 
-    Public Sub OpenMS_File(ByRef filename As String)
+    Public Sub OpenMS_File(ByRef filename As String, Optional ByRef bName As String = "none")
 
         Dim slashPosition As Integer = filename.LastIndexOf("\")
         WorkFileName(TabControl2.SelectedIndex) = filename.Substring(slashPosition + 1)
         WorkPath(TabControl2.SelectedIndex) = filename.Replace(WorkFileName(TabControl2.SelectedIndex), "")
+        BotName(TabControl2.SelectedIndex) = bName
 
         frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
         Me.Text = frmTitle(TabControl2.SelectedIndex)
@@ -356,9 +503,51 @@ Public Class MS_Edit
 
 
     Private Sub MS_Edit_Load(sender As Object, e As System.EventArgs) Handles Me.Load
+        Dim splash As SplashScreen1 = CType(My.Application.SplashScreen, SplashScreen1)
+        Dim filename As String = ""
+        If My.Application.CommandLineArgs.Count > 0 Then
+            filename = My.Application.CommandLineArgs.Last()
+        End If
+
+        Dim BotName As String = "none"
+        If My.Application.CommandLineArgs.Count > 1 Then
+            BotName = My.Application.CommandLineArgs(0)
+        End If
+        objMutex = New System.Threading.Mutex(False, "MyApplicationName")
+        If objMutex.WaitOne(0, False) = False Then
+            splash.UpdateProgress("Loading file: " & filename, 50 / 100)
+            objMutex.Close()
+            objMutex = Nothing
+            'splash.Close()
+            'Step 1.
+            'The second way is to iter through all processes 
+            'Since a windows title can change, I perfer the second method
+            Dim cstrProcessName As String = "DSeX"
+            Dim ProcessHandle As IntPtr = FindProcessByName(cstrProcessName)
+
+            'Step 2.
+            'Create some information to send.
+            Dim strTag As String = BotName
+
+            Dim strData As String = filename
+
+            'Option 1 - Encryption
+            'To make a message a little more difficult to hack we can make it look like a bad piece of memory.
+            'The receiver must also set the same value.
+            WmCpyDta_SetEncrypt("d"c)
+            ' 'd' is a bitwise seed value. I like to use d because it 
+            'makes the message look like bad memory
+
+            Dim iResult As Integer = 0
+            If ProcessHandle.ToInt32() <> 0 Then
+                iResult = WmCpyDta_SendMessage_sTagData(ProcessHandle.ToInt32(), 0, "~DSEX~", 0, strTag, strData)
+            End If
+            splash.UpdateProgress("Complete ", 100)
+            End
+        End If
+
         Me.DoubleBuffered = True
 
-        Dim splash As SplashScreen1 = CType(My.Application.SplashScreen, SplashScreen1)
         KeysIni = New IniFile()
         KeysIni.Load(My.Application.Info.DirectoryPath + "\Keys.ini")
         EditSettings = New EditSettings
@@ -402,14 +591,13 @@ Public Class MS_Edit
         SetDSHilighter()
         CanOpen(0) = True
         If (My.Application.CommandLineArgs.Count > 0) Then
-            OpenMS_File(My.Application.CommandLineArgs(0))
+            OpenMS_File(filename)
         Else
             NewFile()
         End If
 
         GetTemplates()
         splash.UpdateProgress("Complete!", 100)
-        'If Not IsNothing(splash) Then splash.Close()
     End Sub
 
     Private Sub RefreshTemplatesToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RefreshTemplatesToolStripMenuItem.Click
@@ -1082,9 +1270,10 @@ Public Class MS_Edit
         tp.Name = "tbpageBrowser" & intLastTabIndex.ToString
         'Adds a new tab to your tab control
         CanOpen.Add(True)
-        'SettingsChanged.Add(False)
         WorkFileName.Add(FileName)
         WorkPath.Add(FilePath)
+        BotName.Add("none")
+
         frmTitle.Add("DSeX - New DragonSpeak File")
         SectionIdx.Add(0)
         TabEditStyles.Add(EditStyles.ds)

@@ -1,0 +1,25 @@
+; WmCpyDta.def : Declares the module parameters for the DLL.
+
+LIBRARY      "WmCpyDta"
+DESCRIPTION  'WmCpyDta Windows Dynamic Link Library'
+
+EXPORTS
+    ; Explicit exports can go here
+
+;Adornment or optional properties
+WmCpyDta_SetEncrypt				@50
+WmCpyDta_SetSenderId			@51
+WmCpyDta_GetSenderId			@52
+WmCpyDta_SetMessageId			@53
+WmCpyDta_GetMessageId			@54
+
+;Functions for sending / receiving the data structure
+WmCpyDta_SendMessage_sTagData	@55
+WmCpyDta_GetMessage_sTagData	@56
+
+;Constants
+WmCpyDta_MaxNameLen				@57
+WmCpyDta_MaxTagLen				@58
+WmCpyDta_MaxDataLen				@59
+WmCpyDta_BaseDefaultMsgId		@60
+
