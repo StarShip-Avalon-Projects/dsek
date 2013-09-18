@@ -9,11 +9,14 @@
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
 
-        Private Sub MyApplication_Startup(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
-            ' Get the splash screen.
-            Dim splash As SplashScreen1 = CType(My.Application.SplashScreen, SplashScreen1)
+        'Public SplashScreen As Object
 
-        End Sub
+
+        'Private Sub MyApplication_Startup(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) Handles Me.Startup
+        '    ' Get the splash screen.
+        '    Dim splash As SplashScreen1 = CType(My.Application.SplashScreen, SplashScreen1)
+
+        'End Sub
 
     End Class
 
