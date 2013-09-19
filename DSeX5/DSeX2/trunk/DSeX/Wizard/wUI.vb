@@ -1,9 +1,9 @@
 ﻿
 Imports System.Text.RegularExpressions
-Imports No_Flicker
 Imports DSeX.ConfigStructs
 Imports DSeX.IniFile
 Imports System.IO
+Imports FastColoredTextBoxNS
 
 Public Module MyExtensions
     <System.Runtime.CompilerServices.Extension()> _
@@ -105,7 +105,7 @@ Public Class wUI
             End Set
         End Property
     End Structure
-    
+
     Public wVariables As Dictionary(Of Integer, Object) = New Dictionary(Of Integer, Object)
 
 #End Region
@@ -239,11 +239,10 @@ Public Class wUI
         End If
 
         selecter2.SelectedIndex = 0
-        'solution.Text = vbLf + vbLf + vbLf
         Dim n As Integer = selecter2.SelectedIndex + 1
         Dim s As String = ScriptIni.GetKeyValue("main", "b" + n.ToString)
         If s <> "" Then TextBox1.Text = s
-       
+
     End Sub
 
 
@@ -488,8 +487,7 @@ Public Class wUI
 
 
     Private Sub ProcessIterations(ByRef Values As List(Of List(Of String)))
-        ' solution.Text = ""
-        Exit Sub
+        Solution.Text = ""
         For i As Integer = 0 To NumericUpDown1.Value - 1
             Dim template As String = Code
             For t = 1 To Values(i).Count
@@ -506,7 +504,7 @@ Public Class wUI
                     template = Regex.Replace(template, "\^" & s.groups(0) & "\^", CalcMath(str, List), RegexOptions.IgnoreCase)
                 Next
             Next
-            'solution.AppendText(template + vbLf)
+            Solution.AppendText(template + vbLf)
         Next
 
     End Sub
@@ -533,7 +531,7 @@ Public Class wUI
     End Sub
 
     Private Sub ReloadToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ReloadToolStripMenuItem.Click
-        'solution.Text = ""
+        Solution.Text = ""
         selecter2.Items.Clear()
         wMain.GetParams(ScriptPaths(PathIndex) & Me.Text())
         selecter2.SelectedIndex = 0
@@ -546,7 +544,31 @@ Public Class wUI
         If s <> "" Then NumericUpDown1.Value = s.ToInteger Else NumericUpDown1.Value = 1
     End Sub
 
+    Private Sub MS_Editor_TextChangedDelayed(sender As Object, e As TextChangedEventArgs) Handles Solution.TextChanged
+        sender.CommentPrefix = "*"
+        'clear style of changed range
+        e.ChangedRange.ClearStyle(StyleIndex.All)
 
+        'comment highlighting
+        'e.ChangedRange.SetStyle(DS_Comment_Style, "^\*([^\n]*)")
+        e.ChangedRange.SetStyle(DS_Comment_Style, "^\*(.*)$", RegexOptions.Multiline)
+
+        'Line ID highlighting
+        e.ChangedRange.SetStyle(DS_Line_ID_Style, "(\([0-9#]+):[0-9]+\)")
+        'number Variable highlighting
+        e.ChangedRange.SetStyle(DS_Num_Var_Style, "%([A-Za-z0-9_]+)")
+        'number Variable highlighting
+        e.ChangedRange.SetStyle(DS_Str_Var_Style, "~([A-Za-z0-9_]+)")
+
+        'string highlighting
+        e.ChangedRange.SetStyle(DS_String_Style, "\{.*?\}")
+        'number highlighting
+        e.ChangedRange.SetStyle(DS_Num_Style, "([0-9#]+)")
+        'clear folding markers
+        ' sender.Range.ClearFoldingMarkers()
+
+
+    End Sub
 
 
 
@@ -556,8 +578,8 @@ Public Class wUI
     End Sub
 
     Private Sub BtnImport_Click(sender As System.Object, e As System.EventArgs) Handles BtnImport.Click
-        'If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
-        'MS_Edit.MS_Editor.InsertText(solution.text)
+        If IsNothing(MS_Edit.MS_Editor) Then Exit Sub
+        MS_Edit.MS_Editor.InsertText(Solution.Text)
     End Sub
 
 

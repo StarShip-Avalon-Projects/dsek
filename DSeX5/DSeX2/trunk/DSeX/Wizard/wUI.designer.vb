@@ -47,10 +47,10 @@ Partial Class wUI
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
-
+        Me.Solution = New FastColoredTextBoxNS.FastColoredTextBox()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
-
+        CType(Me.Solution, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'selecter2
@@ -264,12 +264,34 @@ Partial Class wUI
         Me.Button2.Text = ">>"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'Solution
+        '
+        Me.Solution.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Solution.AutoIndent = False
+        Me.Solution.AutoScrollMinSize = New System.Drawing.Size(27, 14)
+        Me.Solution.BackBrush = Nothing
+        Me.Solution.CharHeight = 14
+        Me.Solution.CharWidth = 8
+        Me.Solution.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.Solution.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
+        Me.Solution.IsReplaceMode = False
+        Me.Solution.Location = New System.Drawing.Point(12, 237)
+        Me.Solution.Name = "Solution"
+        Me.Solution.Paddings = New System.Windows.Forms.Padding(0)
+        Me.Solution.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.Solution.Size = New System.Drawing.Size(514, 189)
+        Me.Solution.TabIndex = 27
+        Me.Solution.Zoom = 100
+        '
         'wUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLight
         Me.ClientSize = New System.Drawing.Size(538, 457)
+        Me.Controls.Add(Me.Solution)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label1)
@@ -293,6 +315,7 @@ Partial Class wUI
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.Solution, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout
 
@@ -321,5 +344,6 @@ End Sub
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents Solution As FastColoredTextBoxNS.FastColoredTextBox
 
 End Class
