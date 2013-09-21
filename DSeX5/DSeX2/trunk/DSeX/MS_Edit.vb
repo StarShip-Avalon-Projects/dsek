@@ -934,17 +934,17 @@ Public Class MS_Edit
     End Sub
 
     Private Sub ToolBoxFindReplace_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxFindReplace.Click
-        'Try
+        Try
 
-        '    Dim frm As Form = New frmSearch
+            Dim frm As Form = New frmSearch
 
-        '    frm.Show() 'Dialog()
+            frm.Show() 'Dialog()
 
-        'Catch exc As Exception
+        Catch exc As Exception
 
-        '    MessageBox.Show(exc.Message, exc.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(exc.Message, exc.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)
 
-        'End Try
+        End Try
     End Sub
 
     Private Sub FindReplaceToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles FindReplaceToolStripMenuItem.Click
@@ -992,18 +992,19 @@ Public Class MS_Edit
     End Sub
 
     Private Sub GotoToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoToolStripMenuItem.Click, ToolStripButton1.Click
-        '        If IsNothing(MS_Editor) Then Exit Sub
-        '        Dim i As String = _
-        'InputBox("What line within the document do you want to send the cursor to?", _
-        '" Location to send the Cursor?", "0")
-        '        If String.IsNullOrEmpty(i) Then Exit Sub
-        '        If IsInteger(i) And i.ToInteger > 0 Then
-        '            If i > MS_Editor.Lines.Count - 1 Then i = MS_Editor.Lines.Count - 1
-        '            MS_Editor.GoTo.Line(i.ToInteger)
+        If IsNothing(MS_Editor) Then Exit Sub
+        Dim i As String = _
+InputBox("What line within the document do you want to send the cursor to?", _
+" Location to send the Cursor?", "0")
+        If String.IsNullOrEmpty(i) Then Exit Sub
+        If IsInteger(i) And i.ToInteger > 0 Then
+            If i > MS_Editor.Lines.Count - 1 Then i = MS_Editor.Lines.Count - 1
+            MS_Editor.Selection.Start = New Place(0, i.ToInteger)
+            MS_Editor.Selection.Expand()
+            MS_Editor.DoSelectionVisible()
+            UpdateStatusBar()
 
-        '            UpdateStatusBar()
-
-        '        End If
+        End If
     End Sub
 
     Private Sub UndoToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles UndoToolStripMenuItem.Click
