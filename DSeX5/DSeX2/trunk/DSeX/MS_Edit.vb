@@ -488,7 +488,7 @@ Public Class MS_Edit
             Dim line As String = reader.ReadLine
             FullFile(TabControl2.SelectedIndex).Add(line)
         Loop
-        MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
+        MS_Editor.Text = String.Join(vbLf, FullFile(TabControl2.SelectedIndex).ToArray)
         reader.Close()
 
         UpdateSegments()
@@ -952,18 +952,18 @@ Public Class MS_Edit
     End Sub
 
     Private Sub FindReplace()
-        'If IsNothing(MS_Editor) Then Exit Sub
-        'Try
+        If IsNothing(MS_Editor) Then Exit Sub
+        Try
 
-        '    Dim frm As Form = New frmSearch
+            Dim frm As Form = New frmSearch
 
-        '    frm.Show() 'Dialog()
+            frm.Show() 'Dialog()
 
-        'Catch exc As Exception
+        Catch exc As Exception
 
-        '    MessageBox.Show(exc.Message, exc.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(exc.Message, exc.Source, MessageBoxButtons.OK, MessageBoxIcon.Error)
 
-        'End Try
+        End Try
     End Sub
 
     Private Sub ToolBoxCut_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxCut.Click
