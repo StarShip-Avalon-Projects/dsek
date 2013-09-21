@@ -88,9 +88,10 @@ Public Class MS_Edit
         ''' Compares fragment text with this item
         ''' </summary>
         Public Overrides Function Compare(fragmentText As String) As CompareResult
-            Dim pattern = Regex.Replace(fragmentText, RegexSpecSymbolsPattern, "$0")
+            fragmentText = fragmentText.Trim
+            Dim pattern = Regex.Replace(fragmentText, RegexSpecSymbolsPattern, "$0").Trim
             If Regex.IsMatch(Text, pattern, RegexOptions.IgnoreCase) Then
-                If Regex.IsMatch(Text, "\{" & fragmentText & "\}?", RegexOptions.IgnoreCase) Then
+                If Regex.IsMatch(Text.Trim, "\{" & fragmentText & "\}?", RegexOptions.IgnoreCase) Then
                     Return CompareResult.Hidden
                 End If
                 Return CompareResult.Visible
@@ -560,6 +561,7 @@ Public Class MS_Edit
             Dim items As List(Of AutocompleteItem) = New List(Of AutocompleteItem)()
             Dim KeyCount As Integer = CInt(KeysIni.GetKeyValue("Init-Types", "Count"))
             For i As Integer = 1 To KeyCount
+                items.Clear()
                 Dim DSLines As New List(Of String)
                 Dim DSLines2 As New ArrayList
                 Dim key As String = KeysIni.GetKeyValue("Init-Types", i.ToString)
