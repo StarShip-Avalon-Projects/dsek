@@ -460,6 +460,7 @@ Public Class MS_Edit
                     FullFile(TabControl2.SelectedIndex).Add(line)
                 Loop
                 MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
+                MS_Editor.ClearUndo()
                 reader.Close()
 
                 UpdateSegments()
@@ -490,6 +491,7 @@ Public Class MS_Edit
             FullFile(TabControl2.SelectedIndex).Add(line)
         Loop
         MS_Editor.Text = String.Join(vbLf, FullFile(TabControl2.SelectedIndex).ToArray)
+        MS_Editor.ClearUndo()
         reader.Close()
 
         UpdateSegments()
@@ -1001,7 +1003,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         If String.IsNullOrEmpty(i) Then Exit Sub
         If IsInteger(i) And i.ToInteger > 0 Then
             If i > MS_Editor.Lines.Count - 1 Then i = MS_Editor.Lines.Count - 1
-            MS_Editor.Selection.Start = New Place(0, i.ToInteger)
+            MS_Editor.Selection.Start = New Place(0, i.ToInteger + 1)
             MS_Editor.Selection.Expand()
             MS_Editor.DoSelectionVisible()
             UpdateStatusBar()
@@ -1035,6 +1037,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         End If
         TabSections(TabControl2.SelectedIndex).Clear()
         MS_Editor.Text = NewMSFile()
+        MS_Editor.ClearUndo()
         WorkFileName(TabControl2.SelectedIndex) = ""
 
         lblStatus.Text = "Status: Opened New DragonSpeak  File "

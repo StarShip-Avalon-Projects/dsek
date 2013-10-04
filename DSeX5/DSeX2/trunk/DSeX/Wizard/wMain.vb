@@ -151,9 +151,10 @@ Public Class wMain
 
     Private Sub GetScriptIni()
         selecter.Items.Clear()
+        ScriptPaths.Clear()
+
         Dim path As String = Application.StartupPath + "/Scripts/"
         Directory.CreateDirectory(path)
-        ScriptPaths.Clear()
         Dim x As Integer = 0
         For x = 0 To FileIO.FileSystem.GetFiles(path, FileIO.SearchOption.SearchTopLevelOnly, "*.ini").Count - 1
             Dim s = FileIO.FileSystem.GetName(FileIO.FileSystem.GetFiles(path).Item(x))
@@ -245,4 +246,6 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             selecter.Items.RemoveAt(selecter.SelectedIndex)
         End If
     End Sub
+
+
 End Class

@@ -113,8 +113,8 @@ Public Class wUI
 #Region "Position Functions"
 
     'Regexes for calculation parsing
-    Private Const RGEX_Movement As String = "(\d+)(nw|ne|sw|se)(\d+)(.*)"""
-    Private Const RGEX_MathCalc As String = "(\d+)(\+|-|\*|/)(\d+)(.*)"""
+    Private Const RGEX_Movement As String = "(\d+)(nw|ne|sw|se)(\d+)(.*)"
+    Private Const RGEX_MathCalc As String = "(\d+)(\+|-|\*|/)(\d+)(.*)"
     Private Const RGEX_MathStep As String = "(\+|-|\*|/)(\d+)"
     Private Const RGEX_Coordinate As String = "(\d+)\s*,\s*(\d+)"
     Private Const RGEX_Number As String = "^(\d+)"
@@ -208,9 +208,9 @@ Public Class wUI
 
 
         For Each s In m
-            Dim spaces As Integer = s.groups(2)
+            Dim spaces As Integer = s.groups(2).value
 
-            Select Case s.groups(1).ToLower
+            Select Case s.groups(1).value.ToLower
                 Case "+"
                     x += spaces
 
@@ -496,12 +496,13 @@ Public Class wUI
                 Dim m As MatchCollection = Regex.Matches(template, "\^" + RGEX_Movement + "\^", RegexOptions.IgnoreCase)
                 For Each s In m
                     Dim List As String = s.groups(2).value + s.groups(3).value + s.groups(4).value
-                    template = Regex.Replace(template, "\^" & s.groups(0) & "\^", MoveCoord(str, List), RegexOptions.IgnoreCase)
+                    template = Regex.Replace(template, Regex.Escape(s.groups(0)), MoveCoord(str, List), RegexOptions.IgnoreCase)
                 Next
                 m = Regex.Matches(template, "\^" + RGEX_MathCalc + "\^", RegexOptions.IgnoreCase)
                 For Each s In m
                     Dim List As String = s.groups(2).value + s.groups(3).value + s.groups(4).value
-                    template = Regex.Replace(template, "\^" & s.groups(0) & "\^", CalcMath(str, List), RegexOptions.IgnoreCase)
+                    Dim test As String = CalcMath(str, List)
+                    template = Regex.Replace(template, Regex.Escape(s.groups(0).value), CalcMath(str, List), RegexOptions.IgnoreCase)
                 Next
             Next
             Solution.AppendText(template + vbLf)
