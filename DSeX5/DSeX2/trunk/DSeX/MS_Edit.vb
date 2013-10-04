@@ -1003,7 +1003,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         If String.IsNullOrEmpty(i) Then Exit Sub
         If IsInteger(i) And i.ToInteger > 0 Then
             If i > MS_Editor.Lines.Count - 1 Then i = MS_Editor.Lines.Count - 1
-            MS_Editor.Selection.Start = New Place(0, i.ToInteger + 1)
+            MS_Editor.Selection.Start = New Place(0, i.ToInteger - 1)
             MS_Editor.Selection.Expand()
             MS_Editor.DoSelectionVisible()
             UpdateStatusBar()
@@ -1161,9 +1161,9 @@ InputBox("What line within the document do you want to send the cursor to?", _
         Dim str2 As String = ""
         If str.Length > 1 Then
             For i As Integer = 0 To str.Length - 1
-                str2 &= vbCrLf & "*" & str(i)
+                str(i) = "*" + str(i)
             Next
-            MS_Editor.SelectedText = str2.Substring(1)
+            MS_Editor.SelectedText = String.Join(vbCrLf, str)
 
         End If
     End Sub
