@@ -425,7 +425,7 @@ Public Class MS_Edit
         ElseIf (e.KeyCode = Keys.W AndAlso e.Modifiers = Keys.Control) Then
             wMain.Show()
         ElseIf (e.KeyCode = Keys.S AndAlso e.Modifiers = Keys.Control) Then
-            ' SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
+            'SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
         ElseIf (e.KeyCode = Keys.F1) Then
 
         ElseIf e.KeyCode = Keys.F5 Then
@@ -773,8 +773,10 @@ Public Class MS_Edit
             If .ShowDialog = DialogResult.OK Then
 
                 Dim slashPosition As Integer = .FileName.LastIndexOf("\")
-                WorkFileName(TabControl2.SelectedIndex) = .FileName.Substring(slashPosition + 1)
-                WorkPath(TabControl2.SelectedIndex) = .FileName.Replace(WorkFileName(TabControl2.SelectedIndex), "")
+                WorkFileName(TabControl2.SelectedIndex) = Path.GetFileName(.FileName)
+                'WorkPath(TabControl2.SelectedIndex) = .FileName.Replace(WorkFileName(TabControl2.SelectedIndex), "")
+                WorkPath(TabControl2.SelectedIndex) = Path.GetDirectoryName(.FileName)
+
                 SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
                 lblStatus.Text = "Status: Saved " & WorkFileName(TabControl2.SelectedIndex)
                 frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
@@ -796,8 +798,9 @@ Public Class MS_Edit
                     SaveAs()
                     Exit Sub
                 End If
-                UpdateSegments()
+                SaveSections()
                 RebuildFullFile()
+                UpdateSegments()
                 Try
                     Dim Writer As New StreamWriter(path & "/" & fName)
                     For j = 0 To FullFile(TabControl2.SelectedIndex).Count - 1
@@ -1295,6 +1298,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         lstView.ContextMenuStrip = Me.EditMenu
         lstView.AcceptsTab = True
         lstView.Parent = tp
+        lstView.AutoIndent = False
         lstView.Anchor = AnchorStyles.Left + AnchorStyles.Top + AnchorStyles.Bottom + AnchorStyles.Right
         lstView.Name = "edit" + n
         lstView.Dock = DockStyle.Fill
@@ -1511,7 +1515,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         Dim t1 As String = ""
         Dim blank As Boolean = False
         'Dim TabSections As List(Of Dictionary(Of String, TDSSegment)) 
-        If Not IsNothing(TabSections) Then TabSections(idx).Clear()
+        If Not IsNothing(TabSections(idx)) Then TabSections(idx).Clear()
 
         'Build from the basics
 

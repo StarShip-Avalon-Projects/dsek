@@ -4,4 +4,5 @@ bin
 </Value></Property><Property><Name>svn:ignore</Name><Value>*.suo
 ScintillaNET
 bin
+</Value></Property><Property><Name>svn:ignore</Name><Value>DSeX2.sdf
 </Value></Property></Properties></ItemProperties>
