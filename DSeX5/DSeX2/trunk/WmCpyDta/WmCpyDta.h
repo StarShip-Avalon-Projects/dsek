@@ -19,9 +19,9 @@
 // See WmCpyDta.cpp for the implementation of this class
 //
 const int ciMaxFID = 4;
-const int ciMaxName = 70;
-const int ciMaxTag = 70;
-const int ciMaxData = 500;
+const int ciMaxName = 128;
+const int ciMaxTag = 512;
+const int ciMaxData = 2048;
 const int cWM_TagDataMessageIdDefault = WM_APP + 1;
 
 
