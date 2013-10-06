@@ -225,7 +225,6 @@ Public Class wMain
     End Sub
 
     Private Sub WizardEdit_Click(sender As System.Object, e As System.EventArgs) Handles WizardEdit.Click
-        MS_Edit.AddNewEditorTab("", "", 0)
         MS_Edit.OpenMS_File(ScriptPaths.Item(selecter.SelectedIndex) + "/" + selecter.SelectedItem + ".ini")
     End Sub
 

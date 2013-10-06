@@ -303,7 +303,7 @@ Public Class MS_Edit
                     'store Botname to List at NewTab index
                 End If
 
-                AddNewEditorTab("", "", "")
+
                 OpenMS_File(sData.ToString, bName)
 
             End If
@@ -473,11 +473,49 @@ Public Class MS_Edit
 
     End Sub
 
+    Public Function FileTab(ByRef File As String) As Integer
+        Dim f As String = Path.GetFileName(File)
+        Dim p As String = Path.GetDirectoryName(File)
+        For I = 0 To TabControl2.TabPages.Count - 1
+            If WorkFileName(I) = f And WorkPath(I) = p Then
+                Return I
+            End If
+        Next
+        Return -1
+    End Function
+
+    Public Function IsEditorOpen(ByRef File As String) As Boolean
+        Dim f As String = Path.GetFileName(File)
+        Dim p As String = Path.GetDirectoryName(File)
+        For I = 0 To TabControl2.TabPages.Count - 1
+            If WorkFileName(I) = f And WorkPath(I) = p Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+    Public Function IsEditorOpen(ByRef File As String, ByRef path As String) As Boolean
+        For I = 0 To TabControl2.TabPages.Count - 1
+            If WorkFileName(I) = File And WorkPath(I) = path Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+
     Public Sub OpenMS_File(ByRef filename As String, Optional ByRef bName As String = "none")
 
-        Dim slashPosition As Integer = filename.LastIndexOf("\")
-        WorkFileName(TabControl2.SelectedIndex) = filename.Substring(slashPosition + 1)
-        WorkPath(TabControl2.SelectedIndex) = filename.Replace(WorkFileName(TabControl2.SelectedIndex), "")
+        If IsEditorOpen(filename) Then
+            TabControl2.SelectedIndex = FileTab(filename)
+            BotName(FileTab(filename)) = bName
+            Exit Sub
+        End If
+
+        Dim f As String = Path.GetFileName(filename)
+        Dim p As String = Path.GetDirectoryName(filename)
+        AddNewEditorTab(f, p, TabControl2.TabPages.Count)
+        WorkFileName(TabControl2.SelectedIndex) = f
+        WorkPath(TabControl2.SelectedIndex) = p
         BotName(TabControl2.SelectedIndex) = bName
 
         frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
@@ -1473,8 +1511,6 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Private Sub EditToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles EditToolStripMenuItem1.Click
-        'TemplatePaths(ListBox2.SelectedIndex) + 
-        AddNewEditorTab(ListBox2.SelectedItem + ".ds", TemplatePaths.Item(ListBox2.SelectedIndex), TabControl2.TabCount.ToString)
         OpenMS_File(TemplatePaths.Item(ListBox2.SelectedIndex) + "/" + ListBox2.SelectedItem + ".ds")
     End Sub
 
