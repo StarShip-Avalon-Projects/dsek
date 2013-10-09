@@ -323,7 +323,7 @@ Public Class MS_Edit
 #End Region
 
 #Region "Event Handlers"
-    Delegate Sub FileSave(ByRef path As String, ByRef filename As String)
+    Delegate Sub FileSave(ByRef Idx As Integer)
 #End Region
 
     Private Sub GetTemplates()
@@ -380,7 +380,7 @@ Public Class MS_Edit
                         Dim logError As New ErrorLogging(eX, Me)
                     End Try
                 ElseIf result = DialogResult.Yes Then
-                    SaveMS_File(WorkPath(i), WorkFileName(i))
+                    SaveMS_File(i)
                     Try
                         TabControl2.TabPages.RemoveAt(i)
                         CanOpen.RemoveAt(i)
@@ -815,7 +815,7 @@ Public Class MS_Edit
                 'WorkPath(TabControl2.SelectedIndex) = .FileName.Replace(WorkFileName(TabControl2.SelectedIndex), "")
                 WorkPath(TabControl2.SelectedIndex) = Path.GetDirectoryName(.FileName)
 
-                SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
+                SaveMS_File(TabControl2.SelectedIndex)
                 lblStatus.Text = "Status: Saved " & WorkFileName(TabControl2.SelectedIndex)
                 frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
                 Me.Text = frmTitle(TabControl2.SelectedIndex)
@@ -824,33 +824,33 @@ Public Class MS_Edit
         End With
     End Sub
 
-    Private Sub SaveMS_File(ByRef path As String, ByRef fName As String)
+    Private Sub SaveMS_File(ByRef TabIdx As Integer)
         If MS_Editor.InvokeRequired Then
             Dim d As New FileSave(AddressOf SaveMS_File)
-            Me.Invoke(d, path, fName)
+            Me.Invoke(d, TabIdx)
         Else
-            Dim Restart As Boolean = False
-            If Not CanOpen(TabControl2.SelectedIndex) Then
+            'Dim Restart As Boolean = False
+            If Not CanOpen(TabIdx) Then
 
-                If String.IsNullOrEmpty(fName) Then
+                If String.IsNullOrEmpty(WorkFileName(TabIdx)) Then
                     SaveAs()
                     Exit Sub
                 End If
-                SaveSections()
-                RebuildFullFile()
-                UpdateSegments()
+                SaveSections(TabIdx)
+                RebuildFullFile(TabIdx)
+                'UpdateSegments()
                 Try
-                    Dim Writer As New StreamWriter(path & "/" & fName)
-                    For j = 0 To FullFile(TabControl2.SelectedIndex).Count - 1
-                        Writer.WriteLine(FullFile(TabControl2.SelectedIndex)(j))
+                    Dim Writer As New StreamWriter(WorkPath(TabIdx) & "/" & WorkFileName(TabIdx))
+                    For j = 0 To FullFile(TabIdx).Count - 1
+                        Writer.WriteLine(FullFile(TabIdx)(j))
                     Next
                     Writer.Close()
                     lblStatus.Text = "Status: File Saved."
 
-                    CanOpen(TabControl2.SelectedIndex) = True
-                    Me.Text = frmTitle(TabControl2.SelectedIndex)
+                    CanOpen(TabIdx) = True
+                    If TabIdx = TabControl2.SelectedIndex Then Me.Text = frmTitle(TabIdx)
                 Catch ex As Exception
-                    MessageBox.Show("There was an error writing to " + fName)
+                    MessageBox.Show("There was an error writing to " + WorkFileName(TabIdx))
                 End Try
 
 
@@ -859,7 +859,7 @@ Public Class MS_Edit
     End Sub
 
     Private Sub SaveToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles SaveToolStripMenuItem.Click
-        SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
+        SaveMS_File(TabControl2.SelectedIndex)
     End Sub
 
     Private Sub MenuCopy_Click(sender As System.Object, e As System.EventArgs) Handles MenuCopy.Click, EditDropCopy.Click
@@ -970,7 +970,7 @@ Public Class MS_Edit
     End Sub
 
     Private Sub ToolBoxSave_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxSave.Click
-        SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
+        SaveMS_File(TabControl2.SelectedIndex)
     End Sub
 
     Private Sub ToolBoxOpen_Click(sender As System.Object, e As System.EventArgs) Handles ToolBoxOpen.Click
@@ -1073,7 +1073,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
       MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
 
             If reply = DialogResult.Yes Then
-                SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
+                SaveMS_File(TabControl2.SelectedIndex)
             End If
         End If
         TabSections(TabControl2.SelectedIndex).Clear()
@@ -1101,7 +1101,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
       MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
 
             If reply = DialogResult.Yes Then
-                SaveMS_File(WorkPath(TabControl2.SelectedIndex), WorkFileName(TabControl2.SelectedIndex))
+                SaveMS_File(TabControl2.SelectedIndex)
             End If
         End If
         TabSections(TabControl2.SelectedIndex).Clear()
@@ -1452,7 +1452,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
       MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
 
             If reply = DialogResult.Yes Then
-                SaveMS_File(WorkPath(i), WorkFileName(i))
+                SaveMS_File(i)
             ElseIf reply = DialogResult.Cancel Then
                 Exit Sub
             End If
@@ -1500,7 +1500,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Private Sub FSave_Click(sender As System.Object, e As System.EventArgs)
 
-        SaveMS_File(WorkPath(sender.tag), WorkFileName(sender.tag))
+        SaveMS_File(sender.tag)
     End Sub
 
     Private Sub RenameToolStripMenuItem1_Click(sender As System.Object, e As System.EventArgs) Handles RenameToolStripMenuItem1.Click
@@ -1632,41 +1632,41 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Dim SectionLstIdx As Integer = 0
     Private Sub ListBox1_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseDown
-        If ListBox1.Items.Count = 0 Then Exit Sub
+        If sender.Items.Count = 0 Then Exit Sub
         SectionLstIdx = sender.IndexFromPoint(New Point(e.X, e.Y))
-        If e.Button = Windows.Forms.MouseButtons.Right Then
+        If e.Button = Windows.Forms.MouseButtons.Right And SectionLstIdx <> -1 Then
 
             sender.SelectedIndex = sender.IndexFromPoint(New Point(e.X, e.Y))
         End If
         Debug.Print("ListBox1_MouseDown()")
-        SaveSections()
+        SaveSections(TabControl2.SelectedIndex)
 
     End Sub
 
-    Private Sub SaveSections()
+    Private Sub SaveSections(ByVal tabidx As Integer)
         If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
         Debug.Print("SaveSections()")
 
         If SectionIdx(TabControl2.SelectedIndex) = 0 And MS_Editor.Text <> "" Then
             Debug.Print("SectionIdx(" + TabControl2.SelectedIndex.ToString + ")")
-            FullFile(TabControl2.SelectedIndex).Clear()
+            FullFile(tabidx).Clear()
             For i = 0 To MS_Editor.Lines.Count - 1
                 FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines.Item(i).TrimEnd(charsToTrim))
             Next
             UpdateSegments()
         End If
         If SectionIdx(TabControl2.SelectedIndex) > 0 Then
-            Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(SectionIdx(TabControl2.SelectedIndex) - 1)
+            Dim section As TDSSegment = TabSections(tabidx)(SectionIdx(tabidx) - 1)
             section.lines.Clear()
             For i = 0 To MS_Editor.Lines.Count - 1
                 section.lines.Add(MS_Editor.Lines.Item(i).TrimEnd(charsToTrim))
             Next
-            TabSections(TabControl2.SelectedIndex)(SectionIdx(TabControl2.SelectedIndex) - 1) = section
+            TabSections(tabidx)(SectionIdx(tabidx) - 1) = section
         End If
     End Sub
 
     Private Sub ListBox1_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseUp
-        If ListBox1.Items.Count = 0 Then Exit Sub
+        If ListBox1.Items.Count = 0 Or sender.SelectedIndex = -1 Or SectionLstIdx = -1 Then Exit Sub
         Debug.Print("ListBox1_MouseUp()")
         If sender.selectedindex <> SectionLstIdx Then Exit Sub
         If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
@@ -1723,7 +1723,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         If ListBox1.Items.Count = 0 Then Exit Sub
         If i > 1 Then i = 1
         Debug.Print("NewSection_Click()")
-        SaveSections()
+        SaveSections(TabControl2.SelectedIndex)
         Dim section As TDSSegment = New TDSSegment
         Dim s As String = Microsoft.VisualBasic.InputBox("Add Section")
         If String.IsNullOrEmpty(s) Then Exit Sub
