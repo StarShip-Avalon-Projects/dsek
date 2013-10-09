@@ -1,0 +1,62 @@
+(14:28:19)   Oxil: Just noticed one more little thing with DSeX. If you open it up, and then open 
+an existing file, the new file tab stays there. Usually kinda pointless.
+(14:33:09)   Oxil: Also ctrl-z works to undo, but ctrl-y doesn't redo, it seem you have to click the
+ button for that one. Not a huge program-breaking issue, but everyone loves keyboard shortcuts.
+ (17:04:17) Gerolkae: was curious what the redo combo was
+
+(20:31:47)   Oxil: Wow.. I'm not sure what's causing this, but that's twice now I've been working on
+ DS, and something while I'm pressing ctrl-z a causes it to wipe everything and leave me with a
+  completely blank file. Undo doesn't fix it.
+(20:40:58) Gerolkae: O.o
+
+(20:46:15)   Oxil: Also on the ctrl-f window, just hitting enter doesn't work, you have to click the
+ Find button. Just another little thing that could be made more convenient.
+(20:48:04)   Oxil: And ctrl-f doesn't work at all to search for something like %temp or {share}, 
+making searching for specific uses of PS info or variables quite unpleasant.
+(20:49:20)   Oxil: Doesn't seem to work for anything that contains a non-letter character...
+
+(20:54:17)   Oxil: The clear thing just happened again, as I clicked somewhere around the sidebar.
+(20:58:47)   Oxil: Alright, still not sure as to the cause, but click around the area where the line
+ numbers are shown a bit if you want to try and see what's going on. Seems to happen randomly.
+(21:05:18) Gerolkae: Alright... Watch that Disappearing thing... Let See if we can find more clues to 
+whats happening.. I'll be on the look outfor it as well.. thanks for the details on the other stuff
+ too.. I had a feeling I was missing some Things...
+(21:07:04)   Oxil: I just noticed the last couple time's it's happened, when I close the program, it
+ hasn't even given me the "This file has changed, would you like to save?" dialogue. And the file is 
+ apparently being saved because when I reopened them there were two lines.. I just lost a couple DS 
+ files to that. Thank god for backups.
+
+(21:49:12) Gerolkae: O.o
+(21:49:34)   Oxil: Indeed.
+(17:57:42) Gerolkae: is the Close Program Save thing happening every time or just random?
+(18:10:47)   Oxil: The first couple times everything poofed, closing DSeX got me the save dialogue. 
+Last few times it didn't. Not sure if I didn't anything different between those, but I don't think so.
+ (18:18:22) Gerolkae: Ok Sounds luike I Fixed one thing and Broke another thing when I fixed the saving
+ thing before...Thanks for the input I'll run some tess and see what I can do for this one.. Thanks 
+ for testing and reporting the Issue... 
+
+ (19:24:55) Gerolkae: When you closed the program.. where the Files Modified? 
+(19:26:09)   Oxil: On the ones where I got the "Would you like to save?" thing, I just clicked no,
+ and they seemed to be fine. The times I didn't get that, they were modified, and contained 2 lines, 
+ I think it was part of the text that you find in a new file. 
+ (19:27:01) Gerolkae: Um Did you Modify the Files or did DSeX do it on its own? 
+ (19:28:53)   Oxil: It did that on its own. Deleted everything in the file as I was working, so I was 
+ left with just an empty tab, but I could still work in it
+
+ (19:31:20)   Oxil: Oh I think I just figured out what's happening. 
+(19:31:29) Gerolkae: Oh? 
+(19:31:48)   Oxil: It happens when you click a section. 
+(19:33:00)   Oxil: Or anywhere in that area with the sections list.
+
+ Hotkeys
+ Ctrl+y Undo
+ Ctrl+f Find Window
+ Ctrl+z Undo
+ * Causes a Editor Wipe and Undo doesn't work
+
+Search&Replace doesn't seen to work for Symbol patterns... Suspect Regex Escape issue
+
+Disappearing Text in editor
+ * Clicked some where on the side Bar Text disappeared (sections?)
+ * Closing Program doesn't display Save file Dialog... Saves files any way with empty data.
+ 

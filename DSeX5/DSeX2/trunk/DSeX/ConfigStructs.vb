@@ -86,13 +86,16 @@ Public Class ConfigStructs
 
 
         Public Sub New()
-            ini.AddSection("Editor").AddKey("IDColor").Value = Color.Blue.ToArgb.ToString
+            ini.AddSection("Editor").AddKey("IDColor").Value = Color.Blue.ToArgb
             ini.AddSection("Editor").AddKey("CommentColor").Value = Color.Green.ToArgb
             ini.AddSection("Editor").AddKey("StringColor").Value = Color.Red.ToArgb
-            ini.AddSection("Editor").AddKey("VariableColor").Value = Color.Cyan.ToArgb
+            ini.AddSection("Editor").AddKey("VariableColor").Value = Color.DarkGray.ToArgb
             ini.AddSection("Editor").AddKey("StringVariableColor").Value = Color.Blue.ToArgb
-            ini.AddSection("Editor").AddKey("NumberColor").Value = Color.Tan.ToArgb
+            ini.AddSection("Editor").AddKey("NumberColor").Value = Color.Brown.ToArgb
+
+
             ini.AddSection("Editor").AddKey("AutoComplete").Value = True.ToString
+
             Dim Count As Integer = KeysIni.GetKeyValue("Init-Types", "Count").ToInteger
             ini.AddSection("Init-Types").AddKey("Count").Value = Count
             ini.AddSection("Init-Types").AddKey("Character").Value = Keysini.GetKeyValue("Init-Types", "Character")

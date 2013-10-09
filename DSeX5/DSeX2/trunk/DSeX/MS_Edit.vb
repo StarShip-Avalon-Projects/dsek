@@ -1630,10 +1630,13 @@ InputBox("What line within the document do you want to send the cursor to?", _
         End With
     End Sub
 
+    Dim SectionLstIdx As Integer = 0
     Private Sub ListBox1_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseDown
         If ListBox1.Items.Count = 0 Then Exit Sub
+        SectionLstIdx = sender.IndexFromPoint(New Point(e.X, e.Y))
         If e.Button = Windows.Forms.MouseButtons.Right Then
-            ListBox1.SelectedIndex = ListBox1.IndexFromPoint(New Point(e.X, e.Y))
+
+            sender.SelectedIndex = sender.IndexFromPoint(New Point(e.X, e.Y))
         End If
         Debug.Print("ListBox1_MouseDown()")
         SaveSections()
@@ -1665,19 +1668,21 @@ InputBox("What line within the document do you want to send the cursor to?", _
     Private Sub ListBox1_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseUp
         If ListBox1.Items.Count = 0 Then Exit Sub
         Debug.Print("ListBox1_MouseUp()")
+        If sender.selectedindex <> SectionLstIdx Then Exit Sub
         If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
+
         SectionChange = True
         If ListBox1.SelectedIndex = 0 Then
             'Rebuild FullFile list first
             RebuildFullFile()
             MS_Editor.Text = ""
-            MS_Editor.ClearUndo()
             MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
+
             UpdateSegments()
         Else
             DisplaySection(ListBox1.SelectedIndex - 1)
         End If
-
+        MS_Editor.ClearUndo()
 
         Dim j As Integer = ListBox1.SelectedIndex
         SectionIdx(TabControl2.SelectedIndex) = ListBox1.SelectedIndex

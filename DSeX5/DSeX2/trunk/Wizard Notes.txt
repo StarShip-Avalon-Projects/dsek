@@ -1,2 +1,10 @@
-[7:16:34 PM] Lothus Marque: Basically, I used the initial test regex I gave you, but added... uh, it's not in front of me but I think it was (.*) to the end. If it matches, add all the pieces together (except for the variable number) and toss it all at the function as a single string. The function that does the movement takes two (I think, again, not in front of me) parameters - one is the variable VALUE, the other is the string of commands. It then basically takes the command string and uses a clipped version of the original test regex - just with the command+number. It tests for that, processes the single match as it would for a single... then loops, matching/looping until there are no more valid commands in the list. Then the final coordinate is returned. :P
-[7:17:32 PM] Lothus Marque: So you could have 30+ movements in a single replace point. I can't quite think of a good reason beyond maybe doing a spiral placement, but it's better than hardcoding. >.>
+[7:16:34 PM] Lothus Marque: Basically, I used the initial test regex I gave you, but added... uh, 
+it's not in front of me but I think it was (.*) to the end. If it matches, add all the pieces together
+ (except for the variable number) and toss it all at the function as a single string. The function 
+ that does the movement takes two (I think, again, not in front of me) parameters - one is the 
+ variable VALUE, the other is the string of commands. It then basically takes the command string 
+ and uses a clipped version of the original test regex - just with the command+number. It tests for 
+ that, processes the single match as it would for a single... then loops, matching/looping until there
+  are no more valid commands in the list. Then the final coordinate is returned. :P
+[7:17:32 PM] Lothus Marque: So you could have 30+ movements in a single replace point. I can't quite 
+think of a good reason beyond maybe doing a spiral placement, but it's better than hardcoding. >.>
