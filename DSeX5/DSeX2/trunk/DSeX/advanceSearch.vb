@@ -107,12 +107,10 @@ Public Class frmSearch
         '
         'optWhole
         '
-        Me.optWhole.Checked = True
-        Me.optWhole.Location = New System.Drawing.Point(8, 104)
+        Me.optWhole.Location = New System.Drawing.Point(8, 127)
         Me.optWhole.Name = "optWhole"
         Me.optWhole.Size = New System.Drawing.Size(136, 16)
         Me.optWhole.TabIndex = 5
-        Me.optWhole.TabStop = True
         Me.optWhole.Text = "Match - W&hole Word"
         '
         'cmbReplace
@@ -157,10 +155,12 @@ Public Class frmSearch
         '
         'optNone
         '
-        Me.optNone.Location = New System.Drawing.Point(8, 128)
+        Me.optNone.Checked = True
+        Me.optNone.Location = New System.Drawing.Point(11, 107)
         Me.optNone.Name = "optNone"
         Me.optNone.Size = New System.Drawing.Size(136, 16)
         Me.optNone.TabIndex = 13
+        Me.optNone.TabStop = True
         Me.optNone.Text = "Match - All Matches"
         '
         'chkReverse
@@ -267,10 +267,6 @@ Public Class frmSearch
                     MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Exit Sub
 
-
-
-
-
             End If
         ElseIf optNone.Checked Then
 
@@ -289,8 +285,6 @@ Public Class frmSearch
                     MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Exit Sub
 
-
-
             Else
 
 
@@ -306,14 +300,22 @@ Public Class frmSearch
                     MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Exit Sub
 
-
-
-
-
             End If
 
         End If
 
+    End Sub
+
+    Private Sub cmbSearch_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles cmbSearch.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            e.SuppressKeyPress = True
+            If btnFindNext.Enabled = True Then
+                btnFindNext.PerformClick()
+            Else
+                btnFind.PerformClick()
+            End If
+
+        End If
     End Sub
 
     Private Sub cmbSearch_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmbSearch.TextChanged
