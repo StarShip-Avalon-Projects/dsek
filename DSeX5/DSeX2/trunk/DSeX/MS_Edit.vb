@@ -1631,45 +1631,22 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Dim SectionLstIdx As Integer = 0
+    Dim SectionLstIdxOld As Integer = 0
     Private Sub ListBox1_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseDown
         If sender.Items.Count = 0 Then Exit Sub
         SectionLstIdx = sender.IndexFromPoint(New Point(e.X, e.Y))
-        If e.Button = Windows.Forms.MouseButtons.Right And SectionLstIdx <> -1 Then
-
-            sender.SelectedIndex = sender.IndexFromPoint(New Point(e.X, e.Y))
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            If SectionLstIdx = -1 Then SectionLstIdx = sender.SelectedIndex
+            sender.SelectedIndex = SectionLstIdx
         End If
         Debug.Print("ListBox1_MouseDown()")
-        SaveSections(TabControl2.SelectedIndex)
-
+        If SectionLstIdx <> SectionLstIdxOld Then SaveSections(TabControl2.SelectedIndex)
     End Sub
-
-    Private Sub SaveSections(ByVal tabidx As Integer)
-        If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
-        Debug.Print("SaveSections()")
-
-        If SectionIdx(TabControl2.SelectedIndex) = 0 And MS_Editor.Text <> "" Then
-            Debug.Print("SectionIdx(" + TabControl2.SelectedIndex.ToString + ")")
-            FullFile(tabidx).Clear()
-            For i = 0 To MS_Editor.Lines.Count - 1
-                FullFile(TabControl2.SelectedIndex).Add(MS_Editor.Lines.Item(i).TrimEnd(charsToTrim))
-            Next
-            UpdateSegments()
-        End If
-        If SectionIdx(TabControl2.SelectedIndex) > 0 Then
-            Dim section As TDSSegment = TabSections(tabidx)(SectionIdx(tabidx) - 1)
-            section.lines.Clear()
-            For i = 0 To MS_Editor.Lines.Count - 1
-                section.lines.Add(MS_Editor.Lines.Item(i).TrimEnd(charsToTrim))
-            Next
-            TabSections(tabidx)(SectionIdx(tabidx) - 1) = section
-        End If
-    End Sub
-
     Private Sub ListBox1_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseUp
-        If ListBox1.Items.Count = 0 Or sender.SelectedIndex = -1 Or SectionLstIdx = -1 Then Exit Sub
+        If ListBox1.Items.Count = 0 Or sender.SelectedIndex = -1 Then Exit Sub
         Debug.Print("ListBox1_MouseUp()")
-        If sender.selectedindex <> SectionLstIdx Then Exit Sub
-        If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
+        Dim test As Integer = sender.SelectedIndex
+        If SectionLstIdx = SectionLstIdxOld Then Exit Sub
 
         SectionChange = True
         If ListBox1.SelectedIndex = 0 Then
@@ -1678,16 +1655,40 @@ InputBox("What line within the document do you want to send the cursor to?", _
             MS_Editor.Text = ""
             MS_Editor.Text = String.Join(vbCrLf, FullFile(TabControl2.SelectedIndex).ToArray)
 
-            UpdateSegments()
+            UpdateSegments(TabControl2.SelectedIndex)
         Else
             DisplaySection(ListBox1.SelectedIndex - 1)
         End If
         MS_Editor.ClearUndo()
 
         Dim j As Integer = ListBox1.SelectedIndex
-        SectionIdx(TabControl2.SelectedIndex) = ListBox1.SelectedIndex
+        SectionIdx(TabControl2.SelectedIndex) = sender.SelectedIndex
         SectionChange = False
+        SectionLstIdxOld = sender.SelectedIndex
     End Sub
+
+    Private Sub SaveSections(ByVal tabidx As Integer)
+        If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
+        Debug.Print("SaveSections()")
+
+        If SectionIdx(tabidx) = 0 And MS_Editor(tabidx).Text <> "" Then
+            Debug.Print("SectionIdx(" + tabidx.ToString + ")")
+            FullFile(tabidx).Clear()
+            For i = 0 To MS_Editor.Lines.Count - 1
+                FullFile(tabidx).Add(MS_Editor(tabidx).Lines.Item(i).TrimEnd(charsToTrim))
+            Next
+            UpdateSegments()
+        End If
+        If SectionIdx(TabControl2.SelectedIndex) > 0 Then
+            Dim section As TDSSegment = TabSections(tabidx)(SectionIdx(tabidx) - 1)
+            section.lines.Clear()
+            For i = 0 To MS_Editor(tabidx).Lines.Count - 1
+                section.lines.Add(MS_Editor(tabidx).Lines.Item(i).TrimEnd(charsToTrim))
+            Next
+            TabSections(tabidx)(SectionIdx(tabidx) - 1) = section
+        End If
+    End Sub
+
     Private Sub DisplaySection(ByRef j As Integer)
         MS_Editor.Text = ""
         MS_Editor.Text = String.Join(vbCrLf, TabSections(TabControl2.SelectedIndex)(j).lines.ToArray)
@@ -1826,12 +1827,9 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
     End Sub
 
     Private Sub RemoveAllToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RemoveAllToolStripMenuItem.Click
-        'If IsNothing(MS_Editor) Then Exit Sub
-        'MS_Editor.Markers.DeleteAll(0)
+        If IsNothing(MS_Editor) Then Exit Sub
+        MS_Editor.Bookmarks.Clear()
     End Sub
-
-
-
 
     Private Sub MS_Editor_MouseDoubleClick(sender As Object, e As MouseEventArgs)
         If e.X < MS_Editor.LeftIndent Then
