@@ -1561,7 +1561,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         bypass = False
 
         For i = 0 To FullFile(idx).Count - 1
-
+            Debug.Print("UpdateSegments FullFile.Count" + FullFile(idx).Count.ToString)
             If FullFile(idx)(i).StartsWith(RES_DS_begin) Then
                 sec2.Title = RES_DSS_begin
                 sec2.lines.Add(FullFile(idx)(i))
@@ -1579,11 +1579,15 @@ InputBox("What line within the document do you want to send the cursor to?", _
                 TabSections(idx).Add(tmpsec)
                 bypass = False
             End If
-            If (FullFile(idx)(i) <> "") And (tmpsec.Title = RES_Def_section) And i = 1 Then
+
+            If (tmpsec.Title = RES_Def_section) And i = 1 And Not FullFile(idx)(i).StartsWith(RES_SEC_Marker) Then
                 blank = False
                 bypass = False
+                ' End If
+                ' Section marker
+
             End If
-            ' Section marker
+
             If FullFile(idx)(i).StartsWith(RES_SEC_Marker) Then
 
                 t1 = FullFile(idx)(i).Substring(RES_SEC_Marker.Length)
@@ -1593,10 +1597,13 @@ InputBox("What line within the document do you want to send the cursor to?", _
                 TabSections(idx).Add(tmpsec)
 
                 bypass = False
-            ElseIf Not bypass Then
+            End If
+
+            If Not bypass Then
                 tmpsec.lines.Add(FullFile(idx)(i))
                 bypass = False
             End If
+            Debug.Print("UpdateSegments TabSections " + TabSections(idx).Count.ToString)
         Next
 
     End Sub
@@ -1640,14 +1647,15 @@ InputBox("What line within the document do you want to send the cursor to?", _
             sender.SelectedIndex = SectionLstIdx
         End If
         Debug.Print("ListBox1_MouseDown()")
-        If SectionLstIdx <> SectionLstIdxOld Then SaveSections(TabControl2.SelectedIndex)
+        'SaveSections(TabControl2.SelectedIndex)
+
+        If sender.SelectedIndex <> SectionLstIdxOld Then SaveSections(TabControl2.SelectedIndex)
     End Sub
     Private Sub ListBox1_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseUp
         If ListBox1.Items.Count = 0 Or sender.SelectedIndex = -1 Then Exit Sub
         Debug.Print("ListBox1_MouseUp()")
         Dim test As Integer = sender.SelectedIndex
-        If SectionLstIdx = SectionLstIdxOld Then Exit Sub
-
+        If ListBox1.SelectedIndex = SectionLstIdxOld Then Exit Sub
         SectionChange = True
         If ListBox1.SelectedIndex = 0 Then
             'Rebuild FullFile list first
@@ -1659,11 +1667,13 @@ InputBox("What line within the document do you want to send the cursor to?", _
         Else
             DisplaySection(ListBox1.SelectedIndex - 1)
         End If
+        SectionChange = False
+
         MS_Editor.ClearUndo()
 
         Dim j As Integer = ListBox1.SelectedIndex
         SectionIdx(TabControl2.SelectedIndex) = sender.SelectedIndex
-        SectionChange = False
+
         SectionLstIdxOld = sender.SelectedIndex
     End Sub
 
@@ -1702,13 +1712,17 @@ InputBox("What line within the document do you want to send the cursor to?", _
         Debug.Print("RebuildFullFile()")
         FullFile(Tab).Clear()
         For i = 0 To TabSections(Tab).Count - 1
+
             'RES_SEC_Marker
             If TabSections(Tab)(i).Title <> RES_DSS_begin And _
                 TabSections(Tab)(i).Title <> RES_DSS_End And _
                 (TabSections(Tab)(i).Title <> RES_Def_section Or TabSections(Tab)(i).Title = RES_Def_section And i > 1) Then
                 FullFile(Tab).Add(RES_SEC_Marker + TabSections(Tab)(i).Title)
+                Debug.Print("RebuildFullFile SectionMarker FullFile.Count" + FullFile(Tab).Count.ToString)
             End If
+
             FullFile(Tab).AddRange(TabSections(Tab)(i).lines)
+            Debug.Print("RebuildFullFile AddRange FullFile.Count" + FullFile(Tab).Count.ToString)
         Next
     End Sub
 
