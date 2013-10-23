@@ -56,6 +56,7 @@ emailed me.
  Hotkeys
  Ctrl+f Find Window
 
+ Crashes on Missing Furc Install path
 
 Search&Replace doesn't seen to work for Symbol patterns... Suspect Regex Escape issue
 
