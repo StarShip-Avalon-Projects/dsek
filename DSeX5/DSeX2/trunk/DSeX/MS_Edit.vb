@@ -1554,7 +1554,6 @@ InputBox("What line within the document do you want to send the cursor to?", _
         If Not IsNothing(TabSections(idx)) Then TabSections(idx).Clear()
 
         'Build from the basics
-
         tmpsec.Title = RES_Def_section
 
         TabSections(idx).Add(tmpsec)
@@ -1581,7 +1580,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
             End If
 
             If (tmpsec.Title = RES_Def_section) And i = 1 And Not FullFile(idx)(i).StartsWith(RES_SEC_Marker) Then
-                blank = False
+
                 bypass = False
                 ' End If
                 ' Section marker
@@ -1596,13 +1595,14 @@ InputBox("What line within the document do you want to send the cursor to?", _
                 tmpsec.Title = t1
                 TabSections(idx).Add(tmpsec)
 
-                bypass = False
+                bypass = True
             End If
 
             If Not bypass Then
                 tmpsec.lines.Add(FullFile(idx)(i))
-                bypass = False
+
             End If
+            bypass = False
             Debug.Print("UpdateSegments TabSections " + TabSections(idx).Count.ToString)
         Next
 
@@ -1668,7 +1668,8 @@ InputBox("What line within the document do you want to send the cursor to?", _
             DisplaySection(ListBox1.SelectedIndex - 1)
         End If
         SectionChange = False
-
+        UpdateSegmentList()
+        ListBox1.SelectedIndex = SectionLstIdx
         MS_Editor.ClearUndo()
 
         Dim j As Integer = ListBox1.SelectedIndex
