@@ -41,6 +41,18 @@ Last few times it didn't. Not sure if I didn't anything different between those,
 (19:31:48)   Oxil: It happens when you click a section. 
 (19:33:00)   Oxil: Or anywhere in that area with the sections list.
 
+
+(19:32:46)   Oxil: Just found an interesting little bug with DSeX's Find thing. If you type in 
+copy into the box and click Find, the first result it'll show is      (5:10) play sound # to every 
+furre who can see (#,#)., which doesn't contain the word copy at all 
+(19:33:12)   Oxil: Then you cycle through to the end though and it doesn't show it again when you 
+start the search over. 
+(19:35:08)   Oxil: And now I'm getting a very odd error where every time I type a . it copies a 
+portion of the line I'm working on and moving the text up a line, which is making it impossible to 
+work on this since I'm using a lot of variable.x and variable.y stuff. O.o 
+(19:36:39)   Oxil: This is in the version that's on Codeplex, by the way, not the last one you 
+emailed me.
+
  Hotkeys
  Ctrl+f Find Window
 
@@ -58,3 +70,4 @@ Fixed Editor undo operation from Clearing after a Section Change
 Fixed Section changing from changing sections on a blank ListBox1 SelectedIndex
 Changed SaveMS_File() to use a file index
 changed SaveSections() to use a TabIndex pointer
+Fixed Find&Replace to accept Enter Key
