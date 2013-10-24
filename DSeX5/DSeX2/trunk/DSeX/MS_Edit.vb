@@ -1556,7 +1556,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         'Build from the basics
         tmpsec.Title = RES_Def_section
 
-        TabSections(idx).Add(tmpsec)
+
         bypass = False
 
         For i = 0 To FullFile(idx).Count - 1
@@ -1566,6 +1566,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
                 sec2.lines.Add(FullFile(idx)(i))
                 sec2.SecType = TSecType.SecFixed
                 bypass = True
+                blank = True
                 TabSections(idx).Insert(0, sec2)
             End If
             'Ending segment
@@ -1577,10 +1578,12 @@ InputBox("What line within the document do you want to send the cursor to?", _
                 'tmpsec.lines.Add(FullFile(idx)(i))
                 TabSections(idx).Add(tmpsec)
                 bypass = False
+                blank = False
             End If
 
             If (tmpsec.Title = RES_Def_section) And i = 1 And Not FullFile(idx)(i).StartsWith(RES_SEC_Marker) Then
-
+                blank = False
+                TabSections(idx).Add(tmpsec)
                 bypass = False
                 ' End If
                 ' Section marker
@@ -1594,7 +1597,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
                 tmpsec = New TDSSegment
                 tmpsec.Title = t1
                 TabSections(idx).Add(tmpsec)
-
+                blank = False
                 bypass = True
             End If
 
