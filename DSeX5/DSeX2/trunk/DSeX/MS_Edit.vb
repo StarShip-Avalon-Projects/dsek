@@ -114,7 +114,6 @@ Public Class MS_Edit
     ' Public SettingsChanged As List(Of Boolean) = New List(Of Boolean)
     Public WorkFileName As List(Of String) = New List(Of String)
     Public WorkPath As List(Of String) = New List(Of String)
-    Public BotName As List(Of String) = New List(Of String)
 
     Private objMutex As System.Threading.Mutex
 
@@ -154,7 +153,7 @@ Public Class MS_Edit
         End Sub
     End Class
     Dim SectionChange As Boolean = False
-    Dim TabSections As List(Of List(Of TDSSegment)) = New List(Of List(Of TDSSegment))
+    Private TabSections As List(Of List(Of TDSSegment)) = New List(Of List(Of TDSSegment))
 
     Public TemplatePaths As List(Of String) = New List(Of String)
 
@@ -507,7 +506,6 @@ Public Class MS_Edit
 
         If IsEditorOpen(filename) Then
             TabControl2.SelectedIndex = FileTab(filename)
-            BotName(FileTab(filename)) = bName
             Exit Sub
         End If
 
@@ -516,7 +514,6 @@ Public Class MS_Edit
         AddNewEditorTab(f, p, TabControl2.TabPages.Count)
         WorkFileName(TabControl2.SelectedIndex) = f
         WorkPath(TabControl2.SelectedIndex) = p
-        BotName(TabControl2.SelectedIndex) = bName
 
         frmTitle(TabControl2.SelectedIndex) = "DSeX - " & WorkFileName(TabControl2.SelectedIndex)
         Me.Text = frmTitle(TabControl2.SelectedIndex)
@@ -1319,7 +1316,6 @@ InputBox("What line within the document do you want to send the cursor to?", _
         CanOpen.Add(True)
         WorkFileName.Add(FileName)
         WorkPath.Add(FilePath)
-        BotName.Add("none")
 
         frmTitle.Add("DSeX - New DragonSpeak File")
         SectionIdx.Add(0)
@@ -1436,12 +1432,17 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Private Sub TabControl2_CloseButtonClick(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles TabControl2.CloseButtonClick
         e.Cancel = True
-        CloseTab(sender.TabIndex)
+        Dim i As Integer = sender.TabIndex
+        If sender.TabIndex = -1 Then Exit Sub
+        If sender.TabIndex >= TabControl2.TabPages.Count Then Exit Sub
+
+        CloseTab(i)
         TabControl2.RePositionCloseButtons()
     End Sub
 
     Private Sub CloseTab(ByVal i As Integer)
-        If i > TabControl2.TabCount - 1 Then Exit Sub
+        If i = -1 Then Exit Sub
+        If i >= TabControl2.TabPages.Count Then Exit Sub
         Dim fname As String = WorkFileName(i)
         If fname = "" Then
             fname = New_File_Tag
@@ -1560,7 +1561,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         bypass = False
 
         For i = 0 To FullFile(idx).Count - 1
-            Debug.Print("UpdateSegments FullFile.Count" + FullFile(idx).Count.ToString)
+            'Debug.Print("UpdateSegments FullFile.Count" + FullFile(idx).Count.ToString)
             If FullFile(idx)(i).StartsWith(RES_DS_begin) Then
                 sec2.Title = RES_DSS_begin
                 sec2.lines.Add(FullFile(idx)(i))
@@ -1606,7 +1607,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
             End If
             bypass = False
-            Debug.Print("UpdateSegments TabSections " + TabSections(idx).Count.ToString)
+            'Debug.Print("UpdateSegments TabSections " + TabSections(idx).Count.ToString)
         Next
 
     End Sub
@@ -1615,9 +1616,9 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Public Sub UpdateSegmentList(ByRef idx As Integer)
-        Dim tseg As TDSSegment
+        Dim tseg As TDSSegment = New TDSSegment
         Dim Sects_Indent As String = Space(4)
-        Debug.Print("UpdateSegmentList()")
+        'Debug.Print("UpdateSegmentList()")
         With ListBox1
             .Items.Clear()
             .Items.Add(RES_DSS_All)
@@ -1655,6 +1656,10 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
         If sender.SelectedIndex <> SectionLstIdxOld Then SaveSections(TabControl2.SelectedIndex)
     End Sub
+    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As System.EventArgs) Handles ListBox1.SelectedIndexChanged, ListBox2.SelectedIndexChanged
+        If IsNothing(sender.selecteditem) Then Exit Sub
+        ToolTip1.SetToolTip(sender, sender.SelectedItem.ToString)
+    End Sub
     Private Sub ListBox1_MouseUp(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseUp
         If ListBox1.Items.Count = 0 Or sender.SelectedIndex = -1 Then Exit Sub
         Debug.Print("ListBox1_MouseUp()")
@@ -1684,10 +1689,10 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Private Sub SaveSections(ByVal tabidx As Integer)
         If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
-        Debug.Print("SaveSections()")
+        'Debug.Print("SaveSections()")
 
         If SectionIdx(tabidx) = 0 And MS_Editor(tabidx).Text <> "" Then
-            Debug.Print("SectionIdx(" + tabidx.ToString + ")")
+            'Debug.Print("SectionIdx(" + tabidx.ToString + ")")
             FullFile(tabidx).Clear()
             For i = 0 To MS_Editor.Lines.Count - 1
                 FullFile(tabidx).Add(MS_Editor(tabidx).Lines.Item(i).TrimEnd(charsToTrim))
@@ -1698,9 +1703,9 @@ InputBox("What line within the document do you want to send the cursor to?", _
             Dim section As TDSSegment = TabSections(tabidx)(SectionIdx(tabidx) - 1)
             section.lines.Clear()
             For i = 0 To MS_Editor(tabidx).Lines.Count - 1
-                section.lines.Add(MS_Editor(tabidx).Lines.Item(i).TrimEnd(charsToTrim))
+                section.lines.Add(MS_Editor(tabidx).Lines.Item(i))
             Next
-            TabSections(tabidx)(SectionIdx(tabidx) - 1) = section
+            'TabSections(tabidx)(SectionIdx(tabidx) - 1) = section
         End If
     End Sub
 
@@ -1732,34 +1737,39 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Private Sub NewSection_Click(sender As System.Object, e As System.EventArgs) Handles NewSection.Click, BtnSectionAdd.Click
-        If TabControl2.TabCount > 0 Then NewSec((TabSections(TabControl2.SelectedIndex).Count - 1))
+        If TabControl2.TabCount > 0 Then NewSec((TabSections(TabControl2.SelectedIndex).Count))
     End Sub
 
     Private Sub InsertSectionToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles InsertSectionToolStripMenuItem.Click
-        If ListBox1.SelectedIndex > 1 Then NewSec(ListBox1.SelectedIndex - 1)
+        If ListBox1.SelectedIndex > 1 Then NewSec(ListBox1.SelectedIndex)
     End Sub
 
     Private Sub NewSec(ByRef i As Integer)
         If ListBox1.Items.Count = 0 Then Exit Sub
-        If ListBox1.SelectedIndex < 1 Or i < 2 Then Exit Sub
+        If ListBox1.SelectedIndex < 1 Or i < 1 Then Exit Sub
         'If i >= 1 Then i = 2
+        i -= 1
         Debug.Print("NewSection_Click()")
         Dim s As String = Microsoft.VisualBasic.InputBox("Add Section")
         If String.IsNullOrEmpty(s) Then Exit Sub
 
         SaveSections(TabControl2.SelectedIndex)
-        Dim section As TDSSegment = New TDSSegment
-
+        Dim section As New TDSSegment
+        'Dim sec As TDSSegment = TabSections(TabControl2.SelectedIndex)(i)
         section.Title = s
         section.lines.Add("")
 
         TabSections(TabControl2.SelectedIndex).Insert(i, section)
-        'RebuildFullFile()
+        'TabSections(TabControl2.SelectedIndex)(i + 1) = sec
         UpdateSegmentList()
-        DisplaySection(i)
-        ListBox1.SelectedIndex = i + 1
-        'DisplaySection(i)
 
+        SectionChange = False
+
+        DisplaySection(i) 'Loosing Selected Section here, Remove this Line Everything saves properly
+        i += 1
+        SectionChange = True
+        ListBox1.SelectedIndex = i
+        SectionLstIdxOld = i
     End Sub
 
     Private Sub RemoveSection(ByRef i As Integer)
@@ -1808,6 +1818,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             TabSections(TabControl2.SelectedIndex).Insert(idx, item)
             UpdateSegmentList()
             ListBox1.SelectedIndex = idx + 1
+            SectionLstIdxOld = idx + 1
         End If
 
         'Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(idx)
@@ -1832,6 +1843,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             TabSections(TabControl2.SelectedIndex).Insert(idx, item)
             UpdateSegmentList()
             ListBox1.SelectedIndex = idx + 1
+            SectionLstIdxOld = idx + 1
         End If
 
         'Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(idx)
@@ -1849,10 +1861,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         End If
     End Sub
 
-    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As System.EventArgs) Handles ListBox1.SelectedIndexChanged, ListBox2.SelectedIndexChanged
-        If IsNothing(sender.selecteditem) Then Exit Sub
-        ToolTip1.SetToolTip(sender, sender.SelectedItem.ToString)
-    End Sub
+
 
     Private Sub GotoNextToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles GotoNextToolStripMenuItem.Click
         GotoBookMark()
