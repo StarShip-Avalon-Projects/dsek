@@ -1654,7 +1654,10 @@ InputBox("What line within the document do you want to send the cursor to?", _
         Debug.Print("ListBox1_MouseDown()")
         'SaveSections(TabControl2.SelectedIndex)
 
-        If sender.SelectedIndex <> SectionLstIdxOld Then SaveSections(TabControl2.SelectedIndex)
+        If sender.SelectedIndex <> SectionLstIdxOld Then
+            SaveSections(TabControl2.SelectedIndex)
+        End If
+
     End Sub
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As System.EventArgs) Handles ListBox1.SelectedIndexChanged, ListBox2.SelectedIndexChanged
         If IsNothing(sender.selecteditem) Then Exit Sub
@@ -1689,7 +1692,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
     Private Sub SaveSections(ByVal tabidx As Integer)
         If ListBox1.SelectedIndex = -1 Then ListBox1.SelectedIndex = 0
-        'Debug.Print("SaveSections()")
+        Debug.Print("SaveSections()")
 
         If SectionIdx(tabidx) = 0 And MS_Editor(tabidx).Text <> "" Then
             'Debug.Print("SectionIdx(" + tabidx.ToString + ")")
@@ -1701,6 +1704,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
         ElseIf SectionIdx(tabidx) > 0 Then
             Dim section As TDSSegment = TabSections(tabidx)(SectionIdx(tabidx) - 1)
+            Debug.Print("Saving to section "+section.Title)
             section.lines.Clear()
             For i = 0 To MS_Editor(tabidx).Lines.Count - 1
                 section.lines.Add(MS_Editor(tabidx).Lines.Item(i))
@@ -1710,6 +1714,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
     End Sub
 
     Private Sub DisplaySection(ByRef j As Integer)
+        Debug.WriteLine("Section Display: " + TabSections(TabControl2.SelectedIndex)(j).Title)
         MS_Editor.Text = ""
         MS_Editor.Text = String.Join(vbCrLf, TabSections(TabControl2.SelectedIndex)(j).lines.ToArray)
     End Sub
@@ -1765,11 +1770,17 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
         SectionChange = False
 
-        DisplaySection(i) 'Loosing Selected Section here, Remove this Line Everything saves properly
         i += 1
-        SectionChange = True
         ListBox1.SelectedIndex = i
+        SectionLstIdx = i
         SectionLstIdxOld = i
+        SectionIdx(TabControl2.SelectedIndex) = SectionLstIdx
+
+        DisplaySection(i - 1) 'Loosing Selected Section here, Remove this Line Everything saves properly
+
+        SectionChange = True
+        
+
     End Sub
 
     Private Sub RemoveSection(ByRef i As Integer)
@@ -1809,7 +1820,7 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         If ListBox1.SelectedIndex <= 2 Then Exit Sub
         Dim idx As Integer = ListBox1.SelectedIndex - 1
 
-        Dim item As TDSSegment = New TDSSegment
+        Dim item As TDSSegment '= New TDSSegment
         item = TabSections(TabControl2.SelectedIndex)(idx)
 
         If idx <> 0 Then
@@ -1817,15 +1828,18 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             idx -= 1
             TabSections(TabControl2.SelectedIndex).Insert(idx, item)
             UpdateSegmentList()
-            ListBox1.SelectedIndex = idx + 1
             SectionLstIdxOld = idx + 1
+            ListBox1.SelectedIndex = idx + 1
+            SectionLstIdx = idx + 1
+            SectionIdx(TabControl2.SelectedIndex) = SectionLstIdx
+        Else
+            'Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(idx)
+            'TabSections(TabControl2.SelectedIndex).RemoveAt(idx)
+            'TabSections(TabControl2.SelectedIndex).Insert(idx - 1, section)
+            UpdateSegmentList()
+            ListBox1.SelectedIndex = idx
         End If
 
-        'Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(idx)
-        'TabSections(TabControl2.SelectedIndex).RemoveAt(idx)
-        'TabSections(TabControl2.SelectedIndex).Insert(idx - 1, section)
-        UpdateSegmentList()
-        ListBox1.SelectedIndex = idx
     End Sub
 
     Private Sub BtnSectionDown_Click(sender As System.Object, e As System.EventArgs) Handles BtnSectionDown.Click
@@ -1834,7 +1848,8 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
         If ListBox1.SelectedIndex = ListBox1.Items.Count - 1 Then Exit Sub
         Dim idx As Integer = ListBox1.SelectedIndex - 1
 
-        Dim item As TDSSegment = New TDSSegment
+        Dim item As TDSSegment ' = New TDSSegment
+
         item = TabSections(TabControl2.SelectedIndex)(idx)
 
         If idx < TabSections(TabControl2.SelectedIndex).Count - 1 Then
@@ -1842,8 +1857,10 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             idx += 1
             TabSections(TabControl2.SelectedIndex).Insert(idx, item)
             UpdateSegmentList()
-            ListBox1.SelectedIndex = idx + 1
             SectionLstIdxOld = idx + 1
+            ListBox1.SelectedIndex = idx + 1
+            SectionLstIdx = idx + 1
+            SectionIdx(TabControl2.SelectedIndex) = SectionLstIdx
         End If
 
         'Dim section As TDSSegment = TabSections(TabControl2.SelectedIndex)(idx)
