@@ -19,11 +19,4 @@ Module MainModule
     Public DS_Header_Style As TextStyle = New TextStyle(New SolidBrush(Color.Green), Nothing, FontStyle.Bold)
     Public DS_Footer_Style As TextStyle = New TextStyle(New SolidBrush(Color.Green), Nothing, FontStyle.Regular)
 
-    <System.Runtime.CompilerServices.Extension()> _
-    Public Sub Move(Of T)(list As List(Of T), oldIndex As Integer, newIndex As Integer)
-        Dim aux As T = list(newIndex)
-        list(newIndex) = list(oldIndex)
-        list(oldIndex) = aux
-    End Sub
-
 End Module

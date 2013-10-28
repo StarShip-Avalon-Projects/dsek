@@ -87,9 +87,8 @@ Public Class TabControlEx
     End Function
 
     Public Sub RePositionCloseButtons()
+
         For Each item In CloseButtonCollection
-
-
             RePositionCloseButtons(item.Value)
         Next
     End Sub
@@ -110,6 +109,7 @@ Public Class TabControlEx
                     btn.Size = New Size(rect.Height - 3, rect.Height - 3)
                     btn.Location = New Point(rect.X + rect.Width - rect.Height - 1, rect.Y + 1)
                 End If
+                btn.TabIndex = tpIndex
                 btn.Visible = ShowCloseButtonOnTabs
                 btn.BringToFront()
             End If
