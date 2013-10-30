@@ -717,9 +717,8 @@ Public Class MS_Edit
         'Creates the listview and displays it in the new tab
         Dim lstView As ListView_NoFlicker = New ListView_NoFlicker()
 
-
-        lstView.Dock = DockStyle.Fill
         lstView.Sorting = SortOrder.Ascending
+        lstView.Dock = DockStyle.Fill
         lstView.Columns.Add(n)
         lstView.Location = New System.Drawing.Point(6, 3)
         lstView.Height = Causes.Height
@@ -729,8 +728,8 @@ Public Class MS_Edit
             lstView.Items.Add(t)
         Next
         lstView.EndUpdate()
-        lstView.Parent = Causes.TabPages(intLastTabIndex)
         lstView.ListViewItemSorter = New MyCustomSorter
+        lstView.Parent = Causes.TabPages(intLastTabIndex)
         lstView.HeaderStyle = ColumnHeaderStyle.None
         lstView.Name = VL_Name
         lstView.FullRowSelect = True
@@ -738,7 +737,11 @@ Public Class MS_Edit
         lstView.Columns(0).Width() = lstView.Width
         AddHandler lstView.DoubleClick, AddressOf ListCauses_DoubleClick
         AddHandler lstView.Resize, AddressOf ListView_resize
-        'lstView.Show()
+
+        'This covers a very strange order bug involving sorted listboxes
+        'Without this (or a .Show()) it will never actually update the internal list order
+        'until it becomes visible in the application. (Triggering .Sort() doesn't work)
+        lstView.Visible = True
 
     End Sub
 
@@ -1255,12 +1258,25 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
             With LV1
                 For i As Integer = LastFoundIndex To .Items.Count - 1
+                    'Debug.Print("Searching: " + .Items(i).SubItems(0).Text)
                     If .Items(i).SubItems(0).Text.ToLower.Contains(TxtBxFind.Text.ToLower) Then
+
+                        Dim tmp As ListViewItem = .Items(i)
+                        'Debug.Print(i.ToString() + ":" + TxtBxFind.Text.ToLower + ":" + .Items(i).SubItems(0).Text + ":" + .Items(i).Text)
+                        'Debug.Print(tmp.Text)
+
                         Causes.SelectedTab = Causes.TabPages.Item(lis - 1)
-                        .Items(i).Selected = True
-                        .Items(i).EnsureVisible()
-                        .Items(i).BackColor = Color.Blue
-                        .Items(i).ForeColor = Color.White
+
+                        '.Items(i).Selected = True
+                        '.Items(i).EnsureVisible()
+                        '.Items(i).BackColor = Color.Blue
+                        '.Items(i).ForeColor = Color.White
+
+                        tmp.Selected = True
+                        tmp.EnsureVisible()
+                        tmp.BackColor = Color.Blue
+                        tmp.ForeColor = Color.White
+
                         LastFoundIndex = i
                         LastSearchString = TxtBxFind.Text
                         lisView = lis
