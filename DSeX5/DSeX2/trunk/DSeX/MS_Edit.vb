@@ -723,6 +723,7 @@ Public Class MS_Edit
         lstView.Location = New System.Drawing.Point(6, 3)
         lstView.Height = Causes.Height
         lstView.Width = Causes.Width
+        lstView.MultiSelect = False
         lstView.BeginUpdate()
         For Each t In lst
             lstView.Items.Add(t)
@@ -1245,6 +1246,8 @@ InputBox("What line within the document do you want to send the cursor to?", _
         Debug.WriteLine("Control count: " & Causes.Controls.Find("1", True).Count)
         Dim LV1 As ListView_NoFlicker = CType(Causes.TabPages.Item(lisView - 1).Controls.Find(lisView.ToString, True)(0), ListView_NoFlicker)
 
+        LV1.Items(LastFoundIndex).Selected = False
+
         LV1.Items(LastFoundIndex).BackColor = Color.White
         LV1.Items(LastFoundIndex).ForeColor = Color.Black
         If TxtBxFind.Text <> LastSearchString Then
@@ -1258,8 +1261,10 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
             With LV1
                 For i As Integer = LastFoundIndex To .Items.Count - 1
-                    'Debug.Print("Searching: " + .Items(i).SubItems(0).Text)
-                    If .Items(i).SubItems(0).Text.ToLower.Contains(TxtBxFind.Text.ToLower) Then
+
+                    Dim ItemStr As String = .Items(i).SubItems(0).Text
+                    If ItemStr.Trim.ToLower.Contains(TxtBxFind.Text.Trim.ToLower) Then
+
 
                         Dim tmp As ListViewItem = .Items(i)
                         'Debug.Print(i.ToString() + ":" + TxtBxFind.Text.ToLower + ":" + .Items(i).SubItems(0).Text + ":" + .Items(i).Text)
@@ -1267,20 +1272,16 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
                         Causes.SelectedTab = Causes.TabPages.Item(lis - 1)
 
-                        '.Items(i).Selected = True
-                        '.Items(i).EnsureVisible()
-                        '.Items(i).BackColor = Color.Blue
-                        '.Items(i).ForeColor = Color.White
 
-                        tmp.Selected = True
-                        tmp.EnsureVisible()
-                        tmp.BackColor = Color.Blue
-                        tmp.ForeColor = Color.White
-
+                        .Items(i).EnsureVisible()
+                        .Items(i).BackColor = Color.Blue
+                        .Items(i).ForeColor = Color.White
+                        .Visible = True
                         LastFoundIndex = i
                         LastSearchString = TxtBxFind.Text
                         lisView = lis
                         Test2 = True
+                        .Items(i).Selected = True
                         Exit For
                     End If
                 Next
@@ -1297,7 +1298,10 @@ InputBox("What line within the document do you want to send the cursor to?", _
         End If
     End Sub
 
-
+    Private Sub TxtBxFind_TextChanged(sender As Object, e As System.EventArgs) Handles TxtBxFind.TextChanged
+        LastFoundIndex = 0
+        lisView = 1
+    End Sub
 
     Private Sub TxtBxFind_KeyDown(sender As Object, e As System.Windows.Forms.KeyEventArgs) Handles TxtBxFind.KeyDown
         If e.KeyCode = Keys.Enter Then
@@ -1720,7 +1724,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
         ElseIf SectionIdx(tabidx) > 0 Then
             Dim section As TDSSegment = TabSections(tabidx)(SectionIdx(tabidx) - 1)
-            Debug.Print("Saving to section "+section.Title)
+            Debug.Print("Saving to section " + section.Title)
             section.lines.Clear()
             For i = 0 To MS_Editor(tabidx).Lines.Count - 1
                 section.lines.Add(MS_Editor(tabidx).Lines.Item(i))
@@ -1795,7 +1799,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
         DisplaySection(i - 1) 'Loosing Selected Section here, Remove this Line Everything saves properly
 
         SectionChange = True
-        
+
 
     End Sub
 
@@ -1931,5 +1935,6 @@ MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.But
             End If
         End If
     End Sub
+
 
 End Class
