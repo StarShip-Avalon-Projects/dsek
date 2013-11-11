@@ -113,8 +113,8 @@ Public Class wUI
 #Region "Position Functions"
 
     'Regexes for calculation parsing
-    Private Const RGEX_Movement As String = "(\d+)(nw|ne|sw|se)(\d+)(.*)"
-    Private Const RGEX_MathCalc As String = "(\d+)(\+|-|\*|/)(\d+)(.*)"
+    Private Const RGEX_Movement As String = "(\d+)(nw|ne|sw|se)(\d+)(.*)"""
+    Private Const RGEX_MathCalc As String = "(\d+)(\+|-|\*|/)(\d+)(.*)"""
     Private Const RGEX_MathStep As String = "(\+|-|\*|/)(\d+)"
     Private Const RGEX_Coordinate As String = "(\d+)\s*,\s*(\d+)"
     Private Const RGEX_Number As String = "^(\d+)"
@@ -208,9 +208,9 @@ Public Class wUI
 
 
         For Each s In m
-            Dim spaces As Integer = s.groups(2).value
+            Dim spaces As Integer = s.groups(2)
 
-            Select Case s.groups(1).value.ToLower
+            Select Case s.groups(1).ToLower
                 Case "+"
                     x += spaces
 
@@ -254,7 +254,14 @@ Public Class wUI
 
     End Sub
 
-    Private Sub selecter2_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles selecter2.SelectedIndexChanged, selecter2.Click
+
+
+    Private Sub selecter2_SelectedIndexChanged_1(sender As System.Object, e As System.EventArgs) Handles selecter2.SelectedIndexChanged, ListBox1.SelectedIndexChanged
+        Dim lb As ListBox = CType(sender, ListBox)
+        selecter2.SelectedIndex = lb.SelectedIndex
+        ListBox1.SelectedIndex = lb.SelectedIndex
+    End Sub
+    Private Sub selecter2_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles selecter2.Click, ListBox1.Click
         Dim s = selecter2.GetItemText(selecter2.SelectedItem)
         Dim Space As Integer = selecter2.SelectedIndex + 1
         Dim t As String = ScriptIni.GetKeyValue("main", "t" + Space.ToString)
@@ -312,6 +319,7 @@ Public Class wUI
                 Else
                     wVariables.Add(n, m)
                 End If
+                ListBox1.Items.Item(n - 1) = TextBox1.Text
                 Dim file As String = ""
                 If WorkFileName <> "" Then file = WorkFileName.Remove(WorkFileName - 3, 3) + ".map"
                 TextBox3.Text = file
@@ -323,10 +331,11 @@ Public Class wUI
                 Else
                     wVariables.Add(n, TextBox1.Text)
                 End If
+                ListBox1.Items.Item(n - 1) = TextBox1.Text
                 TextBox1.Text = ""
         End Select
-        If selecter2.SelectedIndex + 1 <> selecter2.Items.Count() Then
-            selecter2.SelectedIndex = selecter2.SelectedIndex + 1
+        If n <> selecter2.Items.Count() Then
+            selecter2.SelectedIndex = n
             SetUI()
         Else
             generate.Enabled = False
@@ -501,8 +510,7 @@ Public Class wUI
                 m = Regex.Matches(template, "\^" + RGEX_MathCalc + "\^", RegexOptions.IgnoreCase)
                 For Each s In m
                     Dim List As String = s.groups(2).value + s.groups(3).value + s.groups(4).value
-                    Dim test As String = CalcMath(str, List)
-                    template = Regex.Replace(template, Regex.Escape(s.groups(0).value), CalcMath(str, List), RegexOptions.IgnoreCase)
+                    template = Regex.Replace(template, Regex.Escape(s.groups(0)), CalcMath(str, List), RegexOptions.IgnoreCase)
                 Next
             Next
             Solution.AppendText(template + vbLf)
@@ -584,4 +592,22 @@ Public Class wUI
     End Sub
 
 
+    Private Sub ListBox1_OnVerticalScroll(sender As Object, e As System.Windows.Forms.ScrollEventArgs) Handles ListBox1.OnVerticalScroll
+        Dim lb As ScrollingListBox = CType(sender, ScrollingListBox)
+        selecter2.TopIndex = lb.TopIndex
+    End Sub
+
+    Private Sub selecter2_OnVerticalScroll(sender As Object, e As System.Windows.Forms.ScrollEventArgs) Handles selecter2.OnVerticalScroll
+        Dim lb As ScrollingListBox = CType(sender, ScrollingListBox)
+        ListBox1.TopIndex = lb.TopIndex
+    End Sub
+
+    Private Sub ListBox1_MouseWheel(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles ListBox1.MouseWheel
+        Dim lb As ScrollingListBox = CType(sender, ScrollingListBox)
+        selecter2.TopIndex = lb.TopIndex
+    End Sub
+    Private Sub selecter2_MouseWheel(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles selecter2.MouseWheel
+        Dim lb As ScrollingListBox = CType(sender, ScrollingListBox)
+        ListBox1.TopIndex = lb.TopIndex
+    End Sub
 End Class

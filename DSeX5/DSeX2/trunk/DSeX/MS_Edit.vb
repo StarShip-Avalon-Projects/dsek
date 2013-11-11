@@ -849,7 +849,12 @@ Public Class MS_Edit
                     lblStatus.Text = "Status: File Saved."
 
                     CanOpen(TabIdx) = True
-                    If TabIdx = TabControl2.SelectedIndex Then Me.Text = frmTitle(TabIdx)
+                    If TabIdx = TabControl2.SelectedIndex Then
+                        Me.Text = frmTitle(TabIdx)
+                        TabControl2.SelectedTab.Text = WorkFileName(TabIdx)
+                        TabControl2.RePositionCloseButtons()
+                    End If
+
                 Catch ex As Exception
                     MessageBox.Show("There was an error writing to " + WorkFileName(TabIdx))
                 End Try

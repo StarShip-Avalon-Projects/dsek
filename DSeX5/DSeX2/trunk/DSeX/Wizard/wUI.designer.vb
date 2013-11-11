@@ -1,4 +1,6 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿Imports No_Flicker
+
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class wUI
     Inherits System.Windows.Forms.Form
 
@@ -21,7 +23,6 @@ Partial Class wUI
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(wUI))
-        Me.selecter2 = New System.Windows.Forms.ListBox()
         Me.generate = New System.Windows.Forms.Button()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
@@ -34,7 +35,6 @@ Partial Class wUI
         Me.ViewFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Timer = New System.Windows.Forms.Timer(Me.components)
         Me.BtnImport = New System.Windows.Forms.Button()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.NumericUpDown1 = New System.Windows.Forms.NumericUpDown()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.dsdesc2 = New System.Windows.Forms.RichTextBox()
@@ -46,23 +46,13 @@ Partial Class wUI
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Solution = New FastColoredTextBoxNS.FastColoredTextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.selecter2 = New DSeX.ScrollingListBox()
+        Me.ListBox1 = New DSeX.ScrollingListBox()
         Me.MenuStrip1.SuspendLayout()
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Solution, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'selecter2
-        '
-        Me.selecter2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.selecter2.BackColor = System.Drawing.SystemColors.Window
-        Me.selecter2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.selecter2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.selecter2.FormattingEnabled = True
-        Me.selecter2.Location = New System.Drawing.Point(236, 40)
-        Me.selecter2.Name = "selecter2"
-        Me.selecter2.Size = New System.Drawing.Size(223, 106)
-        Me.selecter2.TabIndex = 2
         '
         'generate
         '
@@ -161,15 +151,6 @@ Partial Class wUI
         Me.BtnImport.Text = "Export To DSeX"
         Me.BtnImport.UseVisualStyleBackColor = True
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(244, 24)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(45, 13)
-        Me.Label2.TabIndex = 12
-        Me.Label2.Text = "Variable"
-        '
         'NumericUpDown1
         '
         Me.NumericUpDown1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -197,7 +178,7 @@ Partial Class wUI
         Me.dsdesc2.Location = New System.Drawing.Point(0, 42)
         Me.dsdesc2.Name = "dsdesc2"
         Me.dsdesc2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical
-        Me.dsdesc2.Size = New System.Drawing.Size(230, 104)
+        Me.dsdesc2.Size = New System.Drawing.Size(168, 104)
         Me.dsdesc2.TabIndex = 1
         Me.dsdesc2.Text = ""
         '
@@ -274,6 +255,7 @@ Partial Class wUI
         Me.Solution.CharWidth = 8
         Me.Solution.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.Solution.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
+        Me.Solution.Hotkeys = resources.GetString("Solution.Hotkeys")
         Me.Solution.IsReplaceMode = False
         Me.Solution.Location = New System.Drawing.Point(12, 237)
         Me.Solution.Name = "Solution"
@@ -283,12 +265,40 @@ Partial Class wUI
         Me.Solution.TabIndex = 27
         Me.Solution.Zoom = 100
         '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(9, 24)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(61, 13)
+        Me.Label6.TabIndex = 30
+        Me.Label6.Text = "Instructions"
+        '
+        'selecter2
+        '
+        Me.selecter2.FormattingEnabled = True
+        Me.selecter2.Location = New System.Drawing.Point(174, 42)
+        Me.selecter2.Name = "selecter2"
+        Me.selecter2.Size = New System.Drawing.Size(164, 108)
+        Me.selecter2.TabIndex = 31
+        '
+        'ListBox1
+        '
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.Location = New System.Drawing.Point(344, 42)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.Size = New System.Drawing.Size(164, 108)
+        Me.ListBox1.TabIndex = 32
+        '
         'wUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ControlLight
         Me.ClientSize = New System.Drawing.Size(538, 457)
+        Me.Controls.Add(Me.ListBox1)
+        Me.Controls.Add(Me.selecter2)
+        Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.Solution)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Label5)
@@ -298,12 +308,10 @@ Partial Class wUI
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.NumericUpDown1)
-        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.BtnImport)
         Me.Controls.Add(Me.generate)
         Me.Controls.Add(Me.dsdesc2)
-        Me.Controls.Add(Me.selecter2)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
@@ -315,10 +323,9 @@ Partial Class wUI
         CType(Me.NumericUpDown1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.Solution, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout
+        Me.PerformLayout()
 
-End Sub
-    Friend WithEvents selecter2 As System.Windows.Forms.ListBox
+    End Sub
     Friend WithEvents generate As System.Windows.Forms.Button
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     Friend WithEvents ToolTip As System.Windows.Forms.ToolTip
@@ -331,7 +338,6 @@ End Sub
     Friend WithEvents ReloadToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BtnImport As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents NumericUpDown1 As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents dsdesc2 As System.Windows.Forms.RichTextBox
@@ -343,5 +349,9 @@ End Sub
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Solution As FastColoredTextBoxNS.FastColoredTextBox
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents selecter2 As DSeX.ScrollingListBox
+    Friend WithEvents ListBox1 As DSeX.ScrollingListBox
+
 
 End Class

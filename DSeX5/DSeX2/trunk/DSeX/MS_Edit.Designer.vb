@@ -161,14 +161,14 @@ Partial Class MS_Edit
         'MSSaveDialog
         '
         Me.MSSaveDialog.DefaultExt = "ds"
-        Me.MSSaveDialog.Filter = "DragonSpeak Files)|*.ds"
+        Me.MSSaveDialog.Filter = "DragonSpeak Files|*.ds|Script File|*.ini|All Files|*.*"
         Me.MSSaveDialog.RestoreDirectory = True
         Me.MSSaveDialog.Title = "SaveAs"
         '
         'MS_BrosweDialog
         '
         Me.MS_BrosweDialog.DefaultExt = "ds"
-        Me.MS_BrosweDialog.Filter = "DragonSpeak Files)|*.ds"
+        Me.MS_BrosweDialog.Filter = "DragonSpeak Files|*.ds|Script File|*.ini|All Files|*.*"
         '
         'EditMenu
         '
