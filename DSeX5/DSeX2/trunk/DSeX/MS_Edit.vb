@@ -1665,6 +1665,7 @@ InputBox("What line within the document do you want to send the cursor to?", _
 
             Next
         End With
+        ListBox1.SelectedIndex = SectionLstIdx
     End Sub
 
     Dim SectionLstIdx As Integer = 0
